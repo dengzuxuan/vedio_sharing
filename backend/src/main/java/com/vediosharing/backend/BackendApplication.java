@@ -1,4 +1,4 @@
-package com.example.backend;
+package com.vediosharing.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BackendApplication {
 
     public static void main(String[] args) {
-        System.out.println("hi");
         SpringApplication.run(BackendApplication.class, args);
     }
 

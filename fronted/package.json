@@ -10,6 +10,7 @@
     "@types/node": "^16.18.59",
     "@types/react": "^18.2.33",
     "@types/react-dom": "^18.2.14",
+    "antd": "^4.24.3",
     "axios": "^0.27.2",
     "dayjs": "^1.11.9",
     "http-proxy-middleware": "^2.0.6",

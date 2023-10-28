@@ -8,31 +8,6 @@ export default function Register () {
   const [form] = Form.useForm()
   const navigator = useNavigate()
 
-  // const onFinish = async (values: ILoginValues) => {
-  //   const res = await login(values.username, values.password)
-  //   if (res?.code === 200) {
-  //     const { role, token } = res.data
-  //     if (role !== values.role) {
-  //       message.info('角色错误')
-  //     } else {
-  //       localStorage.setItem('token', token!)
-  //       message.success('登录成功')
-  //       if (role === 3) {
-  //         localStorage.setItem('role', '3')
-  //         navigator('/member')
-  //       } else if (role === 2) {
-  //         localStorage.setItem('role', '2')
-  //         navigator('/leader')
-  //       } else if (role === 1) {
-  //         localStorage.setItem('role', '1')
-  //         navigator('/manager')
-  //       }
-  //     }
-  //   } else {
-  //     message.info(res?.message)
-  //   }
-  // }
-
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo)
   }

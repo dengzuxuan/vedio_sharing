@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from './index.module.scss'
 import { tabs_one, tabs_two } from '../../libs/data'
 import chaIcon from '../../assets/imgs/cha.png'
 import searchIcon from '../../assets/imgs/search.png'
+import personIcon from '../../assets/imgs/person.webp'
+import { Outlet, useNavigate } from 'react-router-dom'
 
 export default function Home() {
+  const navigator = useNavigate()
   // 控制左tabs高亮
   const [clickItemValue, setClickItemValue] = useState('recommend')
   // 保存搜索框内容
@@ -14,6 +17,10 @@ export default function Home() {
   const search = (value: string) => {
     setSearchValue(value)
   }
+
+  useEffect(() => {
+    navigator(`/home/${clickItemValue}`)
+  }, [clickItemValue])
   return (
     <div className={style.back}>
       <header className={style.header}>
@@ -36,6 +43,11 @@ export default function Home() {
             }
           </div>
           <img src={searchIcon} className={style.searchIcon}></img>
+        </div>
+        <div className={style.right}>
+          <div className={style.personBox}>
+            <img src={personIcon} className={style.personImg} onClick={() => setClickItemValue('my')}></img>
+          </div>
         </div>
       </header>
       <main className={style.main}>
@@ -66,7 +78,9 @@ export default function Home() {
             )
           }
         </div>
-        <div></div>
+        <div>
+          <Outlet></Outlet>
+        </div>
       </main >
     </div >
   )

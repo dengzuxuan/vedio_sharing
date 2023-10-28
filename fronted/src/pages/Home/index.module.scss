@@ -17,6 +17,8 @@
 .main {
   width: 100%;
   flex: 1;
+  display: flex;
+  flex-direction: row;
 }
 
 .icon_div {
@@ -118,18 +120,48 @@
       margin-left: 10px;
       color: gray;
     }
-  
+
     .chaIcon {
       width: 12px;
       height: 12px;
       cursor: pointer;
     }
-  
+
   }
+
   .searchIcon {
     width: 25px;
     height: 25px;
     cursor: pointer;
     margin-left: 10px;
+  }
+}
+
+.right {
+  margin-left: auto;
+  width: 200px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .personBox {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    .personImg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+
+  .personBox:hover {
+    transform: scale(1.1);
   }
 }

@@ -20,9 +20,9 @@ server:
 --- #---------------------数据库配置---------------------------
 spring:
   datasource:
-    url: url
-    username: name
-    password: psw
+    url: jdbc:mysql://8.140.38.47:13306/vedio_sharing?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
   # ShardingSphere-JDBC 配置
   # 配置是 ShardingSphere-JDBC 中唯一与应用开发者交互的模块，
@@ -33,6 +33,6 @@ spring:
   data:
     # Redis 配置
     redis:
-      host: url
-      port: port
-      password: psw
+      host: 8.140.38.47
+      port: 6379
+      password: 123456

@@ -1,8 +1,9 @@
 import React from 'react'
 import BackgroundImg from '../../assets/imgs/background.png'
 import style from './index.module.scss'
-import { Button, Form, Input } from 'antd'
+import { Button, Form, Input, message } from 'antd'
 import { useNavigate } from 'react-router-dom'
+import { login } from '../../api/login'
 
 export default function Login() {
   const [form] = Form.useForm()
@@ -18,6 +19,16 @@ export default function Login() {
 
   const gotoRegister = () => {
     navigator('/register')
+  }
+
+  const onFinish = async (values: any) => {
+    console.log(values.username, values.password)
+    const res = await login(values.username, values.password)
+    if (res?.code === 200) {
+      message.success('登录成功！')
+    } else {
+      message.info(res?.message)
+    }
   }
   return (
     <div className={style.back}>
@@ -35,14 +46,14 @@ export default function Login() {
             className={style.from}
             form={form}
             name='login'
-            // onFinish={onFinish}
+            onFinish={onFinish}
             onFinishFailed={onFinishFailed}
           >
             <Form.Item
               name='username'
               rules={[
                 { required: true, message: '用户名不为空' },
-                { min: 2, message: '用户名不少于2位' },
+                { min: 5, message: '用户名不少于5位' },
                 { max: 12, message: '用户名不多于12位' }
               ]}
             >
@@ -52,7 +63,8 @@ export default function Login() {
             <Form.Item
               name='password'
               rules={[
-                { required: true, message: '密码不为空' }
+                { required: true, message: '密码不为空' },
+                { min: 5, message: '长度不小于5位' }
               ]}
             >
               <Input.Password placeholder='请输入密码'></Input.Password>

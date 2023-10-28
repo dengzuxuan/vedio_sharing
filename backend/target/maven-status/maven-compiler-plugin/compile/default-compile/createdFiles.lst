@@ -1,0 +1,7 @@
+com\vediosharing\backend\core\constant\Result.class
+com\vediosharing\backend\service\Impl\MessageServiceImpl.class
+com\vediosharing\backend\core\constant\MessageConsts.class
+com\vediosharing\backend\dao\mapper\MessageMapper.class
+com\vediosharing\backend\dao\entity\Message.class
+com\vediosharing\backend\service\MessageService.class
+com\vediosharing\backend\core\constant\ApiRouterConsts.class

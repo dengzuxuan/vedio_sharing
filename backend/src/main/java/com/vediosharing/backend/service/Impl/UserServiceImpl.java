@@ -8,6 +8,7 @@ import com.vediosharing.backend.dao.entity.User;
 import com.vediosharing.backend.dao.mapper.UserMapper;
 import com.vediosharing.backend.dto.req.UserRegisterReqDto;
 import com.vediosharing.backend.service.Impl.utils.UserDetailsImpl;
+import com.vediosharing.backend.service.MessageService;
 import com.vediosharing.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,10 +31,13 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private MessageService messageService;
 
     @Override
     public Result register(UserRegisterReqDto dto) {
@@ -78,22 +82,22 @@ public class UserServiceImpl implements UserService {
         Map<String,String> map = new HashMap<>();
 
         if(dto.getUsername().length()<5){
-            return Result.fail(ResultCodeEnum.USER_NAME_PARAM_WRONG);
+            return Result.build(null,ResultCodeEnum.USER_NAME_PARAM_WRONG);
         }
 
         if(dto.getPassword().length()<5){
-            return Result.fail(ResultCodeEnum.PASSWORD_PARAM_WRONG);
+            return Result.build(null,ResultCodeEnum.PASSWORD_PARAM_WRONG);
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username",dto.getUsername());
         User user = userMapper.selectOne(queryWrapper);
 
         if(user == null){
-            return Result.fail(ResultCodeEnum.USER_NOT_EXIST);
+            return Result.build(null,ResultCodeEnum.USER_NOT_EXIST);
         }
 
         if(!Objects.equals(user.getPasswordReal(), dto.getPassword())){
-            return Result.fail(ResultCodeEnum.USER_PASSWORD_WRONG);
+            return Result.build(null,ResultCodeEnum.USER_PASSWORD_WRONG);
         }
 
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -126,18 +130,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result addfirend(Integer userId) {
+    public Result addfriend(Integer userId) {
         UsernamePasswordAuthenticationToken authentication =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
         User user = loginUser.getUser();
 
-        
+
         return null;
     }
 
     @Override
-    public Result delfirend(Integer userId) {
+    public Result delfriend(Integer userId) {
         return null;
     }
 }

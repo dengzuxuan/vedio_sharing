@@ -12,5 +12,5 @@ import com.vediosharing.backend.core.constant.Result;
 public interface MessageService {
     int getNotReadMessage(int userId);
 
-    Result addMessage(int Type,String message,int sendUserId);
+    void addMessage(int Type,String message,int recvUserId,int sendUserId);
 }

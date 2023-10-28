@@ -127,6 +127,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result addfirend(Integer userId) {
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User user = loginUser.getUser();
+
+        
         return null;
     }
 

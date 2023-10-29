@@ -1,4 +1,4 @@
-package com.vediosharing.backend.core.common.constant;
+package com.vediosharing.backend.core.common.constant.result;
 
 import lombok.Getter;
 
@@ -94,9 +94,9 @@ public enum ResultCodeEnum {
     REGION_NO_OPEN(240, "该区域未开通"),
     ;
 
-    private Integer code;
+    private final Integer code;
 
-    private String message;
+    private final String message;
 
     private ResultCodeEnum(Integer code, String message) {
         this.code = code;

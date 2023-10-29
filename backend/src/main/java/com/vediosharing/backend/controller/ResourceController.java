@@ -27,4 +27,9 @@ public class ResourceController {
     Result uploadPhoto(@RequestParam("file") MultipartFile file){
         return resourceService.uploadPhoto(file);
     }
+
+    @PostMapping("/upload/video")
+    Result uploadVedio(@RequestParam("file") MultipartFile file, @RequestParam("type") int type){
+        return resourceService.uploadVideo(file,type);
+    }
 }

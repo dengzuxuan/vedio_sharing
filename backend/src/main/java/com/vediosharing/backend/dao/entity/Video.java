@@ -11,21 +11,26 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * @ClassName Friend
+ * @ClassName Video
  * @Description TODO
  * @Author Colin
- * @Date 2023/10/28 20:40
+ * @Date 2023/10/29 23:28
  * @Version 1.0
  */
-@TableName("friend")
+@TableName("video")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Friend {
+public class Video {
     @TableId(type = IdType.AUTO)
     private Integer id;
-    private int recvUserid;
-    private int sendUserid;
+    private int userId;
+    private int type;
+    private String videoUrl;
+    private int hotPoints;
+    private int likePoints;
+    private int collectPoints;
+    private int commentPoints;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "Asia/Shanghai")
     private Date createTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "Asia/Shanghai")

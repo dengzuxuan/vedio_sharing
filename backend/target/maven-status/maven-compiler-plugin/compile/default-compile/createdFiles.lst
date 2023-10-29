@@ -5,8 +5,8 @@ com\vediosharing\backend\service\Impl\ResourceServiceImpl.class
 com\vediosharing\backend\BackendApplication.class
 com\vediosharing\backend\core\filter\JwtAuthenticationTokenFilter.class
 com\vediosharing\backend\service\Impl\UserServiceImpl.class
-com\vediosharing\backend\core\common\constant\ResultCodeEnum.class
 com\vediosharing\backend\dto\req\UserRegisterReqDto.class
+com\vediosharing\backend\dao\entity\Friend.class
 com\vediosharing\backend\controller\UserController.class
 com\vediosharing\backend\core\constant\Result.class
 com\vediosharing\backend\service\Impl\utils\UserDetailsImpl.class

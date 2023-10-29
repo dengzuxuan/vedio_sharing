@@ -15,6 +15,8 @@ public interface UserService {
 
     Result login(UserRegisterReqDto dto);
     Result userInfo();
+    //添加朋友
     Result addfriend(Integer userId);
+    //删除朋友
     Result delfriend(Integer userId);
 }

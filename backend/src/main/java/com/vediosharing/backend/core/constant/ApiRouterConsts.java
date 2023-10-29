@@ -17,4 +17,8 @@ public class ApiRouterConsts {
      * 资源模块请求路径前缀
      */
     public static final String RESOURCE_URL_PREFIX = API_URL_PREFIX + "/resource";
+    /**
+     * 用户视频相关请求路径前缀
+     */
+    public static final String VIDEO_URL_PREFIX = API_URL_PREFIX + "/video";
 }

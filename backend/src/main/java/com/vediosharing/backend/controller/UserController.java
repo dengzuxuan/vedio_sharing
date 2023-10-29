@@ -7,6 +7,8 @@ import com.vediosharing.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * @ClassName UserController
  * @Description 用户模块controller层
@@ -20,12 +22,12 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/register")
+    @PostMapping(value = "/register",consumes="application/json")
     public Result register(@RequestBody UserRegisterReqDto dto){
         return userService.register(dto);
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login",consumes="application/json")
     public Result login(@RequestBody UserRegisterReqDto dto){
         return userService.login(dto);
     }
@@ -36,11 +38,14 @@ public class UserController {
     }
 
     @PostMapping("/addfirend")
-    public Result addfirend(){
-        return userService.userInfo();
+    public Result addfirend(@RequestParam Map<String,String> m1){
+        int userId = Integer.parseInt(m1.get("userid"));
+        return userService.addfriend(userId);
     }
     @PostMapping("/delfirend")
-    public Result delfirend(){
-        return userService.userInfo();
+    public Result delfirend(@RequestParam Map<String,String> m1){
+        int userId = Integer.parseInt(m1.get("userid"));
+        return userService.delfriend(userId);
     }
+
 }

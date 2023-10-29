@@ -2,7 +2,6 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\c
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\constant\Result.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\utils\JwtUtil.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\BackendApplication.java
-D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\common\constant\ResultCodeEnum.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\UserDetailServiceImpl.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\controller\UserController.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\ResourceService.java
@@ -10,6 +9,7 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\servic
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\config\SecurityConfig.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\MessageService.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\User.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\Friend.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dto\req\UserRegisterReqDto.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\MessageMapper.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\filter\JwtAuthenticationTokenFilter.java
@@ -21,5 +21,6 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\c
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\controller\ResourceController.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\utils\UserDetailsImpl.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\MessageServiceImpl.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\common\constant\result\ResultCodeEnum.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\Message.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\ResourceServiceImpl.java

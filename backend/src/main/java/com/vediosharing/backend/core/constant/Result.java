@@ -1,6 +1,6 @@
 package com.vediosharing.backend.core.constant;
 
-import com.vediosharing.backend.core.common.constant.ResultCodeEnum;
+import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
 import lombok.Data;
 
 /**

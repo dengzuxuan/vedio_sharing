@@ -1,10 +1,13 @@
 package com.vediosharing.backend.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.vediosharing.backend.core.constant.MessageConsts;
 import com.vediosharing.backend.core.constant.Result;
-import com.vediosharing.backend.core.common.constant.ResultCodeEnum;
+import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
 import com.vediosharing.backend.core.utils.JwtUtil;
+import com.vediosharing.backend.dao.entity.Friend;
 import com.vediosharing.backend.dao.entity.User;
+import com.vediosharing.backend.dao.mapper.FriendMapper;
 import com.vediosharing.backend.dao.mapper.UserMapper;
 import com.vediosharing.backend.dto.req.UserRegisterReqDto;
 import com.vediosharing.backend.service.Impl.utils.UserDetailsImpl;
@@ -22,7 +25,7 @@ import java.util.*;
 
 /**
  * @ClassName UserServiceImpl
- * @Description TODO
+ * @Description 用户模块
  * @Author Colin
  * @Date 2023/10/26 12:11
  * @Version 1.0
@@ -31,6 +34,8 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    FriendMapper friendMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -42,11 +47,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result register(UserRegisterReqDto dto) {
         if(dto.getUsername().length()<5){
-            return Result.fail(ResultCodeEnum.USER_NAME_PARAM_WRONG);
+            return Result.build(null,ResultCodeEnum.USER_NAME_PARAM_WRONG);
         }
 
         if(dto.getPassword().length()<5){
-            return Result.fail(ResultCodeEnum.PASSWORD_PARAM_WRONG);
+            return Result.build(null,ResultCodeEnum.PASSWORD_PARAM_WRONG);
         }
 
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -54,7 +59,7 @@ public class UserServiceImpl implements UserService {
         List<User> users = userMapper.selectList(queryWrapper);
 
         if(!users.isEmpty()){
-            return Result.fail(ResultCodeEnum.USER_NAME_ALREADY_EXIST);
+            return Result.build(null,ResultCodeEnum.USER_NAME_ALREADY_EXIST);
         }
 
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
@@ -93,7 +98,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.selectOne(queryWrapper);
 
         if(user == null){
-            return Result.build(null,ResultCodeEnum.USER_NOT_EXIST);
+            return Result.build(null,ResultCodeEnum.USER_NAME_NOT_EXIST);
         }
 
         if(!Objects.equals(user.getPasswordReal(), dto.getPassword())){
@@ -136,12 +141,33 @@ public class UserServiceImpl implements UserService {
         UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
         User user = loginUser.getUser();
 
+        User user1 = userMapper.selectById(userId);
 
-        return null;
+        messageService.addMessage(MessageConsts.FRIENDAPPLY,user1.getUsername()+"申请添加您为好友",user.getId(),user1.getId());
+        Date now = new Date();
+        Friend friend = new Friend(
+                null,
+                user1.getId(),
+                userId,
+                now,
+                now
+        );
+        friendMapper.insert(friend);
+
+        return Result.success(null);
     }
 
     @Override
     public Result delfriend(Integer userId) {
-        return null;
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User user = loginUser.getUser();
+
+        QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("recv_userid",user.getId()).eq("send_userid",userId);
+        friendMapper.delete(queryWrapper);
+
+        return Result.success(null);
     }
 }

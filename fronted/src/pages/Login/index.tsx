@@ -25,7 +25,9 @@ export default function Login() {
     console.log(values.username, values.password)
     const res = await login(values.username, values.password)
     if (res?.code === 200) {
-      message.success('登录成功！')
+      message
+        .success('登录成功, 正前往主页', 1)
+        .then(() => navigator('/home'))
     } else {
       message.info(res?.message)
     }

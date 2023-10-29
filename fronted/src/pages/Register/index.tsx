@@ -5,7 +5,7 @@ import { Button, Form, Input, message } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { register } from '../../api/register'
 
-export default function Register () {
+export default function Register() {
   const [form] = Form.useForm()
   const navigator = useNavigate()
 
@@ -28,8 +28,9 @@ export default function Register () {
       console.log(values.username, values.password)
       const res = await register(values.username, values.password)
       if (res?.code === 200) {
-        message.success('注册成功！')
-        navigator('/login')
+        message
+          .success('注册成功！跳转至登录页面......', 2)
+          .then(() => navigator('/login'))
       } else {
         message.info(res?.message)
       }

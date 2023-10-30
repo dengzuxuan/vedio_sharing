@@ -1,4 +1,5 @@
 com\vediosharing\backend\service\UserService.class
+com\vediosharing\backend\service\Impl\UserVideoServiceImpl$WeightedItem.class
 com\vediosharing\backend\service\ResourceService.class
 com\vediosharing\backend\core\config\MybatisPlusConfig.class
 com\vediosharing\backend\service\Impl\ResourceServiceImpl.class
@@ -13,12 +14,14 @@ com\vediosharing\backend\service\Impl\utils\UserDetailsImpl.class
 com\vediosharing\backend\core\utils\JwtUtil.class
 com\vediosharing\backend\service\Impl\UserDetailServiceImpl.class
 com\vediosharing\backend\service\Impl\MessageServiceImpl.class
+com\vediosharing\backend\service\Impl\UserVideoServiceImpl.class
 com\vediosharing\backend\controller\ResourceController.class
 com\vediosharing\backend\core\constant\MessageConsts.class
 com\vediosharing\backend\dao\mapper\MessageMapper.class
 com\vediosharing\backend\core\config\SecurityConfig.class
 com\vediosharing\backend\dao\entity\Message.class
 com\vediosharing\backend\dao\mapper\UserMapper.class
+com\vediosharing\backend\dto\req\VideoReqDto.class
 com\vediosharing\backend\service\MessageService.class
 com\vediosharing\backend\core\config\CorsConfig.class
 com\vediosharing\backend\core\constant\ApiRouterConsts.class

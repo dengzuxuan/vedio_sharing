@@ -1,6 +1,7 @@
 package com.vediosharing.backend.service;
 
 import com.vediosharing.backend.core.constant.Result;
+import com.vediosharing.backend.dto.req.VideoReqDto;
 
 /**
  * @ClassName UserVideoService
@@ -12,7 +13,10 @@ import com.vediosharing.backend.core.constant.Result;
 public interface UserVideoService {
     Result incrVideoLike(int videoId,int delta);
     Result decrVideoLike(int videoId,int delta);
-    Result addVideo(String videoUrl,String picUrl);
+    Result addVideo(VideoReqDto reqDto);
     Result initVideoLike(int userId);
     Result getVideo();
+    Result getUserVideos();
+    Result getUserCollects();
+    Result getUserLikes();
 }

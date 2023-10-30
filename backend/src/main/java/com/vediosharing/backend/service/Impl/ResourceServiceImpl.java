@@ -7,6 +7,7 @@ import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
+import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
 import com.vediosharing.backend.core.constant.Result;
 import com.vediosharing.backend.core.utils.PathUtils;
 import com.vediosharing.backend.dao.entity.User;
@@ -41,47 +42,58 @@ public class ResourceServiceImpl implements ResourceService {
     VideoMapper vedioMapper;
     @Override
     public Result uploadPhoto(MultipartFile file) {
+        //判断文件类型或者文件大小
+        String originalFilename = file.getOriginalFilename();
+        //如果判断通过再上传文件到OSS
+        String filePath = PathUtils.generateFilePath(originalFilename);
 
-        return null;
+        //如果判断没通过抛出异常
+        if (!originalFilename.endsWith(".png") && !originalFilename.endsWith(".jpg")){
+            return Result.build(null, ResultCodeEnum.PHOTO_PARAMS_WRONG);
+        }
+
+        String url = UploadOss(file,filePath);
+        Map<String,String> res = new HashMap<>();
+        res.put("photo_url",url);
+
+        return Result.success(res);
     }
 
     @Override
-    public Result uploadVideo(MultipartFile file,int type) {
+    public Result uploadVideo(MultipartFile file) {
             //判断文件类型或者文件大小
             String originalFilename = file.getOriginalFilename();
-            //如果判断没通过抛出异常
-//            if (!originalFilename.endsWith(".mp4") && !originalFilename.endsWith(".mp3")){
-//                try {
-//                    throw new AccountLockedException("文件上传失败！请检查后缀");
-//                } catch (AccountLockedException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
             //如果判断通过再上传文件到OSS
             String filePath = PathUtils.generateFilePath(originalFilename);
+
+            //如果判断没通过抛出异常
+            if (!originalFilename.endsWith(".mp4")){
+                return Result.build(null, ResultCodeEnum.VIDEO_PARAMS_WRONG);
+            }
+
             String url = UploadOss(file,filePath);
-
-            UsernamePasswordAuthenticationToken authentication =
-                    (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-            UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
-            User user = loginUser.getUser();
-
-            Date now = new Date();
-
-            Video vedio = new Video(
-                    null,
-                    user.getId(),
-                    type,
-                    url,
-                    0,
-                    0,
-                    0,
-                    0,
-                    now,
-                    now
-            );
-
-            vedioMapper.insert(vedio);
+//
+//            UsernamePasswordAuthenticationToken authentication =
+//                    (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+//            UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+//            User user = loginUser.getUser();
+//
+//            Date now = new Date();
+//
+//            Video vedio = new Video(
+//                    null,
+//                    user.getId(),
+//                    type,
+//                    url,
+//                    0,
+//                    0,
+//                    0,
+//                    0,
+//                    now,
+//                    now
+//            );
+//
+//            vedioMapper.insert(vedio);
 
             Map<String,String> res = new HashMap<>();
             res.put("video_url",url);
@@ -96,15 +108,15 @@ public class ResourceServiceImpl implements ResourceService {
             //构造一个带指定 Region 对象的配置类
             Configuration cfg = new Configuration(Region.huanan());
             cfg.resumableUploadAPIVersion = Configuration.ResumableUploadAPIVersion.V2;// 指定分片上传版本
-//...其他参数参考类注释
+            //...其他参数参考类注释
 
             UploadManager uploadManager = new UploadManager(cfg);
-//...生成上传凭证，然后准备上传
+            //...生成上传凭证，然后准备上传
             String accessKey = "97OSddKvoSFShgtTJ4MVpBkPROimA1l3xN4KNyFK";
             String secretKey = "v7xyZ8rjRaCA9SIAhf-wAk2PnCeE2qpSxqcYh3cu";
             String bucket = "vedio-sharing";
 
-//默认不指定key的情况下，以文件内容的hash值作为文件名
+            //默认不指定key的情况下，以文件内容的hash值作为文件名
             String key = filePath;
 
             Auth auth = Auth.create(accessKey, secretKey);

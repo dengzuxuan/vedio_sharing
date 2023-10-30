@@ -12,6 +12,7 @@ import com.vediosharing.backend.core.constant.Result;
 public interface UserVideoService {
     Result incrVideoLike(int videoId,int delta);
     Result decrVideoLike(int videoId,int delta);
+    Result addVideo(String videoUrl,String picUrl);
     Result initVideoLike(int userId);
     Result getVideo();
 }

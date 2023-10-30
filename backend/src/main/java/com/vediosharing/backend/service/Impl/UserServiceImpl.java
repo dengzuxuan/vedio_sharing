@@ -43,6 +43,8 @@ public class UserServiceImpl implements UserService {
     private AuthenticationManager authenticationManager;
     @Autowired
     private MessageService messageService;
+    @Autowired
+    private UserVideoServiceImpl userVideoServicel;
 
     @Override
     public Result register(UserRegisterReqDto dto) {
@@ -79,6 +81,7 @@ public class UserServiceImpl implements UserService {
                 now
         );
         userMapper.insert(newUser);
+        userVideoServicel.initVideoLike(newUser.getId());
         return Result.success(null);
     }
 

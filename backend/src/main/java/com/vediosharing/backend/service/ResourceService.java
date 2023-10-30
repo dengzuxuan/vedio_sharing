@@ -12,5 +12,5 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface ResourceService {
     Result uploadPhoto(MultipartFile file);
-    Result uploadVideo(MultipartFile file,int type);
+    Result uploadVideo(MultipartFile file);
 }

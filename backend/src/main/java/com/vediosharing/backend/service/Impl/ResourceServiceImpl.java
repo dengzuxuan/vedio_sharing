@@ -48,15 +48,13 @@ public class ResourceServiceImpl implements ResourceService {
         String filePath = PathUtils.generateFilePath(originalFilename);
 
         //如果判断没通过抛出异常
-        if (!originalFilename.endsWith(".png") && !originalFilename.endsWith(".jpg")){
-            return Result.build(null, ResultCodeEnum.PHOTO_PARAMS_WRONG);
-        }
+//        if (!originalFilename.endsWith(".png") && !originalFilename.endsWith(".jpg")){
+//            return Result.build(null, ResultCodeEnum.PHOTO_PARAMS_WRONG);
+//        }
 
-        String url = UploadOss(file,filePath);
-        Map<String,String> res = new HashMap<>();
-        res.put("photo_url",url);
+        Result result = UploadOss(file,filePath);
 
-        return Result.success(res);
+        return result;
     }
 
     @Override
@@ -66,45 +64,21 @@ public class ResourceServiceImpl implements ResourceService {
             //如果判断通过再上传文件到OSS
             String filePath = PathUtils.generateFilePath(originalFilename);
 
+            System.out.println("originalFilename:"+originalFilename);
             //如果判断没通过抛出异常
             if (!originalFilename.endsWith(".mp4")){
                 return Result.build(null, ResultCodeEnum.VIDEO_PARAMS_WRONG);
             }
 
-            String url = UploadOss(file,filePath);
-//
-//            UsernamePasswordAuthenticationToken authentication =
-//                    (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-//            UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
-//            User user = loginUser.getUser();
-//
-//            Date now = new Date();
-//
-//            Video vedio = new Video(
-//                    null,
-//                    user.getId(),
-//                    type,
-//                    url,
-//                    0,
-//                    0,
-//                    0,
-//                    0,
-//                    now,
-//                    now
-//            );
-//
-//            vedioMapper.insert(vedio);
+            Result res = UploadOss(file,filePath);
 
-            Map<String,String> res = new HashMap<>();
-            res.put("video_url",url);
-
-            return Result.success(res);
+            return res;
     }
 
 
 
         //图片上传操作
-        private String UploadOss(MultipartFile file, String filePath){
+        private Result UploadOss(MultipartFile file, String filePath){
             //构造一个带指定 Region 对象的配置类
             Configuration cfg = new Configuration(Region.huanan());
             cfg.resumableUploadAPIVersion = Configuration.ResumableUploadAPIVersion.V2;// 指定分片上传版本
@@ -129,19 +103,20 @@ public class ResourceServiceImpl implements ResourceService {
                     DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
                 } catch (QiniuException ex) {
                     Response r = ex.response;
-                    System.err.println(r.toString());
                     try {
                         System.err.println(r.bodyString());
                     } catch (QiniuException ex2) {
                         //ignore
                     }
+                    return Result.fail(r.bodyString());
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            Map<String,String> res = new HashMap<>();
+            res.put("url","http://s34n6l898.hn-bkt.clouddn.com/" + key);
 
-
-            return "s34n6l898.hn-bkt.clouddn.com/" + key;
+            return Result.success(res);
         }
     }
 

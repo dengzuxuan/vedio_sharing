@@ -9,6 +9,7 @@ import com.vediosharing.backend.dao.entity.Friend;
 import com.vediosharing.backend.dao.entity.User;
 import com.vediosharing.backend.dao.mapper.FriendMapper;
 import com.vediosharing.backend.dao.mapper.UserMapper;
+import com.vediosharing.backend.dto.req.UserInfoReqDto;
 import com.vediosharing.backend.dto.req.UserRegisterReqDto;
 import com.vediosharing.backend.service.Impl.utils.UserDetailsImpl;
 import com.vediosharing.backend.service.MessageService;
@@ -76,6 +77,10 @@ public class UserServiceImpl implements UserService {
                 "",
                 0,
                 defaultPhotoUrl,
+                0,
+                0,
+                0,
+                0,
                 dto.getPassword(),
                 now,
                 now
@@ -128,13 +133,48 @@ public class UserServiceImpl implements UserService {
         UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
         user = loginUser.getUser();
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("username",user.getUsername());
-        map.put("email",user.getEmail());
-        map.put("avatar",user.getPhoto());
-        map.put("nickname",user.getNickname());
+        user.setPasswordReal(null);
+        user.setPassword(null);
 
-        return Result.success(map);
+        return Result.success(user);
+    }
+
+    @Override
+    public Result otherUserInfo(Integer userId) {
+        User user = userMapper.selectById(userId);
+
+        user.setPasswordReal(null);
+        user.setPassword(null);
+
+        return Result.success(user);
+    }
+
+    @Override
+    public Result updateInfo(UserInfoReqDto dto) {
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User user = loginUser.getUser();
+
+        if(dto.getSexual()!=0 && dto.getSexual()!=1 && dto.getSexual()!=2){
+            return Result.build(null,ResultCodeEnum.SEXUAL_PARAM_WRONG);
+        }
+         if(dto.getPhoto().isEmpty()){
+            return Result.build(null,ResultCodeEnum.PHOTO_PARAMS_WRONG);
+        }
+        if(dto.getEmail().isEmpty() || !dto.getEmail().contains("@")){
+            return Result.build(null,ResultCodeEnum.EMAIL_PARAM_WRONG);
+        }
+        if(dto.getNickname().isEmpty()){
+            return Result.build(null,ResultCodeEnum.PHOTO_PARAMS_WRONG);
+        }
+
+        user.setPhoto(dto.getPhoto());
+        user.setNickname(dto.getNickname());
+        user.setPhoto(dto.getPhoto());
+        user.setEmail(dto.getEmail());
+
+        return Result.success(null);
     }
 
     @Override
@@ -145,12 +185,22 @@ public class UserServiceImpl implements UserService {
         User user = loginUser.getUser();
 
         User user1 = userMapper.selectById(userId);
+        if(user1==null){
+            return Result.build(null,ResultCodeEnum.USER_NAME_NOT_EXIST);
+        }
+
+        QueryWrapper<Friend> friendQueryWrapper = new QueryWrapper<>();
+        friendQueryWrapper.eq("recv_userid",userId).eq("send_userid",user1.getId());
+        Friend friend1 = friendMapper.selectOne(friendQueryWrapper);
+        if(friend1!=null){
+            return Result.build(null,ResultCodeEnum.FRIEND_ADD_WRONG);
+        }
 
         messageService.addMessage(MessageConsts.FRIENDAPPLY,user1.getUsername()+"申请添加您为好友",user.getId(),user1.getId());
         Date now = new Date();
         Friend friend = new Friend(
                 null,
-                user1.getId(),
+                user.getId(),
                 userId,
                 now,
                 now
@@ -168,9 +218,32 @@ public class UserServiceImpl implements UserService {
         User user = loginUser.getUser();
 
         QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("recv_userid",user.getId()).eq("send_userid",userId);
+        queryWrapper.eq("recv_userid",userId).eq("send_userid",user.getId());
         friendMapper.delete(queryWrapper);
 
         return Result.success(null);
+    }
+
+    @Override
+    public Result getfriend() {
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User user = loginUser.getUser();
+
+        QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("send_userid",user.getId());
+        List<Friend> friends = friendMapper.selectList(queryWrapper);
+
+        List<User> friendInfo = new ArrayList<>();
+        for (Friend friend:friends) {
+            User user1 = userMapper.selectById(friend.getRecvUserid());
+            user1.setPasswordReal(null);
+            user1.setPassword(null);
+
+            friendInfo.add(user1);
+        }
+
+        return Result.success(friendInfo);
     }
 }

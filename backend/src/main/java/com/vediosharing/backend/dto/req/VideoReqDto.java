@@ -11,4 +11,9 @@ import lombok.Data;
  */
 @Data
 public class VideoReqDto {
+    private String title;
+    private String description;
+    private int type;
+    private String videourl;
+    private String photourl;
 }

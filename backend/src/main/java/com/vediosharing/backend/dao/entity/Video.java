@@ -25,9 +25,13 @@ public class Video {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private int userId;
+    private String title;
+    private String description;
     private int type;
     private String videoUrl;
+    private String photoUrl;
     private int hotPoints;
+    private int viewsPoints;
     private int likePoints;
     private int collectPoints;
     private int commentPoints;

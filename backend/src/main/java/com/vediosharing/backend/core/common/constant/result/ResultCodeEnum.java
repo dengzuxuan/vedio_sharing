@@ -24,10 +24,15 @@ public enum ResultCodeEnum {
     PASSWORD_NOT_EMPTY(2006,"密码不能为空"),
     PASSWORD_NOT_EQUAL(2007,"两次密码输入不等"),
     PASSWORD_PARAM_WRONG(2008,"密码格式有误"),
+    SEXUAL_PARAM_WRONG(2009,"性别格式有误"),
+    PHOTO_PARAM_WRONG(2010,"头像格式有误"),
+    EMAIL_PARAM_WRONG(2011,"邮箱格式有误"),
+    NICKNAME_PARAM_WRONG(2012,"昵称格式有误"),
 
 
     VIDEO_PARAMS_WRONG(3001,"视频上传格式有误"),
-    PHOTO_PARAMS_WRONG(3002,"图片上传格式有误");
+    PHOTO_PARAMS_WRONG(3002,"图片上传格式有误"),
+    FRIEND_ADD_WRONG(4001,"你们已经是好友了") ;
 
     private final Integer code;
 

@@ -1,3 +1,4 @@
+import { type IUploadVideo } from "../libs/model"
 import request from "../utils/request"
 
 interface IUpload {
@@ -14,7 +15,7 @@ export const postPic = async (file: FormData) => {
 }
 // 上传视频
 export const postVideo = async (file: FormData) => {
-  return await request<IUpload>({
+  return await request<IUploadVideo>({
     url: '/api/v1/resource/upload/video',
     method: 'POST',
     headers: { 'Content-Type': 'multipart/form-data' },

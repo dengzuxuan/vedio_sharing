@@ -73,3 +73,20 @@
     width: 100px;
   }
 }
+
+.uploadImg {
+  width: 100%;
+  height: 100%;
+}
+
+.coverImg {
+  width: 100%;
+  // height: 100%;
+  object-fit: cover;
+}
+
+.spin{
+  position: absolute;
+  left: 40px;
+  top: 40px;
+}

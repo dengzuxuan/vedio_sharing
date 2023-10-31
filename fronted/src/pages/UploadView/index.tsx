@@ -1,6 +1,6 @@
 import Dragger from 'antd/lib/upload/Dragger'
 import { InboxOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons'
-import { Form, Input, message, type UploadProps, Upload, Select, Button, Image } from 'antd'
+import { Form, Input, message, type UploadProps, Upload, Select, Button, Image, Spin } from 'antd'
 import style from './index.module.scss'
 import React, { useRef, useState } from 'react'
 import { type RcFile, type UploadChangeParam, type UploadFile } from 'antd/lib/upload'
@@ -10,14 +10,14 @@ import { useForm } from 'antd/lib/form/Form'
 import VideoComponent from '../../components/VideoComponent'
 import { addVideo } from '../../api/uploadVideo'
 import { useNavigate } from 'react-router-dom'
+import { type IUploadVideo } from '../../libs/model'
 
 export default function UploadView() {
+  const [uploadVideoReturn, setUploadVideoReturn] = useState<IUploadVideo>()
   const navigator = useNavigate()
   // 视频
-  const [videoUrl, setVideoUrl] = useState<string>('')
+  // const [videoUrl, setVideoUrl] = useState<string>('')
   const [videoLoading, setVideoLoading] = useState(false)
-  // 封面
-  const [cover, setCover] = useState<RcFile>()
   // 封面url
   const [coverUrl, setCoverUrl] = useState('')
   // 封面loading
@@ -47,9 +47,6 @@ export default function UploadView() {
     if (!isLt5M) {
       message.error('图片要小于5MB!')
     }
-    if (isPNG && isLt5M) {
-      setCover(file)
-    }
     return isPNG && isLt5M
   }
 
@@ -65,25 +62,20 @@ export default function UploadView() {
     }
   }
 
-  // 封面
-  const uploadButton = (
-    <div>
-      {coverLoading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>点击上传</div>
-    </div>
-  )
-
   const resetForm = () => {
-    setVideoUrl('')
     setCoverUrl('')
     form.resetFields()
+    setUploadVideoReturn(undefined)
   }
 
   const uploadVideoInfo = async (values: any) => {
-    if (!cover) {
+    if (!uploadVideoReturn) {
+      return
+    }
+    if (!coverUrl) {
       message.info('请上传封面')
     } else {
-      const res = await addVideo(values.title, values.description, values.type, coverUrl, videoUrl)
+      const res = await addVideo(values.title, values.description, values.type, uploadVideoReturn.url, coverUrl)
       if (res?.code === 200) {
         message.success('上传成功', 1)
           .then(() => navigator('/home/my'))
@@ -95,7 +87,7 @@ export default function UploadView() {
   return (
     <div className={style.back}>
       {
-        !videoUrl
+        !uploadVideoReturn?.url
           ? <Dragger
             showUploadList={false}
             beforeUpload={beforeUpload}
@@ -108,8 +100,9 @@ export default function UploadView() {
                 temp.append('file', option.file)
                 const res = await postVideo(temp)
                 if (res?.code === 200) {
+                  setCoverUrl(res.data.photo_url)
+                  setUploadVideoReturn(res.data)
                   setVideoLoading(false)
-                  setVideoUrl(res.data.url)
                 } else {
                   message.info(res?.message)
                 }
@@ -141,6 +134,7 @@ export default function UploadView() {
                   <Form.Item
                     label='作品标题'
                     name='title'
+                    initialValue={uploadVideoReturn?.file_title}
                     rules={[
                       { required: true, message: '作品标题不为空' }
                     ]}
@@ -160,32 +154,37 @@ export default function UploadView() {
                     label='上传封面'
                     name='uploadCover'
                   >
-                    <Upload
-                      name="avatar"
-                      accept='.png, .jpg, .webp'
-                      listType="picture-card"
-                      className="avatar-uploader"
-                      showUploadList={false}
-                      onChange={handleChange}
-                      customRequest={async (option) => {
-                        const before = beforeUpload2(option.file as RcFile)
-                        if (before) {
-                          const temp = new FormData()
-                          temp.append('file', option.file)
-                          const res = await postPic(temp)
-                          if (res?.code === 200) {
-                            setCoverUrl(res.data.url)
-                            setCoverLoading(false)
+                    <div style={{ marginBottom: '10px' }}>
+                      <Upload
+                        name="avatar"
+                        accept='.png, .jpg, .webp'
+                        listType="picture-card"
+                        className="avatar-uploader"
+                        showUploadList={false}
+                        onChange={handleChange}
+                        customRequest={async (option) => {
+                          const before = beforeUpload2(option.file as RcFile)
+                          if (before) {
+                            const temp = new FormData()
+                            temp.append('file', option.file)
+                            const res = await postPic(temp)
+                            if (res?.code === 200) {
+                              setCoverUrl(res.data.url)
+                              setCoverLoading(false)
+                            } else {
+                              message.info(res?.message)
+                            }
                           } else {
-                            message.info(res?.message)
+                            setCoverLoading(false)
                           }
-                        } else {
-                          setCoverLoading(false)
-                        }
-                      }}
-                    >
-                      <div>{coverUrl ? <img src={coverUrl} style={{ width: '100px' }} /> : uploadButton}</div>
-                    </Upload>
+                        }}
+                      >
+                        <div className={style.uploadImg}>
+                          <img src={coverUrl || uploadVideoReturn?.photo_url} className={style.coverImg} />
+                          <Spin className={style.spin} spinning={coverLoading}></Spin>
+                        </div>
+                      </Upload>
+                    </div>
                   </Form.Item>
                   <Form.Item
                     label='视频分类'
@@ -218,7 +217,7 @@ export default function UploadView() {
               </div>
               <div className={style.view_video}>
                 <div className={style.video_play}>
-                  <VideoComponent propsOption={{ ...basicVideoInitOption, controls: false }} videoUrl={videoUrl}></VideoComponent>
+                  <VideoComponent propsOption={{ ...basicVideoInitOption, controls: false }} videoUrl={uploadVideoReturn.url}></VideoComponent>
                 </div>
               </div>
             </div>

@@ -17,7 +17,7 @@ import topIcon from '../../assets/imgs/top.png'
 import bottomIcon from '../../assets/imgs/bottom.png'
 import rightIcon from '../../assets/imgs/left.png'
 import Mask from '../../components/Mask'
-import { addCollect, addLike, delCollect, delLike } from '../../api/personal'
+import { addCollect, addFrd, addLike, delCollect, delFrd, delLike } from '../../api/personal'
 
 export default function recommend() {
   const [videoInfo, setVideoInfo] = useState<IGetVideo>()
@@ -80,6 +80,28 @@ export default function recommend() {
     }
   }
 
+  const changeFrd = async () => {
+    const user_id = videoInfo?.user.id
+    const frd = videoInfo?.is_friend
+    if (user_id) {
+      if (frd) {
+        const res = await delFrd(user_id)
+        if (res?.code === 200) {
+          setVideoInfo({ ...videoInfo, is_friend: false })
+        } else {
+          message.info(res?.message)
+        }
+      } else {
+        const res = await addFrd(user_id)
+        if (res?.code === 200) {
+          setVideoInfo({ ...videoInfo, is_friend: true })
+        } else {
+          message.info(res?.message)
+        }
+      }
+    }
+  }
+
   useEffect(() => {
     getInitVideo()
   }, [])
@@ -107,7 +129,7 @@ export default function recommend() {
                 <div>{videoInfo?.user.email.length ? videoInfo?.user.email : ''}</div>
                 <div>{videoInfo?.user.username}</div>
               </div>
-              <div className={style.addFrd_box}>点个关注</div>
+              <div className={style.addFrd_box} onClick={() => changeFrd()}>{videoInfo?.is_friend ? '取消关注' : '点个关注'}</div>
             </div>
             <div className={style.middle_div} title={videoInfo?.video.description}>
               {videoInfo?.video.description}

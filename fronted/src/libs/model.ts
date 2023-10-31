@@ -49,8 +49,30 @@ export interface IVideoInfo {
 }
 
 export interface IGetVideo {
+  is_friend: boolean
   is_collect: boolean
   is_like: boolean
   user: IUpdateUser
   video: IVideoInfo
+}
+
+export interface IGetInfo {
+  collects: number
+  createTime: string
+  email: string
+  friends: number
+  id: number
+  likes: number
+  nickname: string
+  photo: string
+  sexual: number
+  updateTime: string
+  username: string
+  views: number
+}
+
+export interface IUploadVideo {
+  photo_url: string
+  file_title: string
+  url: string
 }

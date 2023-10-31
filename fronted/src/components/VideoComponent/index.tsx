@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect, useCallback } from 'react'
 import style from './index.module.scss'
 import videojs from "video.js"
 import "video.js/dist/video-js.css"
-import { basicVideoInitOption } from '../../libs/data'
 import { type IVideo } from '../../libs/model'
 
 interface Props {
@@ -39,8 +38,8 @@ export default function VideoComponent({ propsOption, videoUrl }: Props) {
     if (!playerRef.current) {
       const videoElement = videoRef.current
       if (!videoElement) return
-      player = playerRef.current = videojs(videoElement, option, () => {
-      })
+      videojs.addLanguage('zh-CN', require('video.js/dist/lang/zh-CN.json'))
+      player = playerRef.current = videojs(videoElement, option, () => {})
       onReadyPlay(player)
     }
 
@@ -49,12 +48,14 @@ export default function VideoComponent({ propsOption, videoUrl }: Props) {
     }
   }, [])
   return (
+    <div className={style.video_div}>
     <video style={{
-      width: '100p%',
+      width: '100%',
       height: '100%'
     }} ref={videoRef}
       className="video-js vjs-big-play-centered">
       <source src={videoUrl} type="video/mp4" />
     </video>
+    </div>
   )
 }

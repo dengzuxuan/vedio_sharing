@@ -4,7 +4,6 @@ import style from './index.module.scss'
 import { Button, Form, Input, message } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { login } from '../../api/login'
-import { getVideo } from '../../api/recommend'
 
 export default function Login() {
   const [form] = Form.useForm()
@@ -35,19 +34,6 @@ export default function Login() {
     }
   }
 
-  // 获得初始视频
-  const getInitVideo = async () => {
-    const res = await getVideo()
-    if (res?.code === 200) {
-      console.log(res.data)
-    } else {
-      message.info(res?.message)
-    }
-  }
-
-  useEffect(() => {
-    getInitVideo()
-  }, [])
   return (
     <div className={style.back}>
       <img src={BackgroundImg} className={style.backGround}></img>

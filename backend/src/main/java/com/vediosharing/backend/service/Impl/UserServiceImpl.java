@@ -162,7 +162,7 @@ public class UserServiceImpl implements UserService {
          if(dto.getPhoto().isEmpty()){
             return Result.build(null,ResultCodeEnum.PHOTO_PARAMS_WRONG);
         }
-        if(dto.getEmail().isEmpty() || !dto.getEmail().contains("@")){
+        if(!dto.getEmail().isEmpty() && !dto.getEmail().contains("@")){
             return Result.build(null,ResultCodeEnum.EMAIL_PARAM_WRONG);
         }
         if(dto.getNickname().isEmpty()){

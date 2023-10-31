@@ -1,4 +1,4 @@
-import { type IGetInfo } from "../libs/model"
+import { type ISelfVideo, type IGetInfo } from "../libs/model"
 import request from "../utils/request"
 
 // 收藏
@@ -86,5 +86,13 @@ export const updateInfo = async (nickname: string, photo: string, email: string,
       email,
       sexual
     }
+  })
+}
+
+// 获取个人作品
+export const userVideo = async () => {
+  return await request<ISelfVideo[]>({
+    url: '/api/v1/video/uservideo',
+    method: 'GET'
   })
 }

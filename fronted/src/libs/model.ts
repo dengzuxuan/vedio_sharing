@@ -76,3 +76,20 @@ export interface IUploadVideo {
   file_title: string
   url: string
 }
+
+export interface ISelfVideo {
+  id: number
+  userId: number
+  title: string
+  description: string
+  type: number
+  videoUrl: string
+  photoUrl: string
+  hotPoints: number
+  viewsPoints: number
+  likePoints: number
+  collectPoints: number
+  commentPoints: number
+  createTime: string
+  updateTime: string
+}

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import style from './index.module.scss'
 import { Image, Modal, Spin, Upload, message, Form, Input, Radio, Button } from 'antd'
-import { updateInfo, userInfo } from '../../api/personal'
+import { updateInfo, userInfo, userVideo } from '../../api/personal'
 import { type IGetInfo } from '../../libs/model'
 import manIcon from '../../assets/imgs/man.png'
 import womanIcon from '../../assets/imgs/woman.png'
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { type UploadProps, type RcFile, type UploadChangeParam, type UploadFile } from 'antd/lib/upload'
 import { postPic } from '../../api/common'
 import { useForm } from 'antd/lib/form/Form'
@@ -13,7 +12,6 @@ export default function Self() {
   const [form] = useForm()
   const [clickTabs, setClickTabs] = useState('work')
   const [selfInfo, setSelfInfo] = useState<IGetInfo>()
-  const [cover, setCover] = useState<RcFile>()
   const [coverLoading, setCoverLoading] = useState(false)
   // 控制modal
   const [isModal, setIsModal] = useState(false)
@@ -39,9 +37,6 @@ export default function Self() {
     if (!isLt5M) {
       message.error('图片要小于5MB!')
     }
-    if (isPNG && isLt5M) {
-      setCover(file)
-    }
     return isPNG && isLt5M
   }
 
@@ -65,6 +60,21 @@ export default function Self() {
       message.info(res?.message)
     }
   }
+
+  // 获取个人作品
+  const getSelfWork = async () => {
+    const res = await userVideo()
+    if (res?.code === 200) {
+      console.log(res.data)
+    }
+  }
+
+  useEffect(() => {
+    if (clickTabs === 'work') {
+      getSelfWork()
+    }
+  }, [clickTabs])
+
   useEffect(() => {
     getSelfInfo()
   }, [])
@@ -104,15 +114,15 @@ export default function Self() {
       <div className={style.tabs}>
         <div className={clickTabs === 'work' ? style.tabs_itemClick : style.tabs_item} onClick={() => setClickTabs('work')}>
           <span className={style.tabs_text}>作品</span>
-          <span className={style.number}>0</span>
+          <span className={style.number}>test</span>
         </div>
         <div className={clickTabs === 'good' ? style.tabs_itemClick : style.tabs_item} onClick={() => setClickTabs('good')}>
           <span className={style.tabs_text}>获赞</span>
-          <span className={style.number}>0</span>
+          <span className={style.number}>{selfInfo?.likes}</span>
         </div>
         <div className={clickTabs === 'collect' ? style.tabs_itemClick : style.tabs_item} onClick={() => setClickTabs('collect')}>
           <span className={style.tabs_text}>收藏</span>
-          <span className={style.number}>0</span>
+          <span className={style.number}>{selfInfo?.collects}</span>
         </div>
       </div>
       <Modal
@@ -189,10 +199,10 @@ export default function Self() {
             <Input defaultValue={selfInfo?.email}></Input>
           </Form.Item>
           <Form.Item>
-              <div className={style.buttons}>
-                <Button className={style.button} type='primary' htmlType="submit">修改</Button>
-              </div>
-            </Form.Item>
+            <div className={style.buttons}>
+              <Button className={style.button} type='primary' htmlType="submit">修改</Button>
+            </div>
+          </Form.Item>
         </Form>
       </Modal>
     </div>

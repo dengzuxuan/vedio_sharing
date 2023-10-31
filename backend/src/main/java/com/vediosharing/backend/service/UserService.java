@@ -6,7 +6,7 @@ import com.vediosharing.backend.dto.req.UserRegisterReqDto;
 
 /**
  * @ClassName UserService
- * @Description 用户模块
+ * @Description 用户相关模块
  * @Author Colin
  * @Date 2023/10/26 12:06
  * @Version 1.0

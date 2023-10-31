@@ -8,6 +8,7 @@ import com.vediosharing.backend.dao.entity.User;
 import com.vediosharing.backend.dao.entity.Video;
 import com.vediosharing.backend.dao.mapper.CollectMapper;
 import com.vediosharing.backend.dao.mapper.LikeMapper;
+import com.vediosharing.backend.dao.mapper.UserMapper;
 import com.vediosharing.backend.dao.mapper.VideoMapper;
 import com.vediosharing.backend.service.Impl.utils.UserDetailsImpl;
 import com.vediosharing.backend.service.OptVideoService;
@@ -34,6 +35,8 @@ public class OptVideoServiceImpl implements OptVideoService {
     CollectMapper collectMapper;
     @Autowired
     VideoMapper videoMapper;
+    @Autowired
+    UserMapper userMapper;
     @Override
     public Result addLike(int videoId) {
         UsernamePasswordAuthenticationToken authentication =
@@ -47,6 +50,13 @@ public class OptVideoServiceImpl implements OptVideoService {
             return Result.build(null, ResultCodeEnum.VIDEO_NOT_EXIST);
         }
 
+        QueryWrapper<Likes> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",user.getId()).eq("video_id",videoId);
+        Likes findLike = likeMapper.selectOne(queryWrapper);
+        if(findLike!=null){
+            return Result.build(null,ResultCodeEnum.LIKE_ALREADY_EXIST);
+        }
+
         Likes newLike = new Likes(
                 null,
                 user.getId(),
@@ -55,6 +65,15 @@ public class OptVideoServiceImpl implements OptVideoService {
                 now
         );
         likeMapper.insert(newLike);
+
+        //在video表中新增
+        findVideo.setLikePoints(findVideo.getLikePoints()+1);
+        videoMapper.updateById(findVideo);
+
+        //在user表中新增
+        User videoUser = userMapper.selectById(findVideo.getUserId());
+        videoUser.setLikes(user.getLikes()+1);
+        userMapper.updateById(videoUser);
         return Result.success(null);
     }
 
@@ -71,8 +90,19 @@ public class OptVideoServiceImpl implements OptVideoService {
         if(findLike == null){
             return Result.build(null, ResultCodeEnum.LIKE_NOT_EXIST);
         }
+        likeMapper.delete(queryWrapper);
 
-        return null;
+        Video findVideo = videoMapper.selectById(videoId);
+        //在video表中减去
+        findVideo.setLikePoints(findVideo.getLikePoints()-1);
+        videoMapper.updateById(findVideo);
+
+        //在user表中减去
+        User videoUser = userMapper.selectById(findVideo.getUserId());
+        videoUser.setLikes(user.getLikes()-1);
+        userMapper.updateById(videoUser);
+
+        return Result.success(null);
     }
 
     @Override

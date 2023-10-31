@@ -1,0 +1,92 @@
+.back {
+  width: 94%;
+  margin: 20px auto 0 auto;
+}
+
+.back {
+  :global {
+    .ant-upload.ant-upload-drag p.ant-upload-drag-icon .anticon {
+      color: #fa7132;
+    }
+  }
+}
+
+.uploadDiv {
+  width: 80%;
+  height: 100px;
+  margin: 40px auto 0 auto;
+
+  .title {
+    font-weight: 700;
+    font-size: 18px;
+    color: #333;
+  }
+
+  .uploadInfo {
+    display: flex;
+    flex-direction: row;
+
+    .info_left {
+      width: 400px;
+      margin-right: 40px;
+    }
+
+    .view_video {
+      width: 400px;
+      height: 500px;
+
+      :global {
+        .vjs-big-play-centered {
+          width: 100%;
+        }
+      }
+
+      .video_play {
+        width: 400px;
+        height: 100%;
+      }
+    }
+  }
+}
+
+.btn_box {
+  :global {
+
+    .ant-btn-default:hover,
+    .ant-btn-default:focus {
+      color: lightgray;
+      border-color: lightgray;
+    }
+
+    .ant-btn-primary {
+      background: #f87e45;
+      border-color: #f87e45;
+    }
+  }
+
+  .btn {
+    width: 100px;
+  }
+
+  .left_btn {
+    margin-right: 30px;
+    width: 100px;
+  }
+}
+
+.uploadImg {
+  width: 100%;
+  height: 100%;
+}
+
+.coverImg {
+  width: 100%;
+  // height: 100%;
+  object-fit: cover;
+}
+
+.spin{
+  position: absolute;
+  left: 40px;
+  top: 40px;
+}

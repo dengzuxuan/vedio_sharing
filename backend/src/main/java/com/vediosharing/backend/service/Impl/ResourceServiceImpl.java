@@ -10,6 +10,7 @@ import com.qiniu.util.Auth;
 import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
 import com.vediosharing.backend.core.constant.Result;
 import com.vediosharing.backend.core.utils.PathUtils;
+import com.vediosharing.backend.core.utils.VideoFrameGrabber;
 import com.vediosharing.backend.dao.entity.User;
 import com.vediosharing.backend.dao.entity.Video;
 import com.vediosharing.backend.dao.mapper.VideoMapper;
@@ -23,11 +24,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.qiniu.http.Response;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @ClassName ResourceServiceImpl
@@ -48,13 +52,18 @@ public class ResourceServiceImpl implements ResourceService {
         String filePath = PathUtils.generateFilePath(originalFilename);
 
         //如果判断没通过抛出异常
-//        if (!originalFilename.endsWith(".png") && !originalFilename.endsWith(".jpg")){
-//            return Result.build(null, ResultCodeEnum.PHOTO_PARAMS_WRONG);
-//        }
+        if (!originalFilename.endsWith(".png") && !originalFilename.endsWith(".jpg")){
+            return Result.build(null, ResultCodeEnum.PHOTO_PARAMS_WRONG);
+        }
+        Map<String,String> res = new HashMap<>();
+        try {
+            String url = UploadOss(file.getInputStream(),filePath);
+            res.put("url",url);
+        } catch (IOException e) {
+            return Result.build(null, ResultCodeEnum.VIDEO_INPUT_WRONG);
+        }
 
-        Result result = UploadOss(file,filePath);
-
-        return result;
+        return Result.success(res);
     }
 
     @Override
@@ -70,15 +79,25 @@ public class ResourceServiceImpl implements ResourceService {
                 return Result.build(null, ResultCodeEnum.VIDEO_PARAMS_WRONG);
             }
 
-            Result res = UploadOss(file,filePath);
-
-            return res;
+        Map<String,String> res = new HashMap<>();
+        try {
+            String video_url = UploadOss(file.getInputStream(),filePath);
+            InputStream stream = VideoFrameGrabber.grabberVideoFramer(file);
+            String photo_url = UploadOss(stream,UUID.randomUUID().toString().replaceAll("-", "")+".jpg");
+            res.put("url",video_url);
+            res.put("photo_url",photo_url);
+        } catch (Exception e) {
+            return Result.build(null, ResultCodeEnum.VIDEO_INPUT_WRONG);
+        }
+        return Result.success(res);
     }
 
 
 
         //图片上传操作
-        private Result UploadOss(MultipartFile file, String filePath){
+        private String UploadOss(InputStream inputStream, String filePath) throws QiniuException {
+            //默认不指定key的情况下，以文件内容的hash值作为文件名
+            String key = filePath;
             //构造一个带指定 Region 对象的配置类
             Configuration cfg = new Configuration(Region.huanan());
             cfg.resumableUploadAPIVersion = Configuration.ResumableUploadAPIVersion.V2;// 指定分片上传版本
@@ -90,33 +109,15 @@ public class ResourceServiceImpl implements ResourceService {
             String secretKey = "v7xyZ8rjRaCA9SIAhf-wAk2PnCeE2qpSxqcYh3cu";
             String bucket = "vedio-sharing";
 
-            //默认不指定key的情况下，以文件内容的hash值作为文件名
-            String key = filePath;
 
             Auth auth = Auth.create(accessKey, secretKey);
             String upToken = auth.uploadToken(bucket);
-            try {
-                InputStream inputStream = file.getInputStream();
-                try {
-                    Response response = uploadManager.put(inputStream,key,upToken,null, null);
-                    //解析上传成功的结果
-                    DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
-                } catch (QiniuException ex) {
-                    Response r = ex.response;
-                    try {
-                        System.err.println(r.bodyString());
-                    } catch (QiniuException ex2) {
-                        //ignore
-                    }
-                    return Result.fail(r.bodyString());
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            Map<String,String> res = new HashMap<>();
-            res.put("url","http://s34n6l898.hn-bkt.clouddn.com/" + key);
+            Response response = uploadManager.put(inputStream, key, upToken, null, null);
+            //解析上传成功的结果
+            DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
 
-            return Result.success(res);
+            Map<String,String> res = new HashMap<>();
+            return "http://s34n6l898.hn-bkt.clouddn.com/" + key;
         }
     }
 

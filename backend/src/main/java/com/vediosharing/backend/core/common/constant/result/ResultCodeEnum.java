@@ -31,6 +31,7 @@ public enum ResultCodeEnum {
 
 
     VIDEO_PARAMS_WRONG(3001,"视频上传格式有误"),
+    VIDEO_INPUT_WRONG(3002,"上传失败"),
     PHOTO_PARAMS_WRONG(3002,"图片上传格式有误"),
     FRIEND_ADD_WRONG(4001,"你们已经是好友了"),
 

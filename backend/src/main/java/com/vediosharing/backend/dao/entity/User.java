@@ -37,6 +37,7 @@ public class User implements Serializable {
     private Integer likes; //被点赞数
     private Integer collects; //被收藏数
     private Integer friends; //被关注数
+    private Integer sendFriends; //我关注的数量
     private Integer views; //视频被播放数
 
 

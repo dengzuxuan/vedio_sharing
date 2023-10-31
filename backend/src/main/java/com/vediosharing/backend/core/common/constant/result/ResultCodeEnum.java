@@ -28,6 +28,7 @@ public enum ResultCodeEnum {
     PHOTO_PARAM_WRONG(2010,"头像格式有误"),
     EMAIL_PARAM_WRONG(2011,"邮箱格式有误"),
     NICKNAME_PARAM_WRONG(2012,"昵称格式有误"),
+    USER_NOT_FRIEND_MY_SELF(2005,"用户不能关注自己"),
 
 
     VIDEO_PARAMS_WRONG(3001,"视频上传格式有误"),

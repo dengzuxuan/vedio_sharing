@@ -38,7 +38,6 @@ public class VideoFrameGrabber {
 
             // 获取视频总帧数
             int ftp = fFmpegFrameGrabber.getLengthInFrames();
-            System.out.println("时长 " + ftp / fFmpegFrameGrabber.getFrameRate() / 60);
 
             //对视屏 帧数处理
             while (flag <= ftp) {

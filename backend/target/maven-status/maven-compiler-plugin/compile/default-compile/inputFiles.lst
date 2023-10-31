@@ -30,6 +30,7 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\ma
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\filter\JwtAuthenticationTokenFilter.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\UserLikelyMapper.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\Collects.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\utils\VideoFrameGrabber.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\utils\VideoPools.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\config\CorsConfig.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\UserService.java

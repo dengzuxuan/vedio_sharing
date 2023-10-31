@@ -81,6 +81,7 @@ public class UserServiceImpl implements UserService {
                 0,
                 0,
                 0,
+                0,
                 dto.getPassword(),
                 now,
                 now
@@ -94,7 +95,7 @@ public class UserServiceImpl implements UserService {
     public Result login(UserRegisterReqDto dto) {
         Map<String,String> map = new HashMap<>();
 
-        if(dto.getUsername().length()<5){
+        if(dto.getUsername().length()<5 || dto.getUsername().length()>15){
             return Result.build(null,ResultCodeEnum.USER_NAME_PARAM_WRONG);
         }
 
@@ -189,6 +190,10 @@ public class UserServiceImpl implements UserService {
             return Result.build(null,ResultCodeEnum.USER_NAME_NOT_EXIST);
         }
 
+        if(Objects.equals(user1.getId(), user.getId())){
+            return Result.build(null,ResultCodeEnum.USER_NOT_FRIEND_MY_SELF);
+        }
+
         QueryWrapper<Friend> friendQueryWrapper = new QueryWrapper<>();
         friendQueryWrapper.eq("recv_userid",userId).eq("send_userid",user.getId());
         Friend friend1 = friendMapper.selectOne(friendQueryWrapper);
@@ -208,9 +213,12 @@ public class UserServiceImpl implements UserService {
         friendMapper.insert(friend);
 
         //在user表中新增
-        User videoUser = userMapper.selectById(userId);
-        videoUser.setFriends(videoUser.getFriends()+1);
-        userMapper.updateById(videoUser);
+        user1.setFriends(user1.getFriends()+1);
+        userMapper.updateById(user1);
+
+        user.setSendFriends(user.getSendFriends()+1);
+        userMapper.updateById(user);
+
         return Result.success(null);
     }
 
@@ -230,11 +238,39 @@ public class UserServiceImpl implements UserService {
         videoUser.setFriends(videoUser.getFriends()-1);
         userMapper.updateById(videoUser);
 
+        user.setSendFriends(user.getSendFriends()-1);
+        userMapper.updateById(user);
+
         return Result.success(null);
     }
 
+    //被关注数
     @Override
     public Result getfriend() {
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User user = loginUser.getUser();
+
+        QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("recv_userid",user.getId());
+        List<Friend> friends = friendMapper.selectList(queryWrapper);
+
+        List<User> friendInfo = new ArrayList<>();
+        for (Friend friend:friends) {
+            User user1 = userMapper.selectById(friend.getRecvUserid());
+            user1.setPasswordReal(null);
+            user1.setPassword(null);
+
+            friendInfo.add(user1);
+        }
+
+        return Result.success(friendInfo);
+    }
+
+    //关注他人数量
+    @Override
+    public Result getSendFriend() {
         UsernamePasswordAuthenticationToken authentication =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();

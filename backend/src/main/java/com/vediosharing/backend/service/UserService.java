@@ -22,6 +22,8 @@ public interface UserService {
     Result addfriend(Integer userId);
     //删除朋友
     Result delfriend(Integer userId);
-    //获取朋友
+    //获取关注我的
     Result getfriend();
+    //获取我关注的
+    Result getSendFriend();
 }

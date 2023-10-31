@@ -63,4 +63,9 @@ public class UserController {
         return userService.getfriend();
     }
 
+    @GetMapping("/getsendfriend")
+    public Result getSendFriend(){
+        return userService.getSendFriend();
+    }
+
 }

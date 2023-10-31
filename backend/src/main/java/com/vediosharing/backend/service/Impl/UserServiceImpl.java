@@ -162,7 +162,7 @@ public class UserServiceImpl implements UserService {
          if(dto.getPhoto().isEmpty()){
             return Result.build(null,ResultCodeEnum.PHOTO_PARAMS_WRONG);
         }
-        if(dto.getEmail().isEmpty() || !dto.getEmail().contains("@")){
+        if(!dto.getEmail().isEmpty() && !dto.getEmail().contains("@")){
             return Result.build(null,ResultCodeEnum.EMAIL_PARAM_WRONG);
         }
         if(dto.getNickname().isEmpty()){
@@ -190,7 +190,7 @@ public class UserServiceImpl implements UserService {
         }
 
         QueryWrapper<Friend> friendQueryWrapper = new QueryWrapper<>();
-        friendQueryWrapper.eq("recv_userid",userId).eq("send_userid",user1.getId());
+        friendQueryWrapper.eq("recv_userid",userId).eq("send_userid",user.getId());
         Friend friend1 = friendMapper.selectOne(friendQueryWrapper);
         if(friend1!=null){
             return Result.build(null,ResultCodeEnum.FRIEND_ADD_WRONG);
@@ -200,13 +200,17 @@ public class UserServiceImpl implements UserService {
         Date now = new Date();
         Friend friend = new Friend(
                 null,
-                user.getId(),
                 userId,
+                user.getId(),
                 now,
                 now
         );
         friendMapper.insert(friend);
 
+        //在user表中新增
+        User videoUser = userMapper.selectById(userId);
+        videoUser.setFriends(videoUser.getFriends()+1);
+        userMapper.updateById(videoUser);
         return Result.success(null);
     }
 
@@ -220,6 +224,11 @@ public class UserServiceImpl implements UserService {
         QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("recv_userid",userId).eq("send_userid",user.getId());
         friendMapper.delete(queryWrapper);
+
+        //在user表中减去
+        User videoUser = userMapper.selectById(userId);
+        videoUser.setFriends(videoUser.getFriends()-1);
+        userMapper.updateById(videoUser);
 
         return Result.success(null);
     }

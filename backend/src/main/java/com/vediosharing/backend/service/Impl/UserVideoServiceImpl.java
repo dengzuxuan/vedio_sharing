@@ -3,12 +3,8 @@ package com.vediosharing.backend.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.vediosharing.backend.core.constant.Result;
 import com.vediosharing.backend.core.constant.VideoTypeConsts;
-import com.vediosharing.backend.dao.entity.User;
-import com.vediosharing.backend.dao.entity.UsertLikely;
-import com.vediosharing.backend.dao.entity.Video;
-import com.vediosharing.backend.dao.mapper.UserLikelyMapper;
-import com.vediosharing.backend.dao.mapper.UserMapper;
-import com.vediosharing.backend.dao.mapper.VideoMapper;
+import com.vediosharing.backend.dao.entity.*;
+import com.vediosharing.backend.dao.mapper.*;
 import com.vediosharing.backend.dto.req.VideoReqDto;
 import com.vediosharing.backend.service.Impl.utils.UserDetailsImpl;
 import com.vediosharing.backend.service.UserVideoService;
@@ -34,6 +30,12 @@ public class UserVideoServiceImpl implements UserVideoService {
     UserMapper userMapper;
     @Autowired
     UserLikelyMapper userLikelyMapper;
+    @Autowired
+    CollectMapper collectMapper;
+    @Autowired
+    LikeMapper likeMapper;
+    @Autowired
+    FriendMapper friendMapper;
     List<Video> videoList = new ArrayList<>();
     int currentList = 0;
     @Override
@@ -136,6 +138,34 @@ public class UserVideoServiceImpl implements UserVideoService {
         userShow.setId(user.getId());
         userShow.setPhoto(user.getPhoto());
         userShow.setNickname(user.getNickname());
+
+        QueryWrapper<Collects> queryWrapper2 = new QueryWrapper<>();
+        queryWrapper2.eq("user_id",video.getUserId()).eq("video_id",video.getId());
+        Collects findCollect= collectMapper.selectOne(queryWrapper2);
+        if(findCollect!=null){
+            res.put("is_collect",true);
+        }else{
+            res.put("is_collect",false);
+        }
+
+        QueryWrapper<Likes> queryWrapper3 = new QueryWrapper<>();
+        queryWrapper3.eq("user_id",video.getUserId()).eq("video_id",video.getId());
+        Likes findLike= likeMapper.selectOne(queryWrapper3);
+        if(findLike!=null){
+            res.put("is_like",true);
+        }else{
+            res.put("is_like",false);
+        }
+
+        QueryWrapper<Friend> queryWrapper4 = new QueryWrapper<>();
+        queryWrapper4.eq("recv_userid",video.getUserId()).eq("send_userid",loginuser.getId());
+        Friend findFriend= friendMapper.selectOne(queryWrapper4);
+        if(findFriend!=null){
+            res.put("is_friend",true);
+        }else{
+            res.put("is_friend",false);
+        }
+
 
         res.put("video",video);
         res.put("user",userMapper.selectById(userShow));

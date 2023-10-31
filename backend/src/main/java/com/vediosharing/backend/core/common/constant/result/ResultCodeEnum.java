@@ -32,7 +32,13 @@ public enum ResultCodeEnum {
 
     VIDEO_PARAMS_WRONG(3001,"视频上传格式有误"),
     PHOTO_PARAMS_WRONG(3002,"图片上传格式有误"),
-    FRIEND_ADD_WRONG(4001,"你们已经是好友了") ;
+    FRIEND_ADD_WRONG(4001,"你们已经是好友了"),
+
+    VIDEO_NOT_EXIST(5001,"该视频不存在"),
+    LIKE_NOT_EXIST(5002,"您尚未点赞该视频"),
+    LIKE_ALREADY_EXIST(5003,"您已经点过赞了"),
+    COLLECT_NOT_EXIST(5004,"您尚未收藏该视频"),
+    COLLECT_ALREADY_EXIST(5005,"您已经收藏过了");
 
     private final Integer code;
 

@@ -34,6 +34,8 @@ public class UserVideoServiceImpl implements UserVideoService {
     CollectMapper collectMapper;
     @Autowired
     LikeMapper likeMapper;
+    @Autowired
+    FriendMapper friendMapper;
     List<Video> videoList = new ArrayList<>();
     int currentList = 0;
     @Override
@@ -153,6 +155,15 @@ public class UserVideoServiceImpl implements UserVideoService {
             res.put("is_like",true);
         }else{
             res.put("is_like",false);
+        }
+
+        QueryWrapper<Friend> queryWrapper4 = new QueryWrapper<>();
+        queryWrapper4.eq("recv_userid",video.getUserId()).eq("send_userid",loginuser.getId());
+        Friend findFriend= friendMapper.selectOne(queryWrapper4);
+        if(findFriend!=null){
+            res.put("is_friend",true);
+        }else{
+            res.put("is_friend",false);
         }
 
 

@@ -3,6 +3,7 @@ package com.vediosharing.backend.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
 import com.vediosharing.backend.core.constant.Result;
+import com.vediosharing.backend.dao.entity.Collects;
 import com.vediosharing.backend.dao.entity.Likes;
 import com.vediosharing.backend.dao.entity.User;
 import com.vediosharing.backend.dao.entity.Video;
@@ -84,6 +85,11 @@ public class OptVideoServiceImpl implements OptVideoService {
         UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
         User user = loginUser.getUser();
 
+        Video findVideo = videoMapper.selectById(videoId);
+        if(findVideo == null){
+            return Result.build(null,ResultCodeEnum.VIDEO_NOT_EXIST);
+        }
+
         QueryWrapper<Likes> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id",user.getId()).eq("video_id",videoId);
         Likes findLike = likeMapper.selectOne(queryWrapper);
@@ -92,7 +98,7 @@ public class OptVideoServiceImpl implements OptVideoService {
         }
         likeMapper.delete(queryWrapper);
 
-        Video findVideo = videoMapper.selectById(videoId);
+
         //在video表中减去
         findVideo.setLikePoints(findVideo.getLikePoints()-1);
         videoMapper.updateById(findVideo);
@@ -107,12 +113,74 @@ public class OptVideoServiceImpl implements OptVideoService {
 
     @Override
     public Result addcollect(int videoId) {
-        return null;
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User user = loginUser.getUser();
+        Date now = new Date();
+
+        Video findVideo = videoMapper.selectById(videoId);
+        if(findVideo == null){
+            return Result.build(null, ResultCodeEnum.VIDEO_NOT_EXIST);
+        }
+
+        QueryWrapper<Collects> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",user.getId()).eq("video_id",videoId);
+        Collects findCollect = collectMapper.selectOne(queryWrapper);
+        if(findCollect!=null){
+            return Result.build(null,ResultCodeEnum.COLLECT_ALREADY_EXIST);
+        }
+
+        Collects newCollect = new Collects(
+                null,
+                user.getId(),
+                videoId,
+                now,
+                now
+        );
+        collectMapper.insert(newCollect);
+
+        //在video表中新增
+        findVideo.setCollectPoints(findVideo.getCollectPoints()+1);
+        videoMapper.updateById(findVideo);
+
+        //在user表中新增
+        User videoUser = userMapper.selectById(findVideo.getUserId());
+        videoUser.setCollects(user.getCollects()+1);
+        userMapper.updateById(videoUser);
+        return Result.success(null);
     }
 
     @Override
     public Result delcollect(int videoId) {
-        return null;
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User user = loginUser.getUser();
+        Date now = new Date();
+
+        Video findVideo = videoMapper.selectById(videoId);
+        if(findVideo == null){
+            return Result.build(null, ResultCodeEnum.VIDEO_NOT_EXIST);
+        }
+
+        QueryWrapper<Collects> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",user.getId()).eq("video_id",videoId);
+        Collects findCollect = collectMapper.selectOne(queryWrapper);
+        if(findCollect==null){
+            return Result.build(null,ResultCodeEnum.COLLECT_NOT_EXIST);
+        }
+        collectMapper.delete(queryWrapper);
+
+        //在video表中减去
+        findVideo.setCollectPoints(findVideo.getCollectPoints()-1);
+        videoMapper.updateById(findVideo);
+
+        //在user表中减去
+        User videoUser = userMapper.selectById(findVideo.getUserId());
+        videoUser.setCollects(user.getCollects()-1);
+        userMapper.updateById(videoUser);
+        return Result.success(null);
     }
 
     @Override

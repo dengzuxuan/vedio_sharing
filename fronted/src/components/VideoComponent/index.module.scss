@@ -1,0 +1,39 @@
+.video_div {
+  width: 100%;
+  height: 100%;
+
+  :global {
+    .video-js {
+      border-radius: 15px;
+    }
+
+    .vjs-control-bar {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      border-radius: 10px;
+    }
+
+    .vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
+      opacity: 1;
+    }
+
+    .vjs-icon-placeholder:before {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .vjs-playback-rate .vjs-playback-rate-value {
+      line-height: 50px;
+    }
+
+    .vjs-menu-button-popup .vjs-menu {
+      bottom: 10px;
+    }
+
+    .vjs-menu-button-popup .vjs-menu > ul > li {
+      letter-spacing: 1px;
+    }
+  }
+}

@@ -1,6 +1,7 @@
 package com.vediosharing.backend.service;
 
 import com.vediosharing.backend.core.constant.Result;
+import com.vediosharing.backend.dto.req.UserInfoReqDto;
 import com.vediosharing.backend.dto.req.UserRegisterReqDto;
 
 /**
@@ -15,6 +16,12 @@ public interface UserService {
 
     Result login(UserRegisterReqDto dto);
     Result userInfo();
-    Result addfirend(Integer userId);
-    Result delfirend(Integer userId);
+    Result otherUserInfo(Integer userId);
+    Result updateInfo(UserInfoReqDto dto);
+    //添加朋友
+    Result addfriend(Integer userId);
+    //删除朋友
+    Result delfriend(Integer userId);
+    //获取朋友
+    Result getfriend();
 }

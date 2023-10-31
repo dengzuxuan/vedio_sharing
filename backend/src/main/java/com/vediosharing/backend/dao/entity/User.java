@@ -34,6 +34,10 @@ public class User implements Serializable {
     private String email;
     private int sexual; //0默认 1男 2女
     private String photo; //使用七牛云cdn存储
+    private Integer likes; //被点赞数
+    private Integer collects; //被收藏数
+    private Integer friends; //被关注数
+    private Integer views; //视频被播放数
 
 
     @JsonInclude(value = JsonInclude.Include.NON_NULL)

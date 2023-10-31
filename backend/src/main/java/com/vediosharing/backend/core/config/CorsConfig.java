@@ -20,7 +20,7 @@ public class CorsConfig implements Filter{
 
         String origin = request.getHeader("Origin");
         if(origin!=null) {
-            response.setHeader("Access-Control-Allow-Origin", origin);
+            response.setHeader("Access-Control-Allow-Origin", "*");
         }
 
         String headers = request.getHeader("Access-Control-Request-Headers");

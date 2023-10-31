@@ -8,8 +8,11 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dto\re
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\UserDetailServiceImpl.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\controller\UserController.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\ResourceService.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\Likes.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\LikeMapper.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\UserVideoService.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\controller\UserVideoController.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\CollectMapper.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\UserServiceImpl.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\config\SecurityConfig.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\MessageService.java
@@ -24,6 +27,7 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\servic
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\MessageMapper.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\filter\JwtAuthenticationTokenFilter.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\UserLikelyMapper.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\Collects.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\utils\VideoPools.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\config\CorsConfig.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\UserService.java

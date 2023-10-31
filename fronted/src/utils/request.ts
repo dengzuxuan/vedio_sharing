@@ -2,7 +2,7 @@ import axios from 'axios'
 import type { HeadersDefaults, AxiosRequestConfig } from 'axios'
 import { message } from 'antd'
 
-const BASE_URL = '/api'
+const BASE_URL = ''
 // 添加额外的头部配置
 interface Header extends HeadersDefaults {
   'Content-Type': string
@@ -17,7 +17,7 @@ interface Response<T> {
 }
 const service = axios.create({
   baseURL: BASE_URL,
-  timeout: 5000
+  timeout: 50000
 })
 
 // 请求拦截

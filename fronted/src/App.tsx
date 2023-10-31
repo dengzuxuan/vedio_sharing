@@ -6,6 +6,7 @@ import Register from './pages/Register'
 import Home from './pages/Home'
 import Self from './pages/Self'
 import Recommend from './pages/Recommend'
+import UploadView from './pages/UploadView'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path='/home' element={<Home/>}>
             <Route path='Recommend' element={<Recommend/>}></Route>
             <Route path='my' element={<Self/>}></Route>
+            <Route path='upload' element={<UploadView/>}></Route>
           </Route>
           <Route path='register' element={<Register/>}></Route>
           <Route path='*' element={<Navigate to='/login' />}></Route>

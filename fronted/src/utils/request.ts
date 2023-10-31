@@ -17,7 +17,7 @@ interface Response<T> {
 }
 const service = axios.create({
   baseURL: BASE_URL,
-  timeout: 5000
+  timeout: 50000
 })
 
 // 请求拦截

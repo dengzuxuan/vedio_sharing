@@ -78,7 +78,7 @@ export default function Home() {
             )
           }
         </div>
-        <div>
+        <div className={style.main_info}>
           <Outlet></Outlet>
         </div>
       </main >

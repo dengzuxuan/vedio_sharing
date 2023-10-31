@@ -1,14 +1,18 @@
 package com.vediosharing.backend.service.Impl;
 
+import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.vediosharing.backend.core.constant.MessageConsts;
 import com.vediosharing.backend.core.constant.Result;
 import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
 import com.vediosharing.backend.core.utils.JwtUtil;
+import com.vediosharing.backend.core.utils.RegexUtil;
 import com.vediosharing.backend.dao.entity.Friend;
 import com.vediosharing.backend.dao.entity.User;
+import com.vediosharing.backend.dao.entity.Video;
 import com.vediosharing.backend.dao.mapper.FriendMapper;
 import com.vediosharing.backend.dao.mapper.UserMapper;
+import com.vediosharing.backend.dao.mapper.VideoMapper;
 import com.vediosharing.backend.dto.req.UserInfoReqDto;
 import com.vediosharing.backend.dto.req.UserRegisterReqDto;
 import com.vediosharing.backend.service.Impl.utils.UserDetailsImpl;
@@ -37,6 +41,8 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
     @Autowired
     FriendMapper friendMapper;
+    @Autowired
+    VideoMapper videoMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -49,11 +55,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result register(UserRegisterReqDto dto) {
-        if(dto.getUsername().length()<5){
+        if(!RegexUtil.isValidUsername(dto.getUsername())){
             return Result.build(null,ResultCodeEnum.USER_NAME_PARAM_WRONG);
         }
 
-        if(dto.getPassword().length()<5){
+        if(!RegexUtil.isValidPassword(dto.getPassword())){
             return Result.build(null,ResultCodeEnum.PASSWORD_PARAM_WRONG);
         }
 
@@ -69,14 +75,17 @@ public class UserServiceImpl implements UserService {
         String defaultPhotoUrl = "http://s34n6l898.hn-bkt.clouddn.com/photo/photo_default.png";
         Date now = new Date();
 
+        String defaultNickName = "niuniu"+ IdUtil.getSnowflakeNextIdStr() ;
+
         User newUser = new  User(
                 null,
                 dto.getUsername(),
-                dto.getUsername(),
+                defaultNickName,
                 encodedPassword,
                 "",
                 0,
                 defaultPhotoUrl,
+                0,
                 0,
                 0,
                 0,
@@ -137,6 +146,21 @@ public class UserServiceImpl implements UserService {
         user.setPasswordReal(null);
         user.setPassword(null);
 
+        QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",user.getId());
+
+        int views = 0,collects = 0,likes = 0;
+        List<Video> videoList = videoMapper.selectList(queryWrapper);
+        for (Video video:videoList){
+            views+=video.getViewsPoints();
+            collects+=video.getCollectPoints();
+            likes+=video.getLikePoints();
+        }
+        user.setVideos(videoList.size());
+        user.setLikes(likes);
+        user.setCollects(collects);
+        user.setViews(views);
+
         return Result.success(user);
     }
 
@@ -146,6 +170,21 @@ public class UserServiceImpl implements UserService {
 
         user.setPasswordReal(null);
         user.setPassword(null);
+
+        QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",user.getId());
+
+        int views = 0,collects = 0,likes = 0;
+        List<Video> videoList = videoMapper.selectList(queryWrapper);
+        for (Video video:videoList){
+            views+=video.getViewsPoints();
+            collects+=video.getCollectPoints();
+            likes+=video.getLikePoints();
+        }
+        user.setVideos(videoList.size());
+        user.setLikes(likes);
+        user.setCollects(collects);
+        user.setViews(views);
 
         return Result.success(user);
     }
@@ -174,6 +213,8 @@ public class UserServiceImpl implements UserService {
         user.setNickname(dto.getNickname());
         user.setPhoto(dto.getPhoto());
         user.setEmail(dto.getEmail());
+
+        userMapper.updateById(user);
 
         return Result.success(null);
     }

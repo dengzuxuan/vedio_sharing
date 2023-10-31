@@ -19,7 +19,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName OptVideoServiceImpl
@@ -70,11 +72,6 @@ public class OptVideoServiceImpl implements OptVideoService {
         //在video表中新增
         findVideo.setLikePoints(findVideo.getLikePoints()+1);
         videoMapper.updateById(findVideo);
-
-        //在user表中新增
-        User videoUser = userMapper.selectById(findVideo.getUserId());
-        videoUser.setLikes(user.getLikes()+1);
-        userMapper.updateById(videoUser);
         return Result.success(null);
     }
 
@@ -102,12 +99,6 @@ public class OptVideoServiceImpl implements OptVideoService {
         //在video表中减去
         findVideo.setLikePoints(findVideo.getLikePoints()-1);
         videoMapper.updateById(findVideo);
-
-        //在user表中减去
-        User videoUser = userMapper.selectById(findVideo.getUserId());
-        videoUser.setLikes(user.getLikes()-1);
-        userMapper.updateById(videoUser);
-
         return Result.success(null);
     }
 
@@ -143,11 +134,6 @@ public class OptVideoServiceImpl implements OptVideoService {
         //在video表中新增
         findVideo.setCollectPoints(findVideo.getCollectPoints()+1);
         videoMapper.updateById(findVideo);
-
-        //在user表中新增
-        User videoUser = userMapper.selectById(findVideo.getUserId());
-        videoUser.setCollects(user.getCollects()+1);
-        userMapper.updateById(videoUser);
         return Result.success(null);
     }
 
@@ -175,12 +161,46 @@ public class OptVideoServiceImpl implements OptVideoService {
         //在video表中减去
         findVideo.setCollectPoints(findVideo.getCollectPoints()-1);
         videoMapper.updateById(findVideo);
-
-        //在user表中减去
-        User videoUser = userMapper.selectById(findVideo.getUserId());
-        videoUser.setCollects(user.getCollects()-1);
-        userMapper.updateById(videoUser);
         return Result.success(null);
+    }
+
+    @Override
+    public Result getcollectVideo() {
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User user = loginUser.getUser();
+
+        QueryWrapper<Collects> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",user.getId());
+        List<Collects> collectsList= collectMapper.selectList(queryWrapper);
+
+        List<Video> collectVideoList = new ArrayList<>();
+        for(Collects collects:collectsList){
+            Video video = videoMapper.selectById(collects.getVideoId());
+            collectVideoList.add(video);
+        }
+
+        return Result.success(collectVideoList);
+    }
+
+    @Override
+    public Result getlikeVideo() {
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User user = loginUser.getUser();
+
+        QueryWrapper<Likes> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",user.getId());
+        List<Likes> likesList= likeMapper.selectList(queryWrapper);
+
+        List<Video> likeVideoList = new ArrayList<>();
+        for(Likes like:likesList){
+            Video video = videoMapper.selectById(like.getVideoId());
+            likeVideoList.add(video);
+        }
+        return Result.success(likeVideoList);
     }
 
     @Override

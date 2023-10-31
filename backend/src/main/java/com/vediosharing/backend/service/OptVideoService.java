@@ -15,6 +15,8 @@ public interface OptVideoService {
     Result addcollect(int videoId);
     Result delcollect(int videoId);
 
+    Result getcollectVideo();
+    Result getlikeVideo();
     Result addcomment(int videoId,int commentId);
     Result delcomment(int commentId);
     Result addLikeComment(int commentId);

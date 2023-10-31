@@ -4,10 +4,7 @@ import com.vediosharing.backend.core.constant.ApiRouterConsts;
 import com.vediosharing.backend.core.constant.Result;
 import com.vediosharing.backend.service.OptVideoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -44,5 +41,14 @@ public class UserOptController {
     public Result delLike(@RequestParam Map<String,String> m1){
         int videoId = Integer.parseInt(m1.get("video_id"));
         return optVideoService.delLike(videoId);
+    }
+
+    @GetMapping("/getlikevideos")
+    public Result getlikevideos(){
+        return optVideoService.getlikeVideo();
+    }
+    @GetMapping("/getcollectvideos")
+    public Result getcollectvideos(){
+        return optVideoService.getcollectVideo();
     }
 }

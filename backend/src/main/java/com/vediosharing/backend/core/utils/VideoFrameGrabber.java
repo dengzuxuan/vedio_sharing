@@ -1,7 +1,5 @@
 package com.vediosharing.backend.core.utils;
 
-import org.bytedeco.opencv.opencv_core.*;
-import org.bytedeco.opencv.global.opencv_imgcodecs;
 import org.bytedeco.javacv.*;
 
 import java.awt.image.BufferedImage;

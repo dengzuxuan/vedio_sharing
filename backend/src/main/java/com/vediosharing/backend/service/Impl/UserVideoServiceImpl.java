@@ -132,6 +132,8 @@ public class UserVideoServiceImpl implements UserVideoService {
 
         int videoIndex = (int) (Math.random()* videos.size());
         Video video = videos.get(videoIndex);
+        video.setViewsPoints(video.getViewsPoints()+1);
+        videoMapper.updateById(video);
 
         User user = userMapper.selectById(video.getUserId());
         User userShow = new User();

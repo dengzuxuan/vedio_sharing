@@ -4,7 +4,7 @@ import { tabs_one, tabs_two } from '../../libs/data'
 import chaIcon from '../../assets/imgs/cha.png'
 import searchIcon from '../../assets/imgs/search.png'
 import personIcon from '../../assets/imgs/person.webp'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 export default function Home() {
   const navigator = useNavigate()
@@ -21,6 +21,7 @@ export default function Home() {
   useEffect(() => {
     navigator(`/home/${clickItemValue}`)
   }, [clickItemValue])
+
   return (
     <div className={style.back}>
       <header className={style.header}>

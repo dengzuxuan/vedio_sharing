@@ -96,3 +96,19 @@ export const userVideo = async () => {
     method: 'GET'
   })
 }
+
+// 获取点赞视频
+export const getlikevideos = async () => {
+  return await request<ISelfVideo[]>({
+    url: '/api/v1/optvideo/getlikevideos',
+    method: 'GET'
+  })
+}
+
+// 获取收藏视频
+export const getcollectvideos = async () => {
+  return await request<ISelfVideo[]>({
+    url: '/api/v1/optvideo/getcollectvideos',
+    method: 'GET'
+  })
+}

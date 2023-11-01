@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import style from './index.module.scss'
 import { Image, Modal, Spin, Upload, message, Form, Input, Radio, Button } from 'antd'
-import { updateInfo, userInfo, userVideo } from '../../api/personal'
-import { type IGetInfo } from '../../libs/model'
+import { getcollectvideos, getlikevideos, updateInfo, userInfo, userVideo } from '../../api/personal'
+import { type ISelfVideo, type IGetInfo } from '../../libs/model'
 import manIcon from '../../assets/imgs/man.png'
 import womanIcon from '../../assets/imgs/woman.png'
 import { type UploadProps, type RcFile, type UploadChangeParam, type UploadFile } from 'antd/lib/upload'
 import { postPic } from '../../api/common'
 import { useForm } from 'antd/lib/form/Form'
+import VideoComponent from '../../components/VideoComponent'
+import { basicVideoInitOption } from '../../libs/data'
 export default function Self() {
   const [form] = useForm()
   const [clickTabs, setClickTabs] = useState('work')
   const [selfInfo, setSelfInfo] = useState<IGetInfo>()
   const [coverLoading, setCoverLoading] = useState(false)
+  const [selfVideo, setSelfVideo] = useState<ISelfVideo[]>()
   // 控制modal
   const [isModal, setIsModal] = useState(false)
 
@@ -62,22 +65,38 @@ export default function Self() {
   }
 
   // 获取个人作品
-  const getSelfWork = async () => {
-    const res = await userVideo()
+  const getVideos = async (clickTabs: string) => {
+    let res
+    switch (clickTabs) {
+      case 'work':
+        res = await userVideo()
+        break
+      case 'good':
+        res = await getlikevideos()
+        break
+      case 'collect':
+        res = await getcollectvideos()
+        break
+      default:
+        console.log('')
+    }
     if (res?.code === 200) {
-      console.log(res.data)
+      setSelfVideo(res.data)
     }
   }
 
   useEffect(() => {
-    if (clickTabs === 'work') {
-      getSelfWork()
-    }
+    getVideos(clickTabs)
   }, [clickTabs])
 
   useEffect(() => {
     getSelfInfo()
   }, [])
+
+  const option = {
+    ...basicVideoInitOption,
+    controls: true
+  }
   return (
     <div className={style.back}>
       <div className={style.self_info}>
@@ -92,7 +111,11 @@ export default function Self() {
           <div className={style.user_info}>
             <div className={style.item_info}>
               <span className={style.text}>关注</span>
-              <span className={style.number}>{ }</span>
+              <span className={style.number}>{selfInfo?.sendFriends}</span>
+            </div>
+            <div className={style.item_info}>
+              <span className={style.text}>粉丝</span>
+              <span className={style.number}>{selfInfo?.friends}</span>
             </div>
             <div className={style.item_info}>
               <span className={style.text}>获赞</span>
@@ -114,7 +137,7 @@ export default function Self() {
       <div className={style.tabs}>
         <div className={clickTabs === 'work' ? style.tabs_itemClick : style.tabs_item} onClick={() => setClickTabs('work')}>
           <span className={style.tabs_text}>作品</span>
-          <span className={style.number}>test</span>
+          <span className={style.number}>{selfInfo?.videos}</span>
         </div>
         <div className={clickTabs === 'good' ? style.tabs_itemClick : style.tabs_item} onClick={() => setClickTabs('good')}>
           <span className={style.tabs_text}>获赞</span>
@@ -124,6 +147,26 @@ export default function Self() {
           <span className={style.tabs_text}>收藏</span>
           <span className={style.number}>{selfInfo?.collects}</span>
         </div>
+      </div>
+      <div className={style.video_box}>
+        {
+          selfVideo
+            ? selfVideo.map(item =>
+              <div key={item.id} className={style.video_item}>
+                <div className={style.video_div}>
+                  <VideoComponent propsOption={{ ...option, loop: true, poster: item.photoUrl }} hoverFunc={true} videoUrl={item.videoUrl}></VideoComponent>
+                </div>
+                <div className={style.title_description} title={item.description}>
+                  <span className={style.title}>{item.title}</span>
+                  <span className={style.description}>
+                    {
+                      item.description
+                    }
+                  </span>
+                </div>
+              </div>)
+            : ''
+        }
       </div>
       <Modal
         className={style.modal}

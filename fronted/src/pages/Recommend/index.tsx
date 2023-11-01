@@ -105,7 +105,7 @@ export default function recommend() {
   useEffect(() => {
     getInitVideo()
   }, [])
-  const propsOption = { ...basicVideoInitOption, loop: true, poster: videoInfo?.video.photoUrl ? videoInfo?.video.photoUrl : '' }
+  const propsOption = { ...basicVideoInitOption, loop: true, autoplay: true, poster: videoInfo?.video.photoUrl ? videoInfo?.video.photoUrl : '' }
   return (
     <div className={style.back}>
       <div className={leftClick ? style.video_play : style.video_play_no_click}>

@@ -16,6 +16,11 @@
 
     .vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
       opacity: 1;
+      height: 50px;
+    }
+
+    .vjs-has-started .vjs-control-bar {
+      height: 50px;
     }
 
     .vjs-icon-placeholder:before {

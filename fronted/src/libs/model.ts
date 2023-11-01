@@ -1,7 +1,7 @@
 export interface IVideo {
   language: string
   controls?: boolean
-  autoplay: boolean // 加载完成是否自动播放
+  autoplay?: boolean // 加载完成是否自动播放
   loop: boolean // 视频播放结束后，是否循环播放
   notSupportedMessage: string
   poster: string // 视频封面
@@ -69,6 +69,8 @@ export interface IGetInfo {
   updateTime: string
   username: string
   views: number
+  sendFriends: number
+  videos: number
 }
 
 export interface IUploadVideo {

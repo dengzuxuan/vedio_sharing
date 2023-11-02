@@ -16,6 +16,7 @@ public interface UserVideoService {
     Result addVideo(VideoReqDto reqDto);
     Result initVideoLike(int userId);
     Result getVideo();
+    Result getSingleVideo(int videoId);
     Result getUserVideos();
     Result getUserCollects();
     Result getUserLikes();

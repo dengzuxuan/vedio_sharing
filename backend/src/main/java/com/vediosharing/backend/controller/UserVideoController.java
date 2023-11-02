@@ -29,6 +29,11 @@ public class UserVideoController {
     public Result getVideo(){
         return userVideoService.getVideo();
     }
+    @GetMapping("/getsinglevideo")
+    public Result getSingleVideo(@RequestParam Map<String,String>m1){
+        int videoId = Integer.parseInt(m1.get("video_id"));
+        return userVideoService.getSingleVideo(videoId);
+    }
     @GetMapping("/uservideo")
     public Result getUserVideo(){
         return userVideoService.getUserVideos();

@@ -1,6 +1,7 @@
 package com.vediosharing.backend.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
 import com.vediosharing.backend.core.constant.Result;
 import com.vediosharing.backend.core.constant.VideoTypeConsts;
 import com.vediosharing.backend.dao.entity.*;
@@ -89,6 +90,7 @@ public class UserVideoServiceImpl implements UserVideoService {
                 now,now
 
         );
+        userLikelyMapper.insert(newUserLikely);
         return Result.success(null);
     }
 
@@ -174,6 +176,16 @@ public class UserVideoServiceImpl implements UserVideoService {
 
         return Result.success(res);
 
+    }
+
+    @Override
+    public Result getSingleVideo(int videoId) {
+        Video video = videoMapper.selectById(videoId);
+
+        if(video == null){
+            return Result.build(null, ResultCodeEnum.VIDEO_NOT_EXIST);
+        }
+        return Result.success(video);
     }
 
     @Override

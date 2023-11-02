@@ -139,3 +139,14 @@ export const delfriend = async (userid: number) => {
     }
   })
 }
+
+// 获取其他人信息
+export const otheruserinfo = async (userid: number) => {
+  return await request<IGetInfo>({
+    url: '/api/v1/user/otheruserinfo',
+    method: 'GET',
+    params: {
+      userid
+    }
+  })
+}

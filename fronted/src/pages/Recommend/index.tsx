@@ -101,6 +101,14 @@ export default function recommend() {
     }
   }
 
+  // 跳转到新页面
+  const jump = () => {
+    const w = window.open('_black')
+    if (w) {
+      w.location.href = `/user/${3}`
+    }
+  }
+
   useEffect(() => {
     getInitVideo()
   }, [])
@@ -120,10 +128,10 @@ export default function recommend() {
         <div className={style.bottom_div}>
           <div className={style.right_div}>
             <div className={style.userInfo}>
-              <div className={style.img_box}>
+              <div className={style.img_box} onClick={() => jump()}>
                 <img className={style.img} src={videoInfo?.user.photo}></img>
               </div>
-              <div className={style.user_info}>
+              <div className={style.user_info} onClick={() => jump()}>
                 <div>{videoInfo?.user.nickname}</div>
                 <div>{videoInfo?.user.email.length ? videoInfo?.user.email : ''}</div>
                 <div>{videoInfo?.user.username}</div>

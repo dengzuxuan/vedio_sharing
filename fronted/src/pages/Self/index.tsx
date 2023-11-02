@@ -148,7 +148,7 @@ export default function Self() {
             </div>
             <div className={style.item_info}>
               <span className={style.text}>获赞</span>
-              <span className={style.number}>22</span>
+              <span className={style.number}>{selfInfo?.likes}</span>
             </div>
           </div>
           <div className={style.username_info}>

@@ -59,27 +59,29 @@ export default function Register() {
               name='username'
               rules={[
                 { required: true, message: '用户名不为空' },
-                { min: 5, message: '用户名不少于5位' },
-                { max: 12, message: '用户名不多于12位' }
+                { min: 6, message: '用户名不少于6位' },
+                { max: 14, message: '用户名不多于14位' }
               ]}
             >
-              <Input placeholder='请输入2~12位用户名'>
+              <Input placeholder='请输入6~14位用户名, 用户名由数字加字母组成'>
               </Input>
             </Form.Item>
             <Form.Item
               name='password'
               rules={[
                 { required: true, message: '密码不为空' },
-                { min: 5, message: '长度不小于5位' }
+                { min: 6, message: '长度不小于6位' },
+                { max: 20, message: '长度不大于20位' }
               ]}
             >
-              <Input.Password placeholder='请输入密码'></Input.Password>
+              <Input.Password placeholder='请输入密码,密码由数字加字母组成'></Input.Password>
             </Form.Item>
             <Form.Item
               name='passwordConfirm'
               rules={[
                 { required: true, message: '密码不为空' },
-                { min: 5, message: '长度不小于5位' }
+                { min: 6, message: '长度不小于6位' },
+                { max: 20, message: '长度不大于20位' }
               ]}
             >
               <Input.Password placeholder='请再次输入密码'></Input.Password>

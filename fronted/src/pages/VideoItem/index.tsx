@@ -18,19 +18,19 @@ import rightIcon from '../../assets/imgs/left.png'
 import Mask from '../../components/Mask'
 import { addCollect, addFrd, addLike, delCollect, delFrd, delLike } from '../../api/personal'
 
-export default function recommend() {
+export default function VideoItem() {
   const [videoInfo, setVideoInfo] = useState<IGetVideo>()
   const [hoverValue, setHoverValue] = useState('')
   // 控制左拉
   const [leftClick, setLeftClick] = useState(false)
-  // 获得初始视频
+  // 获得某一视频
   const getInitVideo = async () => {
-    const res = await getVideo()
-    if (res?.code === 200) {
-      setVideoInfo(res.data)
-    } else {
-      message.info(res?.message)
-    }
+    // const res = await getVideo()
+    // if (res?.code === 200) {
+    //   setVideoInfo(res.data)
+    // } else {
+    //   message.info(res?.message)
+    // }
   }
 
   const getType = (type: number) => {
@@ -102,8 +102,8 @@ export default function recommend() {
   }
 
   useEffect(() => {
-    getInitVideo()
   }, [])
+
   const propsOption = { ...basicVideoInitOption, loop: true, autoplay: true, poster: videoInfo?.video.photoUrl ? videoInfo?.video.photoUrl : '' }
   return (
     <div className={style.back}>

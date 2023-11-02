@@ -29,12 +29,9 @@ export default function VideoComponent({ propsOption, videoUrl, hoverFunc }: Pro
       if (hoverFunc) {
         hoverFunc && player.on('mouseover', () => player.play())
         hoverFunc && player.on('mouseout', () => player.pause())
+      } else {
+        onReadyPlay(player)
       }
-      onReadyPlay(player)
-    }
-
-    return () => {
-      playerRef.current.pause()
     }
   }, [])
   return (

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import style from './index.module.scss'
 import { Image, Modal, Spin, Upload, message, Form, Input, Radio, Button } from 'antd'
-import { getcollectvideos, getlikevideos, updateInfo, userInfo, userVideo } from '../../api/personal'
-import { type ISelfVideo, type IGetInfo } from '../../libs/model'
+import { getFrdInfo, getSendFrd, getcollectvideos, getlikevideos, updateInfo, userInfo, userVideo } from '../../api/personal'
+import { type ISelfVideo, type IGetInfo, type IFrd } from '../../libs/model'
 import manIcon from '../../assets/imgs/man.png'
 import womanIcon from '../../assets/imgs/woman.png'
 import { type UploadProps, type RcFile, type UploadChangeParam, type UploadFile } from 'antd/lib/upload'
@@ -10,12 +10,20 @@ import { postPic } from '../../api/common'
 import { useForm } from 'antd/lib/form/Form'
 import VideoComponent from '../../components/VideoComponent'
 import { basicVideoInitOption } from '../../libs/data'
+import FrdItem from './FrdItem'
+interface IFrdInfo {
+  frds: IFrd[]
+  tabs: string
+}
 export default function Self() {
   const [form] = useForm()
   const [clickTabs, setClickTabs] = useState('work')
   const [selfInfo, setSelfInfo] = useState<IGetInfo>()
   const [coverLoading, setCoverLoading] = useState(false)
   const [selfVideo, setSelfVideo] = useState<ISelfVideo[]>()
+  const [frd, setFrd] = useState<IFrdInfo>({ frds: [], tabs: '' })
+  const [isFrdModal, setIsFrdModal] = useState(false)
+
   // 控制modal
   const [isModal, setIsModal] = useState(false)
 
@@ -85,6 +93,27 @@ export default function Self() {
     }
   }
 
+  const getFriendInfo = async () => {
+    let res
+    if (frd?.tabs === 'sendFrd') {
+      res = await getSendFrd()
+    } else if (frd?.tabs === 'frd') {
+      res = await getFrdInfo()
+    }
+    if (res?.code) {
+      frd && setFrd({ ...frd, frds: res.data })
+    }
+  }
+
+  const clickFrdClick = (tabs: string) => {
+    setFrd({ ...frd, tabs })
+    setIsFrdModal(true)
+  }
+
+  useEffect(() => {
+    getFriendInfo()
+  }, [frd?.tabs])
+
   useEffect(() => {
     getVideos(clickTabs)
   }, [clickTabs])
@@ -110,11 +139,11 @@ export default function Self() {
           <div className={style.name_text}>{selfInfo?.nickname}</div>
           <div className={style.user_info}>
             <div className={style.item_info}>
-              <span className={style.text}>关注</span>
+              <span className={style.text} onClick={() => clickFrdClick('sendFrd')}>关注</span>
               <span className={style.number}>{selfInfo?.sendFriends}</span>
             </div>
             <div className={style.item_info}>
-              <span className={style.text}>粉丝</span>
+              <span className={style.text} onClick={() => clickFrdClick('frd')}>粉丝</span>
               <span className={style.number}>{selfInfo?.friends}</span>
             </div>
             <div className={style.item_info}>
@@ -247,6 +276,18 @@ export default function Self() {
             </div>
           </Form.Item>
         </Form>
+      </Modal>
+      <Modal
+        title={frd?.tabs === 'sendFrd' ? '关注' : '粉丝'}
+        open={isFrdModal}
+        onCancel={() => { setIsFrdModal(false); setFrd({ ...frd, frds: [] }) }}
+        footer={null}
+        width={1100}
+      >
+        {
+          frd.frds.map(item =>
+            <FrdItem item={item} tabs={frd.tabs} getFriendInfo={getFriendInfo} key={item.id}/>)
+        }
       </Modal>
     </div>
   )

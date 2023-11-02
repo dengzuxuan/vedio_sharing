@@ -95,3 +95,19 @@ export interface ISelfVideo {
   createTime: string
   updateTime: string
 }
+
+export interface IFrd {
+  id: number
+  username: string
+  nickname: string
+  email: string
+  sexual: string
+  photo: string
+  likes: number
+  collects: number
+  friends: number
+  sendFriends: number
+  views: number
+  createTime: string
+  updateTime: string
+}

@@ -1,4 +1,4 @@
-import { type ISelfVideo, type IGetInfo } from "../libs/model"
+import { type ISelfVideo, type IGetInfo, type IFrd } from "../libs/model"
 import request from "../utils/request"
 
 // 收藏
@@ -110,5 +110,32 @@ export const getcollectvideos = async () => {
   return await request<ISelfVideo[]>({
     url: '/api/v1/optvideo/getcollectvideos',
     method: 'GET'
+  })
+}
+
+// 获取粉丝信息
+export const getFrdInfo = async () => {
+  return await request<IFrd[]>({
+    url: '/api/v1/user/getfriend',
+    method: 'GET'
+  })
+}
+
+// 获得关注信息
+export const getSendFrd = async () => {
+  return await request<IFrd[]>({
+    url: '/api/v1/user/getsendfriend',
+    method: 'GET'
+  })
+}
+
+// 取关
+export const delfriend = async (userid: number) => {
+  return await request({
+    url: '/api/v1/user/delfriend',
+    method: 'POST',
+    params: {
+      userid
+    }
   })
 }

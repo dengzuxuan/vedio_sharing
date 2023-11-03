@@ -36,6 +36,7 @@ public class User implements Serializable {
     private String photo; //使用七牛云cdn存储
     private transient Integer likes; //被点赞数
     private transient Integer collects; //被收藏数
+    private transient boolean bothfriend; //是否为共同好友
     private Integer friends; //被关注数
     private Integer sendFriends; //我关注的数量
     private transient Integer videos; //我发布视频的数量

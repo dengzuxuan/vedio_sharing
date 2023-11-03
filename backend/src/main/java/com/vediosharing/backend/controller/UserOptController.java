@@ -33,12 +33,12 @@ public class UserOptController {
     }
 
     @PostMapping("/addlike")
-    public Result addLike(@RequestParam Map<String,String> m1){
+    public Result addlike(@RequestParam Map<String,String> m1){
         int videoId = Integer.parseInt(m1.get("video_id"));
         return optVideoService.addLike(videoId);
     }
     @PostMapping("/dellike")
-    public Result delLike(@RequestParam Map<String,String> m1){
+    public Result dellike(@RequestParam Map<String,String> m1){
         int videoId = Integer.parseInt(m1.get("video_id"));
         return optVideoService.delLike(videoId);
     }

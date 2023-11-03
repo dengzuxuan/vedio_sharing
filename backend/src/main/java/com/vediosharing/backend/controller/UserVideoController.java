@@ -31,7 +31,7 @@ public class UserVideoController {
     }
     @GetMapping("/getsinglevideo")
     public Result getSingleVideo(@RequestParam Map<String,String>m1){
-        int videoId = Integer.parseInt(m1.get("video_id"));
+        int videoId = Integer.parseInt(m1.get("videoid"));
         return userVideoService.getSingleVideo(videoId);
     }
     @GetMapping("/uservideo")

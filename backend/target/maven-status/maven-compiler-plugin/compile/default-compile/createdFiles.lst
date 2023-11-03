@@ -3,6 +3,7 @@ com\vediosharing\backend\service\ResourceService.class
 com\vediosharing\backend\core\constant\VideoTypeConsts.class
 com\vediosharing\backend\core\utils\RegexUtil.class
 com\vediosharing\backend\service\Impl\UserServiceImpl.class
+com\vediosharing\backend\dto\resp\VideoDetailRespDto.class
 com\vediosharing\backend\dto\req\UserRegisterReqDto.class
 com\vediosharing\backend\dao\mapper\CollectMapper.class
 com\vediosharing\backend\core\constant\Result.class

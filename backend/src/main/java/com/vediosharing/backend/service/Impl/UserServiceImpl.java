@@ -87,6 +87,7 @@ public class UserServiceImpl implements UserService {
                 defaultPhotoUrl,
                 0,
                 0,
+                false,
                 0,
                 0,
                 0,
@@ -299,9 +300,19 @@ public class UserServiceImpl implements UserService {
 
         List<User> friendInfo = new ArrayList<>();
         for (Friend friend:friends) {
-            User user1 = userMapper.selectById(friend.getRecvUserid());
+            User user1 = userMapper.selectById(friend.getSendUserid());
             user1.setPasswordReal(null);
             user1.setPassword(null);
+
+            //共同好友(互相关注)
+            QueryWrapper<Friend> queryWrapper1 = new QueryWrapper<>();
+            queryWrapper1.eq("recv_userid",user1.getId()).eq("send_userid",user.getId());
+            Friend friend1 = friendMapper.selectOne(queryWrapper1);
+            if(friend1 != null){
+                user1.setBothfriend(true);
+            }else{
+                user1.setBothfriend(false);
+            }
 
             friendInfo.add(user1);
         }
@@ -327,6 +338,15 @@ public class UserServiceImpl implements UserService {
             user1.setPasswordReal(null);
             user1.setPassword(null);
 
+            //共同好友(互相关注)
+            QueryWrapper<Friend> queryWrapper1 = new QueryWrapper<>();
+            queryWrapper1.eq("send_userid",user1.getId()).eq("recv_userid",user.getId());
+            Friend friend1 = friendMapper.selectOne(queryWrapper1);
+            if(friend1 != null){
+                user1.setBothfriend(true);
+            }else{
+                user1.setBothfriend(false);
+            }
             friendInfo.add(user1);
         }
 

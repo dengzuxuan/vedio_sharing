@@ -11,6 +11,7 @@ import com.vediosharing.backend.dao.mapper.CollectMapper;
 import com.vediosharing.backend.dao.mapper.LikeMapper;
 import com.vediosharing.backend.dao.mapper.UserMapper;
 import com.vediosharing.backend.dao.mapper.VideoMapper;
+import com.vediosharing.backend.dto.resp.VideoDetailRespDto;
 import com.vediosharing.backend.service.Impl.utils.UserDetailsImpl;
 import com.vediosharing.backend.service.OptVideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,8 +177,16 @@ public class OptVideoServiceImpl implements OptVideoService {
         List<Collects> collectsList= collectMapper.selectList(queryWrapper);
 
         List<Video> collectVideoList = new ArrayList<>();
+
+        //List<VideoDetailRespDto> collectVideoList = new ArrayList<>();
         for(Collects collects:collectsList){
             Video video = videoMapper.selectById(collects.getVideoId());
+//            User videoUser = userMapper.selectById(video.getUserId());
+//            videoUser.setPassword("");
+//            videoUser.setPasswordReal("");
+//            VideoDetailRespDto videoDetail = new VideoDetailRespDto();
+//            videoDetail.setVideo(video);
+//            videoDetail.setUser(user);
             collectVideoList.add(video);
         }
 

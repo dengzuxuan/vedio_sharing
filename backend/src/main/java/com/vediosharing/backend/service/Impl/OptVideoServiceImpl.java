@@ -254,6 +254,10 @@ public class OptVideoServiceImpl implements OptVideoService {
     @Override
     public Result delcomment(int commentId) {
         Comment comment = commentMapper.selectById(commentId);
+        if(comment == null){
+            return Result.build(null,ResultCodeEnum.COMMENT_NOT_EXIST);
+        }
+
         Video video = videoMapper.selectById(comment.getVideoId());
         video.setCommentPoints(video.getCommentPoints()-1);
 

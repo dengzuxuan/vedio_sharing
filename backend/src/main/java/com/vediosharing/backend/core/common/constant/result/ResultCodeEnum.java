@@ -42,7 +42,8 @@ public enum ResultCodeEnum {
     LIKE_NOT_EXIST(5002,"您尚未点赞该视频"),
     LIKE_ALREADY_EXIST(5003,"您已经点过赞了"),
     COLLECT_NOT_EXIST(5004,"您尚未收藏该视频"),
-    COLLECT_ALREADY_EXIST(5005,"您已经收藏过了");
+    COLLECT_ALREADY_EXIST(5005,"您已经收藏过了"),
+    COMMENT_NOT_EXIST(5006,"评论不存在");
 
     private final Integer code;
 

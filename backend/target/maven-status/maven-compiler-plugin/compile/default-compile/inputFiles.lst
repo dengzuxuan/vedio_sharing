@@ -1,9 +1,11 @@
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dto\resp\VideoDetailRespDto.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\utils\JwtUtil.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\Video.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\controller\UserOptController.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\controller\UserController.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\LikeMapper.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\UserVideoService.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\constant\RankConsts.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\CollectMapper.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\MessageService.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\constant\VideoTypeConsts.java

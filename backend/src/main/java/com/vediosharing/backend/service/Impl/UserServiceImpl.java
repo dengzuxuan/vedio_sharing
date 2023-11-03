@@ -7,9 +7,11 @@ import com.vediosharing.backend.core.constant.Result;
 import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
 import com.vediosharing.backend.core.utils.JwtUtil;
 import com.vediosharing.backend.core.utils.RegexUtil;
+import com.vediosharing.backend.dao.entity.Collects;
 import com.vediosharing.backend.dao.entity.Friend;
 import com.vediosharing.backend.dao.entity.User;
 import com.vediosharing.backend.dao.entity.Video;
+import com.vediosharing.backend.dao.mapper.CollectMapper;
 import com.vediosharing.backend.dao.mapper.FriendMapper;
 import com.vediosharing.backend.dao.mapper.UserMapper;
 import com.vediosharing.backend.dao.mapper.VideoMapper;
@@ -43,6 +45,8 @@ public class UserServiceImpl implements UserService {
     FriendMapper friendMapper;
     @Autowired
     VideoMapper videoMapper;
+    @Autowired
+    CollectMapper collectMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -85,6 +89,7 @@ public class UserServiceImpl implements UserService {
                 "",
                 0,
                 defaultPhotoUrl,
+                0,
                 0,
                 0,
                 false,
@@ -162,6 +167,12 @@ public class UserServiceImpl implements UserService {
         user.setCollects(collects);
         user.setViews(views);
 
+        QueryWrapper<Collects> queryWrapper1 = new QueryWrapper<>();
+        queryWrapper1.eq("user_id",user.getId());
+        List<Collects> collectsList = collectMapper.selectList(queryWrapper1);
+
+        user.setSendCollects(collectsList.size());
+
         return Result.success(user);
     }
 
@@ -186,6 +197,12 @@ public class UserServiceImpl implements UserService {
         user.setLikes(likes);
         user.setCollects(collects);
         user.setViews(views);
+
+        QueryWrapper<Collects> queryWrapper1 = new QueryWrapper<>();
+        queryWrapper1.eq("user_id",user.getId());
+        List<Collects> collectsList = collectMapper.selectList(queryWrapper1);
+
+        user.setSendCollects(collectsList.size());
 
         return Result.success(user);
     }

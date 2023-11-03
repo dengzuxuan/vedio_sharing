@@ -137,14 +137,8 @@ public class UserVideoServiceImpl implements UserVideoService {
         video.setViewsPoints(video.getViewsPoints()+1);
         videoMapper.updateById(video);
 
-        User user = userMapper.selectById(video.getUserId());
-        User userShow = new User();
-        userShow.setId(user.getId());
-        userShow.setPhoto(user.getPhoto());
-        userShow.setNickname(user.getNickname());
-
         QueryWrapper<Collects> queryWrapper2 = new QueryWrapper<>();
-        queryWrapper2.eq("user_id",video.getUserId()).eq("video_id",video.getId());
+        queryWrapper2.eq("user_id",loginuser.getId()).eq("video_id",video.getId());
         Collects findCollect= collectMapper.selectOne(queryWrapper2);
         if(findCollect!=null){
             res.put("is_collect",true);
@@ -153,7 +147,7 @@ public class UserVideoServiceImpl implements UserVideoService {
         }
 
         QueryWrapper<Likes> queryWrapper3 = new QueryWrapper<>();
-        queryWrapper3.eq("user_id",video.getUserId()).eq("video_id",video.getId());
+        queryWrapper3.eq("user_id",loginuser.getId()).eq("video_id",video.getId());
         Likes findLike= likeMapper.selectOne(queryWrapper3);
         if(findLike!=null){
             res.put("is_like",true);
@@ -170,22 +164,65 @@ public class UserVideoServiceImpl implements UserVideoService {
             res.put("is_friend",false);
         }
 
+        User author = userMapper.selectById(video.getUserId());
+        author.setPassword(null);
+        author.setPasswordReal(null);
 
         res.put("video",video);
-        res.put("user",userMapper.selectById(userShow));
+        res.put("user",author);
 
         return Result.success(res);
-
     }
 
     @Override
     public Result getSingleVideo(int videoId) {
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User loginuser = loginUser.getUser();
+
+        Map<String,Object> res = new HashMap<>();
         Video video = videoMapper.selectById(videoId);
 
         if(video == null){
             return Result.build(null, ResultCodeEnum.VIDEO_NOT_EXIST);
         }
-        return Result.success(video);
+
+        QueryWrapper<Collects> queryWrapper2 = new QueryWrapper<>();
+        queryWrapper2.eq("user_id",loginuser.getId()).eq("video_id",video.getId());
+        Collects findCollect= collectMapper.selectOne(queryWrapper2);
+        if(findCollect!=null){
+            res.put("is_collect",true);
+        }else{
+            res.put("is_collect",false);
+        }
+
+        QueryWrapper<Likes> queryWrapper3 = new QueryWrapper<>();
+        queryWrapper3.eq("user_id",loginuser.getId()).eq("video_id",video.getId());
+        Likes findLike= likeMapper.selectOne(queryWrapper3);
+        if(findLike!=null){
+            res.put("is_like",true);
+        }else{
+            res.put("is_like",false);
+        }
+
+        QueryWrapper<Friend> queryWrapper4 = new QueryWrapper<>();
+        queryWrapper4.eq("recv_userid",video.getUserId()).eq("send_userid",loginuser.getId());
+        Friend findFriend= friendMapper.selectOne(queryWrapper4);
+        if(findFriend!=null){
+            res.put("is_friend",true);
+        }else{
+            res.put("is_friend",false);
+        }
+
+        User author = userMapper.selectById(video.getUserId());
+        author.setPassword(null);
+        author.setPasswordReal(null);
+
+        res.put("video",video);
+        res.put("user",author);
+
+        return Result.success(res);
     }
 
     @Override

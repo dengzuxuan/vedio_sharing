@@ -2,15 +2,11 @@ package com.vediosharing.backend.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
+import com.vediosharing.backend.core.constant.MessageConsts;
 import com.vediosharing.backend.core.constant.Result;
-import com.vediosharing.backend.dao.entity.Collects;
-import com.vediosharing.backend.dao.entity.Likes;
-import com.vediosharing.backend.dao.entity.User;
-import com.vediosharing.backend.dao.entity.Video;
-import com.vediosharing.backend.dao.mapper.CollectMapper;
-import com.vediosharing.backend.dao.mapper.LikeMapper;
-import com.vediosharing.backend.dao.mapper.UserMapper;
-import com.vediosharing.backend.dao.mapper.VideoMapper;
+import com.vediosharing.backend.dao.entity.*;
+import com.vediosharing.backend.dao.mapper.*;
+import com.vediosharing.backend.dto.req.CommentReqDto;
 import com.vediosharing.backend.dto.resp.VideoDetailRespDto;
 import com.vediosharing.backend.service.Impl.utils.UserDetailsImpl;
 import com.vediosharing.backend.service.OptVideoService;
@@ -41,6 +37,10 @@ public class OptVideoServiceImpl implements OptVideoService {
     VideoMapper videoMapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    CommentMapper commentMapper;
+    @Autowired
+    MessageServiceImpl messageService;
     @Override
     public Result addLike(int videoId) {
         UsernamePasswordAuthenticationToken authentication =
@@ -210,13 +210,56 @@ public class OptVideoServiceImpl implements OptVideoService {
     }
 
     @Override
-    public Result addcomment(int videoId, int commentId) {
-        return null;
+    public Result addcomment(CommentReqDto dto) {
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User user = loginUser.getUser();
+        String content = dto.getContent();
+        Video video = videoMapper.selectById(dto.getVideoid());
+        if(video==null){
+            return Result.build(null,ResultCodeEnum.VIDEO_NOT_EXIST);
+        }
+
+        int flag = 0;
+        if(dto.getCommentid() != 0){
+            Comment replyComment = commentMapper.selectById(dto.getCommentid());
+            User replyUser = userMapper.selectById(replyComment.getUserId());
+            String preComment = "回复 "+replyUser.getNickname() +":";
+            content = preComment+content;
+            flag=1;
+            messageService.addMessage(MessageConsts.REPLYCOMMENT,content,replyUser.getId(),user.getId());
+        }else{
+            messageService.addMessage(MessageConsts.COMMENTVIDEO,content,video.getUserId(),user.getId());
+        }
+        Date now = new Date();
+        Comment newComment = new Comment(
+                null,
+                content,
+                user.getId(),
+                dto.getVideoid(),
+                dto.getCommentid(),
+                flag,
+                0,
+                now,
+                now
+        );
+        commentMapper.insert(newComment);
+
+        video.setCommentPoints(video.getCommentPoints()+1);
+        videoMapper.updateById(video);
+        return Result.success(null);
     }
 
     @Override
     public Result delcomment(int commentId) {
-        return null;
+        Comment comment = commentMapper.selectById(commentId);
+        Video video = videoMapper.selectById(comment.getVideoId());
+        video.setCommentPoints(video.getCommentPoints()-1);
+
+        commentMapper.deleteById(commentId);
+        videoMapper.updateById(video);
+        return Result.success(null);
     }
 
     @Override
@@ -227,6 +270,19 @@ public class OptVideoServiceImpl implements OptVideoService {
     @Override
     public Result delLikeComment(int commentId) {
         return null;
+    }
+
+    @Override
+    public Result getComments(int videoId) {
+        Video video = videoMapper.selectById(videoId);
+        if(video==null){
+            return Result.build(null, ResultCodeEnum.VIDEO_NOT_EXIST);
+        }
+
+        QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("video_id",videoId);
+        List<Comment> comments = commentMapper.selectList(queryWrapper);
+        return Result.success(comments);
     }
 
     private List<Video> getSingleUserCollect(int userId){

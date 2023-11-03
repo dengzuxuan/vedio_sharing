@@ -181,8 +181,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result otherUserInfo(Integer userId) {
-        User user = userMapper.selectById(userId);
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User loginUserInfo = loginUser.getUser();
 
+        Map<String,Object> res = new HashMap<>();
+
+        User user = userMapper.selectById(userId);
         if(user == null){
             return Result.build(null,ResultCodeEnum.USER_NAME_NOT_EXIST);
         }
@@ -208,10 +214,25 @@ public class UserServiceImpl implements UserService {
         QueryWrapper<Collects> queryWrapper1 = new QueryWrapper<>();
         queryWrapper1.eq("user_id",user.getId());
         List<Collects> collectsList = collectMapper.selectList(queryWrapper1);
-
         user.setSendCollects(collectsList.size());
+        res.put("user",user);
 
-        return Result.success(user);
+        res.put("myfollow",false);
+        res.put("followmy",false);
+        QueryWrapper<Friend> queryWrapper2 = new QueryWrapper<>();
+        queryWrapper2.eq("recv_userid",userId).eq("send_userid",loginUserInfo.getId());
+        Friend checkSendFriend = friendMapper.selectOne(queryWrapper2);
+        if(checkSendFriend!=null){
+            res.put("myfollow",true);
+        }
+        QueryWrapper<Friend> queryWrapper3 = new QueryWrapper<>();
+        queryWrapper3.eq("recv_userid",loginUserInfo.getId()).eq("send_userid",userId);
+        Friend checkFriend = friendMapper.selectOne(queryWrapper3);
+        if(checkFriend!=null){
+            res.put("followmy",true);
+        }
+
+        return Result.success(res);
     }
 
     @Override
@@ -275,7 +296,15 @@ public class UserServiceImpl implements UserService {
             return Result.build(null,ResultCodeEnum.FRIEND_ADD_WRONG);
         }
 
-        messageService.addMessage(MessageConsts.FRIENDAPPLY,user1.getUsername()+"申请添加您为好友",user.getId(),user1.getId());
+        QueryWrapper<Friend> friendQueryWrapper1 = new QueryWrapper<>();
+        friendQueryWrapper1.eq("recv_userid",user.getId()).eq("send_userid",userId);
+        Friend friend2 = friendMapper.selectOne(friendQueryWrapper1);
+        if(friend2!=null){
+            messageService.addMessage(MessageConsts.FOLLOWBACK,user1.getUsername()+"回关了您",user.getId(),user1.getId());
+        }else{
+            messageService.addMessage(MessageConsts.FOLLOW,user1.getUsername()+"关注了您",user.getId(),user1.getId());
+        }
+
         Date now = new Date();
         Friend friend = new Friend(
                 null,

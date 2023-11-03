@@ -2,6 +2,7 @@ package com.vediosharing.backend.controller;
 
 import com.vediosharing.backend.core.constant.ApiRouterConsts;
 import com.vediosharing.backend.core.constant.Result;
+import com.vediosharing.backend.dto.req.CommentReqDto;
 import com.vediosharing.backend.service.OptVideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -62,16 +63,19 @@ public class UserOptController {
         return optVideoService.getOthercollectVideo(userId);
     }
 
-    @PostMapping("/addcomment")
-    public Result addcomment(@RequestParam Map<String,String> m1){
-        int videoId = Integer.parseInt(m1.get("video_id"));
-        int commentId = Integer.parseInt(m1.get("comment_id"));
-        return optVideoService.addcomment(videoId,commentId);
+    @PostMapping(value = "/addcomment",consumes="application/json")
+    public Result addcomment(@RequestBody CommentReqDto dto){
+        return optVideoService.addcomment(dto);
     }
     @PostMapping("/delcomment")
     public Result delcomment(@RequestParam Map<String,String> m1){
         int commentId = Integer.parseInt(m1.get("comment_id"));
         return optVideoService.delcomment(commentId);
+    }
+    @GetMapping(value = "/getcomments")
+    public Result getcomments(@RequestParam Map<String,String> m1){
+        int videoId = Integer.parseInt(m1.get("video_id"));
+        return optVideoService.getComments(videoId);
     }
 
 }

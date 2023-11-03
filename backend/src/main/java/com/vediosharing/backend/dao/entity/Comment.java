@@ -27,6 +27,9 @@ public class Comment {
     private String content;
     private int userId;
     private int videoId;
+    private int commentId;
+    private int likes;
+    private int flag;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "Asia/Shanghai")
     private Date createTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "Asia/Shanghai")

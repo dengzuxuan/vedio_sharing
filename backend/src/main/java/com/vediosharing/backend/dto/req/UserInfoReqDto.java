@@ -21,4 +21,6 @@ public class UserInfoReqDto implements Serializable {
     private String photo;
     private String email;
     private int sexual;
+    private int likehidden;
+    private int collecthidden;
 }

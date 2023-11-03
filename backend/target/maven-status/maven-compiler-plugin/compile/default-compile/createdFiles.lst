@@ -48,4 +48,5 @@ com\vediosharing\backend\core\common\constant\result\ResultCodeEnum.class
 com\vediosharing\backend\dao\mapper\LikeMapper.class
 com\vediosharing\backend\controller\UserVideoController.class
 com\vediosharing\backend\dao\mapper\FriendMapper.class
+com\vediosharing\backend\dao\entity\Comment.class
 com\vediosharing\backend\dto\req\VideoReqDto.class

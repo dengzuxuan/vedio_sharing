@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * @ClassName UserVideoController
- * @Description TODO
+ * @Description 上传 获取视频
  * @Author Colin
  * @Date 2023/10/30 2:42
  * @Version 1.0
@@ -38,12 +38,9 @@ public class UserVideoController {
     public Result getUserVideo(){
         return userVideoService.getUserVideos();
     }
-    @GetMapping("/userlike")
-    public Result getMyLike(){
-        return userVideoService.getUserLikes();
-    }
-    @GetMapping("/usercollect")
-    public Result getUserCollect(){
-        return userVideoService.getUserCollects();
+    @GetMapping("/otheruservideo")
+    public Result getOtherUserVideo(@RequestParam Map<String,String>m1){
+        int userId = Integer.parseInt(m1.get("user_id"));
+        return userVideoService.getSingleUserVideos(userId);
     }
 }

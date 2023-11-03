@@ -232,22 +232,23 @@ public class UserVideoServiceImpl implements UserVideoService {
         UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
         User loginuser = loginUser.getUser();
 
+        return Result.success(getSingleUserVideo(loginuser.getId()));
+    }
+
+    @Override
+    public Result getSingleUserVideos(int userId) {
+        User user = userMapper.selectById(userId);
+        if(user == null){
+            return Result.build(null,ResultCodeEnum.USER_NAME_NOT_EXIST);
+        }
+        return Result.success(getSingleUserVideo(userId));
+    }
+
+    private List<Video> getSingleUserVideo(int userId){
         QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id",loginuser.getId());
-        List<Video> videos = videoMapper.selectList(queryWrapper);
-        return Result.success(videos);
+        queryWrapper.eq("user_id",userId);
+        return videoMapper.selectList(queryWrapper);
     }
-
-    @Override
-    public Result getUserCollects() {
-        return null;
-    }
-
-    @Override
-    public Result getUserLikes() {
-        return null;
-    }
-
     public static <T> T selectRandomWeightedOption(List<WeightedItem<T>> items) {
         int totalWeight = items.stream().mapToInt(WeightedItem::getWeight).sum();
         int randomNumber = new Random().nextInt(totalWeight);

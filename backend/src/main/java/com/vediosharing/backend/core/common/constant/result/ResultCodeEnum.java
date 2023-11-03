@@ -28,6 +28,8 @@ public enum ResultCodeEnum {
     PHOTO_PARAM_WRONG(2010,"头像格式有误"),
     EMAIL_PARAM_WRONG(2011,"邮箱格式有误"),
     NICKNAME_PARAM_WRONG(2012,"昵称格式有误"),
+    LIKE_HIDDEN_PARAM_WRONG(2013,"隐藏点赞记录有误"),
+    COLLECT_HIDDEN_PARAM_WRONG(2014,"隐藏收藏记录有误"),
     USER_NOT_FRIEND_MY_SELF(2005,"用户不能关注自己"),
 
 

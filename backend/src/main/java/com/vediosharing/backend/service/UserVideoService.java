@@ -18,6 +18,5 @@ public interface UserVideoService {
     Result getVideo();
     Result getSingleVideo(int videoId);
     Result getUserVideos();
-    Result getUserCollects();
-    Result getUserLikes();
+    Result getSingleUserVideos(int userId);
 }

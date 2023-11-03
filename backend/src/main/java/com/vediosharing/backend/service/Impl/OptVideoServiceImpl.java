@@ -172,25 +172,7 @@ public class OptVideoServiceImpl implements OptVideoService {
         UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
         User user = loginUser.getUser();
 
-        QueryWrapper<Collects> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id",user.getId());
-        List<Collects> collectsList= collectMapper.selectList(queryWrapper);
-
-        List<Video> collectVideoList = new ArrayList<>();
-
-        //List<VideoDetailRespDto> collectVideoList = new ArrayList<>();
-        for(Collects collects:collectsList){
-            Video video = videoMapper.selectById(collects.getVideoId());
-//            User videoUser = userMapper.selectById(video.getUserId());
-//            videoUser.setPassword("");
-//            videoUser.setPasswordReal("");
-//            VideoDetailRespDto videoDetail = new VideoDetailRespDto();
-//            videoDetail.setVideo(video);
-//            videoDetail.setUser(user);
-            collectVideoList.add(video);
-        }
-
-        return Result.success(collectVideoList);
+        return Result.success(getSingleUserCollect(user.getId()));
     }
 
     @Override
@@ -200,16 +182,31 @@ public class OptVideoServiceImpl implements OptVideoService {
         UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
         User user = loginUser.getUser();
 
-        QueryWrapper<Likes> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id",user.getId());
-        List<Likes> likesList= likeMapper.selectList(queryWrapper);
+        return Result.success(getSingleUserLike(user.getId()));
+    }
 
-        List<Video> likeVideoList = new ArrayList<>();
-        for(Likes like:likesList){
-            Video video = videoMapper.selectById(like.getVideoId());
-            likeVideoList.add(video);
+    @Override
+    public Result getOthercollectVideo(int userId) {
+        User user = userMapper.selectById(userId);
+        if(user==null){
+            return Result.build(null,ResultCodeEnum.USER_NAME_NOT_EXIST);
         }
-        return Result.success(likeVideoList);
+        if (user.getCollectHidden() == 1){
+            return Result.success(null);
+        }
+        return Result.success(getSingleUserCollect(userId));
+    }
+
+    @Override
+    public Result getOtherlikeVideo(int userId) {
+        User user = userMapper.selectById(userId);
+        if(user==null){
+            return Result.build(null,ResultCodeEnum.USER_NAME_NOT_EXIST);
+        }
+        if (user.getLikeHidden() == 1){
+            return Result.success(null);
+        }
+        return Result.success(getSingleUserLike(userId));
     }
 
     @Override
@@ -230,5 +227,32 @@ public class OptVideoServiceImpl implements OptVideoService {
     @Override
     public Result delLikeComment(int commentId) {
         return null;
+    }
+
+    private List<Video> getSingleUserCollect(int userId){
+        QueryWrapper<Collects> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",userId);
+        List<Collects> collectsList= collectMapper.selectList(queryWrapper);
+
+        List<Video> collectVideoList = new ArrayList<>();
+
+        for(Collects collects:collectsList){
+            Video video = videoMapper.selectById(collects.getVideoId());
+            collectVideoList.add(video);
+        }
+        return collectVideoList;
+    }
+
+    private List<Video> getSingleUserLike(int userId){
+        QueryWrapper<Likes> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",userId);
+        List<Likes> likesList= likeMapper.selectList(queryWrapper);
+
+        List<Video> likeVideoList = new ArrayList<>();
+        for(Likes like:likesList){
+            Video video = videoMapper.selectById(like.getVideoId());
+            likeVideoList.add(video);
+        }
+        return likeVideoList;
     }
 }

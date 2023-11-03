@@ -92,6 +92,8 @@ public class UserServiceImpl implements UserService {
                 0,
                 0,
                 0,
+                0,
+                0,
                 false,
                 0,
                 0,
@@ -108,7 +110,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result login(UserRegisterReqDto dto) {
-        Map<String,String> map = new HashMap<>();
+        Map<String,Object> map = new HashMap<>();
 
         if(dto.getUsername().length()<5 || dto.getUsername().length()>15){
             return Result.build(null,ResultCodeEnum.USER_NAME_PARAM_WRONG);
@@ -137,6 +139,7 @@ public class UserServiceImpl implements UserService {
         String jwt = JwtUtil.createJWT(loginUser.getUser().getId().toString());
 
         map.put("token",jwt);
+        map.put("userid", loginUser.getUser().getId());
         return Result.success(map);
     }
 
@@ -179,6 +182,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result otherUserInfo(Integer userId) {
         User user = userMapper.selectById(userId);
+
+        if(user == null){
+            return Result.build(null,ResultCodeEnum.USER_NAME_NOT_EXIST);
+        }
 
         user.setPasswordReal(null);
         user.setPassword(null);
@@ -224,13 +231,21 @@ public class UserServiceImpl implements UserService {
             return Result.build(null,ResultCodeEnum.EMAIL_PARAM_WRONG);
         }
         if(dto.getNickname().isEmpty()){
-            return Result.build(null,ResultCodeEnum.PHOTO_PARAMS_WRONG);
+            return Result.build(null,ResultCodeEnum.NICKNAME_PARAM_WRONG);
+        }
+        if(dto.getLikehidden()!=0 && dto.getLikehidden()!=1){
+            return Result.build(null,ResultCodeEnum.LIKE_HIDDEN_PARAM_WRONG);
+        }
+        if(dto.getCollecthidden()!=0 && dto.getCollecthidden()!=1){
+            return Result.build(null,ResultCodeEnum.COLLECT_HIDDEN_PARAM_WRONG);
         }
 
         user.setPhoto(dto.getPhoto());
         user.setNickname(dto.getNickname());
         user.setPhoto(dto.getPhoto());
         user.setEmail(dto.getEmail());
+        user.setLikeHidden(dto.getLikehidden());
+        user.setCollectHidden(dto.getCollecthidden());
 
         userMapper.updateById(user);
 

@@ -51,4 +51,27 @@ public class UserOptController {
     public Result getcollectvideos(){
         return optVideoService.getcollectVideo();
     }
+    @GetMapping("/getotherlikevideos")
+    public Result geOthertlikevideos(@RequestParam Map<String,String> m1){
+        int userId = Integer.parseInt(m1.get("user_id"));
+        return optVideoService.getOtherlikeVideo(userId);
+    }
+    @GetMapping("/getothercollectvideos")
+    public Result getOthercollectvideos(@RequestParam Map<String,String> m1){
+        int userId = Integer.parseInt(m1.get("user_id"));
+        return optVideoService.getOthercollectVideo(userId);
+    }
+
+    @PostMapping("/addcomment")
+    public Result addcomment(@RequestParam Map<String,String> m1){
+        int videoId = Integer.parseInt(m1.get("video_id"));
+        int commentId = Integer.parseInt(m1.get("comment_id"));
+        return optVideoService.addcomment(videoId,commentId);
+    }
+    @PostMapping("/delcomment")
+    public Result delcomment(@RequestParam Map<String,String> m1){
+        int commentId = Integer.parseInt(m1.get("comment_id"));
+        return optVideoService.delcomment(commentId);
+    }
+
 }

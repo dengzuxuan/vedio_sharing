@@ -188,6 +188,9 @@ public class UserVideoServiceImpl implements UserVideoService {
             return Result.build(null, ResultCodeEnum.VIDEO_NOT_EXIST);
         }
 
+        video.setViewsPoints(video.getViewsPoints()+1);
+        videoMapper.updateById(video);
+
         QueryWrapper<Collects> queryWrapper2 = new QueryWrapper<>();
         queryWrapper2.eq("user_id",loginuser.getId()).eq("video_id",video.getId());
         Collects findCollect= collectMapper.selectOne(queryWrapper2);

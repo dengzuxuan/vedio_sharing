@@ -72,10 +72,14 @@ public class UserOptController {
         int commentId = Integer.parseInt(m1.get("comment_id"));
         return optVideoService.delcomment(commentId);
     }
-    @GetMapping(value = "/getcomments")
-    public Result getcomments(@RequestParam Map<String,String> m1){
+    @GetMapping(value = "/getfirstcomments")
+    public Result getfirstcomments(@RequestParam Map<String,String> m1){
         int videoId = Integer.parseInt(m1.get("video_id"));
-        return optVideoService.getComments(videoId);
+        return optVideoService.getFirstComments(videoId);
     }
-
+    @GetMapping(value = "/getsecondcomments")
+    public Result getsecondcomments(@RequestParam Map<String,String> m1){
+        int commentId = Integer.parseInt(m1.get("comment_id"));
+        return optVideoService.getSecondComments(commentId);
+    }
 }

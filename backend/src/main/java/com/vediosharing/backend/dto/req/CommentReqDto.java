@@ -13,5 +13,6 @@ import lombok.Data;
 public class CommentReqDto {
     private int videoid;
     private int commentid;
+    private int flag;
     private String content;
 }

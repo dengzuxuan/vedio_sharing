@@ -8,5 +8,7 @@ package com.vediosharing.backend.core.constant;
  * @Version 1.0
  */
 public class RankConsts {
-    public static final String WEEKLY_RANK = "/api/v1";
+    public static final String WEEKLY_RANK = "WEEKLYRANKLIST";
+    public static final String MOUTH_RANK = "MONTHRANKLIST";
+    public static final String TOTAL_RANK = "TOTALRANKLIST";
 }

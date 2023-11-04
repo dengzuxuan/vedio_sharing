@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
 import com.vediosharing.backend.core.constant.MessageConsts;
 import com.vediosharing.backend.core.constant.Result;
+import com.vediosharing.backend.core.utils.OrderDateComparator;
 import com.vediosharing.backend.dao.entity.*;
 import com.vediosharing.backend.dao.mapper.*;
 import com.vediosharing.backend.dto.req.CommentReqDto;
+import com.vediosharing.backend.dto.resp.CommentDetailRespDto;
 import com.vediosharing.backend.dto.resp.VideoDetailRespDto;
 import com.vediosharing.backend.service.Impl.utils.UserDetailsImpl;
 import com.vediosharing.backend.service.OptVideoService;
@@ -17,6 +19,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +44,8 @@ public class OptVideoServiceImpl implements OptVideoService {
     CommentMapper commentMapper;
     @Autowired
     MessageServiceImpl messageService;
+    @Autowired
+    CommentLikesMapper commentLikesMapper;
     @Override
     public Result addLike(int videoId) {
         UsernamePasswordAuthenticationToken authentication =
@@ -221,17 +226,32 @@ public class OptVideoServiceImpl implements OptVideoService {
             return Result.build(null,ResultCodeEnum.VIDEO_NOT_EXIST);
         }
 
-        int flag = 0;
-        if(dto.getCommentid() != 0){
-            Comment replyComment = commentMapper.selectById(dto.getCommentid());
-            User replyUser = userMapper.selectById(replyComment.getUserId());
-            String preComment = "回复 "+replyUser.getNickname() +":";
-            content = preComment+content;
-            flag=1;
-            messageService.addMessage(MessageConsts.REPLYCOMMENT,content,replyUser.getId(),user.getId());
-        }else{
-            messageService.addMessage(MessageConsts.COMMENTVIDEO,content,video.getUserId(),user.getId());
+        if(dto.getFlag()!=1 && dto.getFlag()!=2 && dto.getFlag()!=3){
+            return Result.build(null,ResultCodeEnum.COMMENT_PARAMS_WRONG);
         }
+        if(dto.getFlag()==1){
+            messageService.addMessage(MessageConsts.COMMENTVIDEO,content,video.getUserId(),user.getId());
+        }else{
+            Comment replyComment = commentMapper.selectById(dto.getCommentid());
+            if(replyComment == null){
+                return Result.build(null,ResultCodeEnum.COMMENT_NOT_EXIST);
+            }
+
+            User replyUser = userMapper.selectById(replyComment.getUserId());
+            if(replyUser==null){
+                return Result.build(null,ResultCodeEnum.USER_NOT_EXIST);
+            }
+            if(dto.getFlag()==3){
+                if(replyComment.getFlag() != 2){
+                    return Result.build(null,ResultCodeEnum.COMMENT_PARAMS_WRONG);
+                }
+                String preComment = "回复 @"+replyUser.getNickname() +" :";
+                content = preComment+content;
+            }
+            messageService.addMessage(MessageConsts.REPLYCOMMENT,content,replyUser.getId(),user.getId());
+        }
+
+
         Date now = new Date();
         Comment newComment = new Comment(
                 null,
@@ -239,8 +259,8 @@ public class OptVideoServiceImpl implements OptVideoService {
                 user.getId(),
                 dto.getVideoid(),
                 dto.getCommentid(),
-                flag,
                 0,
+                dto.getFlag(),
                 now,
                 now
         );
@@ -259,9 +279,30 @@ public class OptVideoServiceImpl implements OptVideoService {
         }
 
         Video video = videoMapper.selectById(comment.getVideoId());
-        video.setCommentPoints(video.getCommentPoints()-1);
-
+        if(video == null){
+            return Result.build(null,ResultCodeEnum.VIDEO_NOT_EXIST);
+        }
+        //一级评论删除的话，下面所有评论都要删除
+        if(comment.getFlag() == 1){
+            int delComment = 0;
+            //二级
+            QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("comment_id",commentId);
+            List<Comment> commentSeconds = commentMapper.selectList(queryWrapper);
+            commentMapper.delete(queryWrapper);
+            delComment+=commentSeconds.size();
+            //三级
+            for (Comment comment2:commentSeconds){
+                QueryWrapper<Comment> queryWrapper1 = new QueryWrapper<>();
+                queryWrapper1.eq("comment_id",comment2.getId());
+                List<Comment> commentThird = commentMapper.selectList(queryWrapper1);
+                commentMapper.delete(queryWrapper1);
+                delComment+=commentThird.size();
+            }
+            video.setCommentPoints(video.getCommentPoints()-delComment);
+        }
         commentMapper.deleteById(commentId);
+        video.setCommentPoints(video.getCommentPoints()-1);
         videoMapper.updateById(video);
         return Result.success(null);
     }
@@ -277,16 +318,66 @@ public class OptVideoServiceImpl implements OptVideoService {
     }
 
     @Override
-    public Result getComments(int videoId) {
+    public Result getFirstComments(int videoId) {
         Video video = videoMapper.selectById(videoId);
         if(video==null){
             return Result.build(null, ResultCodeEnum.VIDEO_NOT_EXIST);
         }
+        return Result.success(getComments(videoId,0));
+    }
 
-        QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("video_id",videoId);
-        List<Comment> comments = commentMapper.selectList(queryWrapper);
-        return Result.success(comments);
+    @Override
+    public Result getSecondComments(int commentId) {
+        Comment comment = commentMapper.selectById(commentId);
+        if(comment==null){
+            return Result.build(null, ResultCodeEnum.COMMENT_NOT_EXIST);
+        }
+        return Result.success(getComments(0,commentId));
+    }
+
+    private List<CommentDetailRespDto> getComments(int videoId,int commentId) {
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User user = loginUser.getUser();
+
+        List<Comment> comments = new ArrayList<>();
+        if(videoId!=0){
+            QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("video_id",videoId).eq("flag",1);
+            comments = commentMapper.selectList(queryWrapper);
+        }else if(commentId!=0){
+            QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("comment_id",commentId) ;
+            List<Comment> commentLevel2 = commentMapper.selectList(queryWrapper);
+            comments.addAll(commentLevel2);
+            for(Comment comment:commentLevel2){
+                QueryWrapper<Comment> queryWrapper2 = new QueryWrapper<>();
+                queryWrapper2.eq("comment_id",comment.getId()) ;
+                comments.addAll(commentMapper.selectList(queryWrapper2));
+            }
+            Collections.sort(comments, new OrderDateComparator());
+        }
+
+        List<CommentDetailRespDto> detailRespDtos = new ArrayList<>();
+        for(Comment comment:comments){
+            User commentUser = userMapper.selectById(comment.getUserId());
+            commentUser.setPassword(null);
+            commentUser.setPasswordReal(null);
+
+            QueryWrapper<CommentLikes> queryWrapper1 = new QueryWrapper<>();
+            queryWrapper1.eq("comment_id",comment.getId()).eq("send_userid",user.getId());
+            CommentLikes findCommentLikes = commentLikesMapper.selectOne(queryWrapper1);
+            boolean like = findCommentLikes != null;
+
+            CommentDetailRespDto commentDetailRespDto = new CommentDetailRespDto(
+                    comment,
+                    commentUser,
+                    like
+            );
+            detailRespDtos.add(commentDetailRespDto);
+        }
+        return detailRespDtos;
     }
 
     private List<Video> getSingleUserCollect(int userId){

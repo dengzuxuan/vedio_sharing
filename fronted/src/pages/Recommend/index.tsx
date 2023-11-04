@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import style from './index.module.scss'
 import "video.js/dist/video-js.css"
 import { basicVideoInitOption, typeList } from '../../libs/data'
@@ -17,8 +17,10 @@ import bottomIcon from '../../assets/imgs/bottom.png'
 import rightIcon from '../../assets/imgs/left.png'
 import Mask from '../../components/Mask'
 import { addCollect, addFrd, addLike, delCollect, delFrd, delLike } from '../../api/personal'
+import { context } from '../../hooks/store'
 
 export default function recommend() {
+  const { setClickItemValue } = useContext(context)
   const [videoInfo, setVideoInfo] = useState<IGetVideo>()
   const [hoverValue, setHoverValue] = useState('')
   // 控制左拉
@@ -101,11 +103,15 @@ export default function recommend() {
     }
   }
 
-  // 跳转到新页面
-  const jump = () => {
-    const w = window.open('_black')
-    if (w) {
-      w.location.href = `/user/${3}`
+  const jumpUserHome = () => {
+    const userid = videoInfo?.user.id
+    const id = localStorage.getItem('id')
+    if (!id) return
+    console.log(id, userid, parseInt(id) === userid)
+    if (parseInt(id) === userid) {
+      setClickItemValue('my')
+    } else {
+      setClickItemValue(`user/${userid}`)
     }
   }
 
@@ -128,15 +134,19 @@ export default function recommend() {
         <div className={style.bottom_div}>
           <div className={style.right_div}>
             <div className={style.userInfo}>
-              <div className={style.img_box} onClick={() => jump()}>
+              <div className={style.img_box} onClick={() => jumpUserHome()}>
                 <img className={style.img} src={videoInfo?.user.photo}></img>
               </div>
-              <div className={style.user_info} onClick={() => jump()}>
+              <div className={style.user_info} onClick={() => jumpUserHome()}>
                 <div>{videoInfo?.user.nickname}</div>
                 <div>{videoInfo?.user.email.length ? videoInfo?.user.email : ''}</div>
                 <div>{videoInfo?.user.username}</div>
               </div>
-              <div className={style.addFrd_box} onClick={() => changeFrd()}>{videoInfo?.is_friend ? '取消关注' : '点个关注'}</div>
+              {
+                videoInfo?.is_friend
+                  ? <div className={style.delFrd_box} onClick={() => changeFrd()}>已关注</div>
+                  : <div className={style.addFrd_box} onClick={() => changeFrd()}>点个关注</div>
+              }
             </div>
             <div className={style.middle_div} title={videoInfo?.video.description}>
               {videoInfo?.video.description}

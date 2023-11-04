@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import style from './index.module.scss'
 import { Image, Modal, Spin, Upload, message, Form, Input, Radio, Button } from 'antd'
 import { getFrdInfo, getSendFrd, getcollectvideos, getlikevideos, updateInfo, userInfo, userVideo } from '../../api/personal'
-import { type ISelfVideo, type IGetInfo, type IFrd } from '../../libs/model'
+import { type IVideoInfo, type IGetInfo, type IFrd } from '../../libs/model'
 import manIcon from '../../assets/imgs/man.png'
 import womanIcon from '../../assets/imgs/woman.png'
 import { type UploadProps, type RcFile, type UploadChangeParam, type UploadFile } from 'antd/lib/upload'
@@ -10,6 +10,7 @@ import { postPic } from '../../api/common'
 import { useForm } from 'antd/lib/form/Form'
 import VideoComponent from '../../components/VideoComponent'
 import { basicVideoInitOption } from '../../libs/data'
+
 import FrdItem from './FrdItem'
 interface IFrdInfo {
   frds: IFrd[]
@@ -20,7 +21,7 @@ export default function Self() {
   const [clickTabs, setClickTabs] = useState('work')
   const [selfInfo, setSelfInfo] = useState<IGetInfo>()
   const [coverLoading, setCoverLoading] = useState(false)
-  const [selfVideo, setSelfVideo] = useState<ISelfVideo[]>()
+  const [selfVideo, setSelfVideo] = useState<IVideoInfo[]>()
   const [frd, setFrd] = useState<IFrdInfo>({ frds: [], tabs: '' })
   const [isFrdModal, setIsFrdModal] = useState(false)
 
@@ -62,7 +63,16 @@ export default function Self() {
     if (values.sexual === 1) {
       sex = 1
     }
-    const res = await updateInfo(values.nickname, selfInfo?.photo ?? '', values.email, sex)
+    let collect = 0
+    let like = 0
+    if (values.collect === 1) {
+      collect = 1
+    }
+    if (values.like === 1) {
+      like = 1
+    }
+    console.log(values)
+    const res = await updateInfo(values.nickname, selfInfo?.photo ?? '', values.email ?? '', sex, like, collect)
     if (res?.code === 200) {
       message.success('修改成功')
       getSelfInfo()
@@ -108,6 +118,14 @@ export default function Self() {
   const clickFrdClick = (tabs: string) => {
     setFrd({ ...frd, tabs })
     setIsFrdModal(true)
+  }
+
+  // 跳转到新页面
+  const jump = (id: number) => {
+    const w = window.open('_black')
+    if (w) {
+      w.location.href = `/video/${id}`
+    }
   }
 
   useEffect(() => {
@@ -169,19 +187,19 @@ export default function Self() {
           <span className={style.number}>{selfInfo?.videos}</span>
         </div>
         <div className={clickTabs === 'good' ? style.tabs_itemClick : style.tabs_item} onClick={() => setClickTabs('good')}>
-          <span className={style.tabs_text}>获赞</span>
+          <span className={style.tabs_text}>喜爱</span>
           <span className={style.number}>{selfInfo?.likes}</span>
         </div>
         <div className={clickTabs === 'collect' ? style.tabs_itemClick : style.tabs_item} onClick={() => setClickTabs('collect')}>
           <span className={style.tabs_text}>收藏</span>
-          <span className={style.number}>{selfInfo?.collects}</span>
+          <span className={style.number}>{selfInfo?.sendCollects}</span>
         </div>
       </div>
       <div className={style.video_box}>
         {
           selfVideo
             ? selfVideo.map(item =>
-              <div key={item.id} className={style.video_item}>
+              <div key={item.id} className={style.video_item} onClick={() => jump(item.id)}>
                 <div className={style.video_div}>
                   <VideoComponent propsOption={{ ...option, loop: true, poster: item.photoUrl }} hoverFunc={true} videoUrl={item.videoUrl}></VideoComponent>
                 </div>
@@ -270,6 +288,24 @@ export default function Self() {
           >
             <Input defaultValue={selfInfo?.email}></Input>
           </Form.Item>
+          <Form.Item
+            label='喜爱设置'
+            name='like'
+          >
+            <Radio.Group defaultValue={selfInfo?.likeHidden}>
+              <Radio value={0}>公开</Radio>
+              <Radio value={1}>隐藏</Radio>
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item
+            label='收藏设置'
+            name='collect'
+          >
+            <Radio.Group defaultValue={selfInfo?.collectHidden}>
+              <Radio value={0}>公开</Radio>
+              <Radio value={1}>隐藏</Radio>
+            </Radio.Group>
+          </Form.Item>
           <Form.Item>
             <div className={style.buttons}>
               <Button className={style.button} type='primary' htmlType="submit">修改</Button>
@@ -286,7 +322,7 @@ export default function Self() {
       >
         {
           frd.frds.map(item =>
-            <FrdItem item={item} tabs={frd.tabs} getFriendInfo={getFriendInfo} key={item.id}/>)
+            <FrdItem item={item} tabs={frd.tabs} getFriendInfo={getFriendInfo} key={item.id} />)
         }
       </Modal>
     </div>

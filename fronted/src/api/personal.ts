@@ -1,4 +1,4 @@
-import { type ISelfVideo, type IGetInfo, type IFrd } from "../libs/model"
+import { type IGetInfo, type IFrd, type IVideoInfo, type IGetVideo, type IGetOtherInfo } from "../libs/model"
 import request from "../utils/request"
 
 // 收藏
@@ -76,7 +76,7 @@ export const userInfo = async () => {
 }
 
 // 修改个人信息
-export const updateInfo = async (nickname: string, photo: string, email: string, sexual: number) => {
+export const updateInfo = async (nickname: string, photo: string, email: string, sexual: number, likehidden: number, collecthidden: number) => {
   return await request({
     url: '/api/v1/user/updateinfo',
     method: 'POST',
@@ -84,14 +84,16 @@ export const updateInfo = async (nickname: string, photo: string, email: string,
       nickname,
       photo,
       email,
-      sexual
+      sexual,
+      likehidden,
+      collecthidden
     }
   })
 }
 
 // 获取个人作品
 export const userVideo = async () => {
-  return await request<ISelfVideo[]>({
+  return await request<IVideoInfo[]>({
     url: '/api/v1/video/uservideo',
     method: 'GET'
   })
@@ -99,7 +101,7 @@ export const userVideo = async () => {
 
 // 获取点赞视频
 export const getlikevideos = async () => {
-  return await request<ISelfVideo[]>({
+  return await request<IVideoInfo[]>({
     url: '/api/v1/optvideo/getlikevideos',
     method: 'GET'
   })
@@ -107,7 +109,7 @@ export const getlikevideos = async () => {
 
 // 获取收藏视频
 export const getcollectvideos = async () => {
-  return await request<ISelfVideo[]>({
+  return await request<IVideoInfo[]>({
     url: '/api/v1/optvideo/getcollectvideos',
     method: 'GET'
   })
@@ -142,11 +144,55 @@ export const delfriend = async (userid: number) => {
 
 // 获取其他人信息
 export const otheruserinfo = async (userid: number) => {
-  return await request<IGetInfo>({
+  return await request<IGetOtherInfo>({
     url: '/api/v1/user/otheruserinfo',
     method: 'GET',
     params: {
       userid
+    }
+  })
+}
+
+// 获得某视频信息
+export const getsinglevideo = async (videoid: number) => {
+  return await request<IGetVideo>({
+    url: '/api/v1/video/getsinglevideo',
+    method: 'GET',
+    params: {
+      videoid
+    }
+  })
+}
+
+// 获取他人点赞视频
+export const getotherlikevideos = async (user_id: number) => {
+  return await request<IVideoInfo[]>({
+    url: '/api/v1/optvideo/getotherlikevideos',
+    method: 'GET',
+    params: {
+      user_id
+    }
+  })
+}
+
+// 获取他人收藏视频
+export const getothercollectvideos = async (user_id: number) => {
+  return await request<IVideoInfo[]>({
+    url: '/api/v1/optvideo/getothercollectvideos',
+    method: 'GET',
+    params: {
+      user_id
+    }
+  })
+}
+
+// 获取他人发布视频
+export const otheruservideo = async (user_id: number) => {
+  return await request<IVideoInfo[]>({
+    url: '/api/v1/video/otheruservideo',
+    method: 'GET',
+    params: {
+      user_id
     }
   })
 }

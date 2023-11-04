@@ -4,8 +4,7 @@ import "video.js/dist/video-js.css"
 import { basicVideoInitOption, typeList } from '../../libs/data'
 import VideoComponent from '../../components/VideoComponent'
 import { Input, Tag, message } from 'antd'
-import { getVideo } from '../../api/recommend'
-import { type IGetVideo } from '../../libs/model'
+import { type IVideoInfo, type IGetVideo } from '../../libs/model'
 import likeIcon from '../../assets/imgs/likepoints.png'
 import likeIconClick from '../../assets/imgs/like_click.png'
 import collectIcon from '../../assets/imgs/collect.png'
@@ -16,21 +15,21 @@ import topIcon from '../../assets/imgs/top.png'
 import bottomIcon from '../../assets/imgs/bottom.png'
 import rightIcon from '../../assets/imgs/left.png'
 import Mask from '../../components/Mask'
-import { addCollect, addFrd, addLike, delCollect, delFrd, delLike } from '../../api/personal'
+import { addCollect, addFrd, addLike, delCollect, delFrd, delLike, getsinglevideo } from '../../api/personal'
+import { useLocation } from 'react-router-dom'
 
 export default function VideoItem() {
+  const video_id = useLocation().pathname.split('/')[2]
   const [videoInfo, setVideoInfo] = useState<IGetVideo>()
   const [hoverValue, setHoverValue] = useState('')
   // 控制左拉
   const [leftClick, setLeftClick] = useState(false)
   // 获得某一视频
   const getInitVideo = async () => {
-    // const res = await getVideo()
-    // if (res?.code === 200) {
-    //   setVideoInfo(res.data)
-    // } else {
-    //   message.info(res?.message)
-    // }
+    const res = await getsinglevideo(parseInt(video_id))
+    if (res?.code === 200) {
+      setVideoInfo(res.data)
+    }
   }
 
   const getType = (type: number) => {
@@ -102,6 +101,7 @@ export default function VideoItem() {
   }
 
   useEffect(() => {
+    getInitVideo()
   }, [])
 
   const propsOption = { ...basicVideoInitOption, loop: true, autoplay: true, poster: videoInfo?.video.photoUrl ? videoInfo?.video.photoUrl : '' }
@@ -147,12 +147,6 @@ export default function VideoItem() {
               <img src={hoverValue === 'view' ? viewIconClick : viewIcon} className={style.icon}></img>
               <span className={style.number_text}>{videoInfo?.video.viewsPoints}</span>
             </div>
-          </div>
-        </div>
-        <div className={style.btns}>
-          <div className={style.btn_box}>
-            <img src={topIcon} className={style.changeIcon} />
-            <img src={bottomIcon} className={style.changeIcon} />
           </div>
         </div>
         <div className={style.right_click_btn} onClick={() => setLeftClick(!leftClick)}>

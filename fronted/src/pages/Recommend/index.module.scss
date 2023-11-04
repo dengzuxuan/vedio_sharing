@@ -237,7 +237,20 @@
   border-radius: 15px;
   background-color: #fa7132;
   text-align: center;
-  line-height: 40px;
+  line-height: 38px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delFrd_box {
+  width: 80px;
+  height: 38px;
+  color: #fff;
+  border-radius: 15px;
+  background-color: rgb(128, 128, 128);
+  text-align: center;
+  line-height: 38px;
   margin-left: 10px;
   cursor: pointer;
   transition: all 0.2s;
@@ -245,6 +258,10 @@
 
 .addFrd_box:hover {
   background-color: rgba(250, 113, 50, .8);
+}
+
+.delFrd_box:hover {
+  background-color: rgba(128, 128, 128, .5);
 }
 
 .middle_div {

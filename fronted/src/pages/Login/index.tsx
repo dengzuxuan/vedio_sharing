@@ -26,6 +26,7 @@ export default function Login() {
     const res = await login(values.username, values.password)
     if (res?.code === 200) {
       localStorage.setItem('token', res.data.token)
+      localStorage.setItem('id', res.data.userid)
       message
         .success('登录成功, 正前往主页', 1)
         .then(() => navigator('/home'))

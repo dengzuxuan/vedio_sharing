@@ -2,6 +2,7 @@ import request from "../utils/request"
 
 interface ILogin {
   token: string
+  userid: string
 }
 export const login = async (username: string, password: string) => {
   return await request<ILogin>({

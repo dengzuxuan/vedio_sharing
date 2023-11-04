@@ -15,6 +15,8 @@ export interface IVideo {
 }
 
 export interface IUpdateUser {
+  sendCollects: number
+  bothfriend: boolean
   id: number
   username: string
   nickname: string
@@ -57,6 +59,10 @@ export interface IGetVideo {
 }
 
 export interface IGetInfo {
+  likeHidden: number
+  collectHidden: number
+  sendCollects: number
+  bothfriend: boolean
   collects: number
   createTime: string
   email: string
@@ -73,27 +79,16 @@ export interface IGetInfo {
   videos: number
 }
 
+export interface IGetOtherInfo {
+  followmy: boolean
+  myfollow: boolean
+  user: IGetInfo
+}
+
 export interface IUploadVideo {
   photo_url: string
   file_title: string
   url: string
-}
-
-export interface ISelfVideo {
-  id: number
-  userId: number
-  title: string
-  description: string
-  type: number
-  videoUrl: string
-  photoUrl: string
-  hotPoints: number
-  viewsPoints: number
-  likePoints: number
-  collectPoints: number
-  commentPoints: number
-  createTime: string
-  updateTime: string
 }
 
 export interface IFrd {

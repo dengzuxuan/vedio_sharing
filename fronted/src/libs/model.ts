@@ -106,3 +106,21 @@ export interface IFrd {
   createTime: string
   updateTime: string
 }
+
+export interface IComment {
+  commentId: number
+  content: string
+  createTime: string
+  flag: number
+  id: number
+  likes: number
+  updateTime: string
+  userId: number
+  videoId: number
+}
+
+export interface IGetComments {
+  comment: IComment
+  like: boolean
+  user: IGetInfo
+}

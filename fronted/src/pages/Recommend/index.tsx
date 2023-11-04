@@ -25,6 +25,7 @@ export default function recommend() {
   const { setClickItemValue } = useContext(context)
   const [videoInfo, setVideoInfo] = useState<IGetVideo>()
   const [hoverValue, setHoverValue] = useState('')
+  const id = localStorage.getItem('id')
   // 控制左拉
   const [leftClick, setLeftClick] = useState(false)
   // 发布评论内容
@@ -179,6 +180,7 @@ export default function recommend() {
       setMessageInfo('')
     }
   }, [leftClick])
+
   useEffect(() => {
     getInitVideo()
   }, [])
@@ -254,7 +256,7 @@ export default function recommend() {
                   comments?.length
                     ? <>
                       {
-                        comments.map(item => <Comment updateFlag={updateFlag} setUpdateFlag={setUpdateFlag} getFirstComment={getFirstComment} setReturnComment={setReturnComment} key={item.comment.commentId} item={item} />)
+                        comments.map(item => <Comment getMesages={getMesages} videoId={videoInfo?.video.id} updateFlag={updateFlag} setUpdateFlag={setUpdateFlag} getFirstComment={getFirstComment} setReturnComment={setReturnComment} key={item.comment.commentId} item={item} />)
                       }
                     </>
                     : <div className={style.no_comment}>还没有任何评论~</div>}

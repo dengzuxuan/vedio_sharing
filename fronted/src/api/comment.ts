@@ -62,7 +62,7 @@ export const delcommentlikes = async (comment_id: number) => {
   })
 }
 
-// 删除视频
+// 删除评论
 export const delcomment = async (comment_id: number) => {
   return await request({
     url: '/api/v1/optvideo/delcomment',

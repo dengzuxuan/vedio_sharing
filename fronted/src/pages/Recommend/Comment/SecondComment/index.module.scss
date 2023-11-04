@@ -25,7 +25,10 @@
 }
 .comment{
   color: dimgray;
+  width: 100%;
   margin-top: 3px;
+  word-break: break-all; // 按字符截断换行；支持IE和chrome，FF不支持
+  word-wrap: break-word; // 按英文单词整体截断换行；以上三个浏览器均支持
 }
 
 .time{
@@ -70,4 +73,28 @@
 
 .secondComment{
   padding-left: 20px;
+}
+
+.input_box{
+  display: flex;
+  align-items: center;
+
+  .input{
+    width: 80%;
+  }
+
+  .publish {
+    margin-left: 10px;
+    color: gray;
+    font-size: 12px;
+    cursor: pointer;
+  }
+}
+
+.del{
+  color: gray;
+  font-size: 12px;
+  margin-left: auto;
+  width: 26px;
+  cursor: pointer;
 }

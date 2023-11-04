@@ -39,12 +39,14 @@ public enum ResultCodeEnum {
     FRIEND_ADD_WRONG(4001,"你已经关注过了"),
 
     VIDEO_NOT_EXIST(5001,"该视频不存在"),
-    LIKE_NOT_EXIST(5002,"您尚未点赞该视频"),
+    LIKE_NOT_EXIST(5002,"您尚未点赞"),
     LIKE_ALREADY_EXIST(5003,"您已经点过赞了"),
     COLLECT_NOT_EXIST(5004,"您尚未收藏该视频"),
     COLLECT_ALREADY_EXIST(5005,"您已经收藏过了"),
     COMMENT_NOT_EXIST(5006,"评论不存在"),
-    COMMENT_PARAMS_WRONG(5007,"评论格式有误");
+    COMMENT_CANT_DELTE(5007,"无法删除该评论"),
+    COMMENT_LIKE_CANT_DELTE(5008,"无法取消该点赞"),
+    COMMENT_PARAMS_WRONG(5009,"评论格式有误");
 
     private final Integer code;
 

@@ -82,4 +82,14 @@ public class UserOptController {
         int commentId = Integer.parseInt(m1.get("comment_id"));
         return optVideoService.getSecondComments(commentId);
     }
+    @PostMapping("/addcommentlikes")
+    public Result addcommentlikes(@RequestParam Map<String,String> m1){
+        int commentId = Integer.parseInt(m1.get("comment_id"));
+        return optVideoService.addLikeComment(commentId);
+    }
+    @PostMapping("/delcommentlikes")
+    public Result delcommentlikes(@RequestParam Map<String,String> m1){
+        int commentId = Integer.parseInt(m1.get("comment_id"));
+        return optVideoService.delLikeComment(commentId);
+    }
 }

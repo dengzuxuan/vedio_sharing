@@ -273,9 +273,18 @@ public class OptVideoServiceImpl implements OptVideoService {
 
     @Override
     public Result delcomment(int commentId) {
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User user = loginUser.getUser();
+
         Comment comment = commentMapper.selectById(commentId);
         if(comment == null){
             return Result.build(null,ResultCodeEnum.COMMENT_NOT_EXIST);
+        }
+
+        if(comment.getUserId() != user.getId()){
+            return Result.build(null,ResultCodeEnum.COMMENT_CANT_DELTE);
         }
 
         Video video = videoMapper.selectById(comment.getVideoId());
@@ -309,12 +318,74 @@ public class OptVideoServiceImpl implements OptVideoService {
 
     @Override
     public Result addLikeComment(int commentId) {
-        return null;
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User user = loginUser.getUser();
+
+        Comment comment = commentMapper.selectById(commentId);
+        if(comment==null){
+            return Result.build(null,ResultCodeEnum.COMMENT_NOT_EXIST);
+        }
+
+        Video video = videoMapper.selectById(comment.getVideoId());
+        if(video == null){
+            return Result.build(null,ResultCodeEnum.VIDEO_NOT_EXIST);
+        }
+
+        QueryWrapper<CommentLikes> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("comment_id",commentId).eq("send_userid",user.getId());
+        CommentLikes commentLikes1 = commentLikesMapper.selectOne(queryWrapper);
+        if(commentLikes1!=null){
+            return Result.build(null,ResultCodeEnum.LIKE_ALREADY_EXIST);
+        }
+
+        Date now = new Date();
+        CommentLikes commentLikes = new CommentLikes(
+                null,
+                video.getId(),
+                commentId,
+                user.getId(),
+                now,
+                now
+        );
+        commentLikesMapper.insert(commentLikes);
+
+        comment.setLikes(comment.getLikes()+1);
+        commentMapper.updateById(comment);
+
+        return Result.success(null);
     }
 
     @Override
     public Result delLikeComment(int commentId) {
-        return null;
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User user = loginUser.getUser();
+
+        Comment comment = commentMapper.selectById(commentId);
+        if(comment==null){
+            return Result.build(null,ResultCodeEnum.COMMENT_NOT_EXIST);
+        }
+
+        Video video = videoMapper.selectById(comment.getVideoId());
+        if(video == null){
+            return Result.build(null,ResultCodeEnum.VIDEO_NOT_EXIST);
+        }
+
+        QueryWrapper<CommentLikes> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("comment_id",commentId).eq("send_userid",user.getId());
+        CommentLikes commentLikes1 = commentLikesMapper.selectOne(queryWrapper);
+        if(commentLikes1==null){
+            return Result.build(null,ResultCodeEnum.LIKE_NOT_EXIST);
+        }
+
+        commentLikesMapper.delete(queryWrapper);
+
+        comment.setLikes(comment.getLikes()-1);
+        commentMapper.updateById(comment);
+        return Result.success(null);
     }
 
     @Override

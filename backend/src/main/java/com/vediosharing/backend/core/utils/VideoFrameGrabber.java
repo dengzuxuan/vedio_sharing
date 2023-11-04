@@ -1,5 +1,6 @@
 package com.vediosharing.backend.core.utils;
 
+import lombok.Cleanup;
 import org.bytedeco.javacv.*;
 
 import java.awt.image.BufferedImage;
@@ -20,7 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class VideoFrameGrabber {
     public static InputStream grabberVideoFramer(MultipartFile file) throws Exception {
+        @Cleanup
         InputStream inputStream = file.getInputStream();
+        @Cleanup
         InputStream outputStrem = null;
         // 最后获取到的视频的图片缓存
         BufferedImage bufferedImage = null;

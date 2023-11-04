@@ -2,8 +2,9 @@ package com.vediosharing.backend.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
+import com.vediosharing.backend.core.constant.RankConsts;
 import com.vediosharing.backend.core.constant.Result;
-import com.vediosharing.backend.core.constant.VideoTypeConsts;
+import com.vediosharing.backend.core.utils.RankUtil;
 import com.vediosharing.backend.dao.entity.*;
 import com.vediosharing.backend.dao.mapper.*;
 import com.vediosharing.backend.dto.req.VideoReqDto;
@@ -37,8 +38,8 @@ public class UserVideoServiceImpl implements UserVideoService {
     LikeMapper likeMapper;
     @Autowired
     FriendMapper friendMapper;
-    List<Video> videoList = new ArrayList<>();
-    int currentList = 0;
+    @Autowired
+    RankUtil rankUtil;
     @Override
     public Result incrVideoLike(int videoId, int delta) {
         return null;
@@ -51,32 +52,52 @@ public class UserVideoServiceImpl implements UserVideoService {
 
     @Override
     public Result addVideo(VideoReqDto reqDto) {
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User user = loginUser.getUser();
 
-            UsernamePasswordAuthenticationToken authentication =
-                    (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-            UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
-            User user = loginUser.getUser();
+        Date now = new Date();
 
-            Date now = new Date();
+        //基本基础热度 1~10
+        //描述的多 +20
+        //标题多 +10
+        Random r = new Random();
+        int baseHot = r.nextInt(9)+1;
+        if(reqDto.getTitle().length()>5){
+            baseHot+=10;
+        }
 
-            Video vedio = new Video(
-                    null,
-                    user.getId(),
-                    reqDto.getTitle(),
-                    reqDto.getDescription(),
-                    reqDto.getType(),
-                    reqDto.getVideourl(),
-                    reqDto.getPhotourl(),
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    now,
-                    now
-            );
+        if(reqDto.getDescription().length()>15){
+            baseHot+=20;
+        }
 
-            videoMapper.insert(vedio);
+        Video vedio = new Video(
+                null,
+                user.getId(),
+                reqDto.getTitle(),
+                reqDto.getDescription(),
+                reqDto.getType(),
+                reqDto.getVideourl(),
+                reqDto.getPhotourl(),
+                baseHot,
+                baseHot,
+                baseHot,
+                0,
+                0,
+                0,
+                0,
+                now,
+                now
+        );
+
+        videoMapper.insert(vedio);
+
+        //初始redis中的热度
+        rankUtil.initRank(RankConsts.TOTAL_RANK,vedio.getType(),baseHot,vedio.getId());
+        rankUtil.initRank(RankConsts.WEEKLY_RANK,vedio.getType(),baseHot,vedio.getId());
+        rankUtil.initRank(RankConsts.DAYLY_RANK,vedio.getType(),baseHot,vedio.getId());
+
         return Result.success(null);
     }
 
@@ -95,86 +116,6 @@ public class UserVideoServiceImpl implements UserVideoService {
     }
 
     @Override
-    public Result getVideo() {
-        Map<String,Object> res = new HashMap<>();
-
-        if(currentList!=videoList.size()){
-            currentList++;
-            res.put("video",videoList.get(currentList));
-            res.put("user",userMapper.selectById(videoList.get(currentList).getUserId()));
-            return Result.success(res);
-        }
-
-        UsernamePasswordAuthenticationToken authentication =
-            (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
-        User loginuser = loginUser.getUser();
-        QueryWrapper<UsertLikely> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id",loginuser.getId());
-        UsertLikely usertLikely = userLikelyMapper.selectOne(queryWrapper);
-
-        //根据用户喜好权重随机获取视频
-        List<WeightedItem<Integer>> weightedItems = new ArrayList<>();
-        weightedItems.add(new WeightedItem<>(VideoTypeConsts.SPORT,  usertLikely.getSport()));
-        weightedItems.add(new WeightedItem<>(VideoTypeConsts.GAME,  usertLikely.getGame()));
-        weightedItems.add(new WeightedItem<>(VideoTypeConsts.FOOD,  usertLikely.getFood()));
-        weightedItems.add(new WeightedItem<>(VideoTypeConsts.MUSIC,  usertLikely.getMusic()));
-        weightedItems.add(new WeightedItem<>(VideoTypeConsts.FUN,  usertLikely.getFun()));
-        weightedItems.add(new WeightedItem<>(VideoTypeConsts.KNOWLEDGE,  usertLikely.getKnowledge()));
-        weightedItems.add(new WeightedItem<>(VideoTypeConsts.ANIMAL,  usertLikely.getAnimal()));
-
-        //Video video1 = videoMapper.selectById(13);
-
-
-        Integer selectedOption = selectRandomWeightedOption(weightedItems);
-
-        QueryWrapper<Video> queryWrapper1 = new QueryWrapper<>();
-        queryWrapper1.eq("type",selectedOption);
-        List<Video> videos = videoMapper.selectList(queryWrapper1);
-
-        int videoIndex = (int) (Math.random()* videos.size());
-        Video video = videos.get(videoIndex);
-        video.setViewsPoints(video.getViewsPoints()+1);
-        videoMapper.updateById(video);
-
-        QueryWrapper<Collects> queryWrapper2 = new QueryWrapper<>();
-        queryWrapper2.eq("user_id",loginuser.getId()).eq("video_id",video.getId());
-        Collects findCollect= collectMapper.selectOne(queryWrapper2);
-        if(findCollect!=null){
-            res.put("is_collect",true);
-        }else{
-            res.put("is_collect",false);
-        }
-
-        QueryWrapper<Likes> queryWrapper3 = new QueryWrapper<>();
-        queryWrapper3.eq("user_id",loginuser.getId()).eq("video_id",video.getId());
-        Likes findLike= likeMapper.selectOne(queryWrapper3);
-        if(findLike!=null){
-            res.put("is_like",true);
-        }else{
-            res.put("is_like",false);
-        }
-
-        QueryWrapper<Friend> queryWrapper4 = new QueryWrapper<>();
-        queryWrapper4.eq("recv_userid",video.getUserId()).eq("send_userid",loginuser.getId());
-        Friend findFriend= friendMapper.selectOne(queryWrapper4);
-        if(findFriend!=null){
-            res.put("is_friend",true);
-        }else{
-            res.put("is_friend",false);
-        }
-
-        User author = userMapper.selectById(video.getUserId());
-        author.setPassword(null);
-        author.setPasswordReal(null);
-
-        res.put("video",video);
-        res.put("user",author);
-
-        return Result.success(res);
-    }
-
-    @Override
     public Result getSingleVideo(int videoId) {
         UsernamePasswordAuthenticationToken authentication =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
@@ -190,6 +131,8 @@ public class UserVideoServiceImpl implements UserVideoService {
 
         video.setViewsPoints(video.getViewsPoints()+1);
         videoMapper.updateById(video);
+
+        rankUtil.addRank(video.getType(),videoId,RankConsts.POINT_INCR);
 
         QueryWrapper<Collects> queryWrapper2 = new QueryWrapper<>();
         queryWrapper2.eq("user_id",loginuser.getId()).eq("video_id",video.getId());
@@ -252,36 +195,5 @@ public class UserVideoServiceImpl implements UserVideoService {
         queryWrapper.eq("user_id",userId);
         return videoMapper.selectList(queryWrapper);
     }
-    public static <T> T selectRandomWeightedOption(List<WeightedItem<T>> items) {
-        int totalWeight = items.stream().mapToInt(WeightedItem::getWeight).sum();
-        int randomNumber = new Random().nextInt(totalWeight);
 
-        int cumulativeWeight = 0;
-        for (WeightedItem<T> item : items) {
-            cumulativeWeight += item.getWeight();
-            if (randomNumber < cumulativeWeight) {
-                return item.getItem();
-            }
-        }
-
-        // Fallback option in case of unexpected situations
-        return items.get(0).getItem();
-    }
-    class WeightedItem<T> {
-        private T item;
-        private int weight;
-
-        public WeightedItem(T item, int weight) {
-            this.item = item;
-            this.weight = weight;
-        }
-
-        public T getItem() {
-            return item;
-        }
-
-        public int getWeight() {
-            return weight;
-        }
-    }
 }

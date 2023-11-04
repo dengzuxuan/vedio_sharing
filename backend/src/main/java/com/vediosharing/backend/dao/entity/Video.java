@@ -30,7 +30,9 @@ public class Video {
     private int type;
     private String videoUrl;
     private String photoUrl;
-    private int hotPoints;
+    private int initHotPoints;
+    private int totalHotPoints;
+    private int weekHotPoints;
     private int viewsPoints;
     private int likePoints;
     private int collectPoints;

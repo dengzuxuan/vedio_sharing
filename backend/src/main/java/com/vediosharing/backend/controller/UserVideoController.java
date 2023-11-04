@@ -25,18 +25,14 @@ public class UserVideoController {
     public Result addVideo(@RequestBody VideoReqDto dto){
         return userVideoService.addVideo(dto);
     }
-    @GetMapping("/getvideo")
-    public Result getVideo(){
-        return userVideoService.getVideo();
-    }
-    @GetMapping("/getsinglevideo")
-    public Result getSingleVideo(@RequestParam Map<String,String>m1){
-        int videoId = Integer.parseInt(m1.get("videoid"));
-        return userVideoService.getSingleVideo(videoId);
-    }
     @GetMapping("/uservideo")
     public Result getUserVideo(){
         return userVideoService.getUserVideos();
+    }
+    @GetMapping("/getsinglevideo")
+    public Result getSingleVideo(@RequestParam Map<String,String> m1){
+        int videoId = Integer.parseInt(m1.get("videoid"));
+        return userVideoService.getSingleVideo(videoId);
     }
     @GetMapping("/otheruservideo")
     public Result getOtherUserVideo(@RequestParam Map<String,String>m1){

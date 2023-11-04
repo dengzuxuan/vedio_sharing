@@ -16,6 +16,7 @@ import com.vediosharing.backend.dao.entity.Video;
 import com.vediosharing.backend.dao.mapper.VideoMapper;
 import com.vediosharing.backend.service.Impl.utils.UserDetailsImpl;
 import com.vediosharing.backend.service.ResourceService;
+import lombok.Cleanup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,7 +58,9 @@ public class ResourceServiceImpl implements ResourceService {
         }
         Map<String,String> res = new HashMap<>();
         try {
-            String url = UploadOss(file.getInputStream(),filePath);
+            @Cleanup
+            InputStream inputStream = file.getInputStream();
+            String url = UploadOss(inputStream,filePath);
             res.put("url",url);
         } catch (IOException e) {
             return Result.build(null, ResultCodeEnum.VIDEO_INPUT_WRONG);
@@ -80,6 +83,7 @@ public class ResourceServiceImpl implements ResourceService {
         Map<String,String> res = new HashMap<>();
         try {
             String video_url = UploadOss(file.getInputStream(),filePath);
+            @Cleanup
             InputStream stream = VideoFrameGrabber.grabberVideoFramer(file);
             String photo_url = UploadOss(stream,UUID.randomUUID().toString().replaceAll("-", "")+".jpg");
             res.put("url",video_url);

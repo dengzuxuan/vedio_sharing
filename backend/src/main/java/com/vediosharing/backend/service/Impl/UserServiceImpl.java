@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
         String defaultPhotoUrl = "http://s34n6l898.hn-bkt.clouddn.com/photo/photo_default.png";
         Date now = new Date();
 
-        String defaultNickName = "niuniu"+ IdUtil.getSnowflakeNextIdStr() ;
+        String defaultNickName = "niuniu_"+ getRandomNickName() ;
 
         User newUser = new  User(
                 null,
@@ -412,5 +412,15 @@ public class UserServiceImpl implements UserService {
         }
 
         return Result.success(friendInfo);
+    }
+    private String getRandomNickName(){
+        Random random = new Random();
+        String randomLetters = "";
+        for (int i = 0; i < 4; i++) {
+            int index = random.nextInt(26);
+            char letter = (char) ('a' + index);
+            randomLetters += letter;
+        }
+        return randomLetters;
     }
 }

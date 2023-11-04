@@ -3,8 +3,10 @@ package com.vediosharing.backend.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
 import com.vediosharing.backend.core.constant.MessageConsts;
+import com.vediosharing.backend.core.constant.RankConsts;
 import com.vediosharing.backend.core.constant.Result;
 import com.vediosharing.backend.core.utils.OrderDateComparator;
+import com.vediosharing.backend.core.utils.RankUtil;
 import com.vediosharing.backend.dao.entity.*;
 import com.vediosharing.backend.dao.mapper.*;
 import com.vediosharing.backend.dto.req.CommentReqDto;
@@ -46,6 +48,8 @@ public class OptVideoServiceImpl implements OptVideoService {
     MessageServiceImpl messageService;
     @Autowired
     CommentLikesMapper commentLikesMapper;
+    @Autowired
+    RankUtil rankUtil;
     @Override
     public Result addLike(int videoId) {
         UsernamePasswordAuthenticationToken authentication =
@@ -78,6 +82,8 @@ public class OptVideoServiceImpl implements OptVideoService {
         //在video表中新增
         findVideo.setLikePoints(findVideo.getLikePoints()+1);
         videoMapper.updateById(findVideo);
+
+        rankUtil.addRank(findVideo.getType(), videoId, RankConsts.LIKE_INCR);
         return Result.success(null);
     }
 
@@ -140,6 +146,8 @@ public class OptVideoServiceImpl implements OptVideoService {
         //在video表中新增
         findVideo.setCollectPoints(findVideo.getCollectPoints()+1);
         videoMapper.updateById(findVideo);
+
+        rankUtil.addRank(findVideo.getType(),videoId, RankConsts.COLLECT_INCR);
         return Result.success(null);
     }
 
@@ -268,6 +276,8 @@ public class OptVideoServiceImpl implements OptVideoService {
 
         video.setCommentPoints(video.getCommentPoints()+1);
         videoMapper.updateById(video);
+
+        rankUtil.addRank(video.getType(), dto.getVideoid(), RankConsts.COMMENT_INCR);
         return Result.success(null);
     }
 

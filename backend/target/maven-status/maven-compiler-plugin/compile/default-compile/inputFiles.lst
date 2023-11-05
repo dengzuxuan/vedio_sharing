@@ -18,6 +18,7 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\en
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\CommentLikesMapper.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\UserVideoServiceImpl.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\UserLikelyMapper.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dto\resp\MessageDetailRespDto.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\Collects.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\utils\VideoFrameGrabber.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\utils\VideoPools.java
@@ -26,6 +27,7 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\c
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\UserService.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\OptVideoServiceImpl.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\FriendMapper.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\utils\SearchUtil.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\common\constant\result\ResultCodeEnum.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\utils\RegexUtil.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\Message.java

@@ -84,6 +84,12 @@ public class OptVideoServiceImpl implements OptVideoService {
         videoMapper.updateById(findVideo);
 
         rankUtil.addRank(findVideo.getType(), videoId, RankConsts.LIKE_INCR);
+
+        String pre = findVideo.getTitle();
+        if(pre.length()>10){
+            pre = pre.substring(0, 10)+"...";
+        }
+        messageService.addMessage(MessageConsts.LIKE,"","点赞了你的视频:"+pre,findVideo.getUserId(),user.getId());
         return Result.success(null);
     }
 
@@ -148,6 +154,12 @@ public class OptVideoServiceImpl implements OptVideoService {
         videoMapper.updateById(findVideo);
 
         rankUtil.addRank(findVideo.getType(),videoId, RankConsts.COLLECT_INCR);
+
+        String pre = findVideo.getTitle();
+        if(pre.length()>10){
+            pre = pre.substring(0, 10)+"...";
+        }
+        messageService.addMessage(MessageConsts.COLLECT,"","收藏了你的视频:"+pre,findVideo.getUserId(),user.getId());
         return Result.success(null);
     }
 
@@ -238,7 +250,11 @@ public class OptVideoServiceImpl implements OptVideoService {
             return Result.build(null,ResultCodeEnum.COMMENT_PARAMS_WRONG);
         }
         if(dto.getFlag()==1){
-            messageService.addMessage(MessageConsts.COMMENTVIDEO,content,video.getUserId(),user.getId());
+            String pre = video.getTitle();
+            if(pre.length()>10){
+                pre = pre.substring(0, 10)+"...";
+            }
+            messageService.addMessage(MessageConsts.COMMENT,pre,content,video.getUserId(),user.getId());
         }else{
             Comment replyComment = commentMapper.selectById(dto.getCommentid());
             if(replyComment == null){
@@ -256,7 +272,11 @@ public class OptVideoServiceImpl implements OptVideoService {
                 String preComment = "回复 @"+replyUser.getNickname() +" :";
                 content = preComment+content;
             }
-            messageService.addMessage(MessageConsts.REPLYCOMMENT,content,replyUser.getId(),user.getId());
+            String pre = replyComment.getContent();
+            if(pre.length()>10){
+                pre = pre.substring(0, 10)+"...";
+            }
+            messageService.addMessage(MessageConsts.COMMENT,pre,content,replyUser.getId(),user.getId());
         }
 
 
@@ -363,6 +383,13 @@ public class OptVideoServiceImpl implements OptVideoService {
 
         comment.setLikes(comment.getLikes()+1);
         commentMapper.updateById(comment);
+
+        String pre = comment.getContent();
+        if(pre.length()>10){
+            pre = pre.substring(0, 10)+"...";
+        }
+        messageService.addMessage(MessageConsts.LIKE,"","点赞了你的评论:"+pre,comment.getUserId(),user.getId());
+
 
         return Result.success(null);
     }

@@ -13,6 +13,6 @@ import lombok.Data;
 public class CommentReqDto {
     private int videoid;
     private int commentid;
-    private int flag;
+    private int flag; //1是回复视频 2是回复第一层 3是回复第二层
     private String content;
 }

@@ -3,6 +3,7 @@ package com.vediosharing.backend.controller;
 import com.vediosharing.backend.core.constant.ApiRouterConsts;
 import com.vediosharing.backend.core.constant.Result;
 import com.vediosharing.backend.dto.req.CommentReqDto;
+import com.vediosharing.backend.service.MessageService;
 import com.vediosharing.backend.service.OptVideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,8 @@ import java.util.Map;
 public class UserOptController {
     @Autowired
     OptVideoService optVideoService;
+    @Autowired
+    MessageService messageService;
 
     @PostMapping("/addcollect")
     public Result addCollect(@RequestParam Map<String,String> m1){
@@ -91,5 +94,17 @@ public class UserOptController {
     public Result delcommentlikes(@RequestParam Map<String,String> m1){
         int commentId = Integer.parseInt(m1.get("comment_id"));
         return optVideoService.delLikeComment(commentId);
+    }
+
+    @GetMapping(value = "/getnotread")
+    public Result getnotread(@RequestParam Map<String,String> m1){
+        int userId = Integer.parseInt(m1.get("user_id"));
+        return messageService.getNotReadMessageCount(userId);
+    }
+    @GetMapping(value = "/getmessage")
+    public Result getmessage(@RequestParam Map<String,String> m1){
+        int userId = Integer.parseInt(m1.get("user_id"));
+        int type = Integer.parseInt(m1.get("type"));
+        return messageService.getTypeMessage(type,userId);
     }
 }

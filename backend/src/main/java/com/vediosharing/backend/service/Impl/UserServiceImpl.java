@@ -300,9 +300,9 @@ public class UserServiceImpl implements UserService {
         friendQueryWrapper1.eq("recv_userid",user.getId()).eq("send_userid",userId);
         Friend friend2 = friendMapper.selectOne(friendQueryWrapper1);
         if(friend2!=null){
-            messageService.addMessage(MessageConsts.FOLLOWBACK,user1.getUsername()+"回关了您",user.getId(),user1.getId());
+            messageService.addMessage(MessageConsts.FOLLOW,"","回关了你",user1.getId(),user.getId());
         }else{
-            messageService.addMessage(MessageConsts.FOLLOW,user1.getUsername()+"关注了您",user.getId(),user1.getId());
+            messageService.addMessage(MessageConsts.FOLLOW,"","关注了你",user1.getId(),user.getId());
         }
 
         Date now = new Date();

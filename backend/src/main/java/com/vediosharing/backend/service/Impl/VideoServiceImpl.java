@@ -113,52 +113,53 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public Result getTypeVideo(int Type) {
-        Map<String,Object> res = new HashMap<>();
-
+    public Result getTypeVideos(int Type) {
         QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("type",Type);
         List<Video> videoAllList = videoMapper.selectList(queryWrapper);
         Collections.shuffle(videoAllList);
-
-        List<VideoDetailRespDto> videoWeekList = new ArrayList<>();
-        Set weekRankVideoIds = rankUtil.getRank(RankConsts.WEEKLY_RANK,Type ,0, 9);
-        for (Object videoId : weekRankVideoIds) {
-            Video video = videoMapper.selectById((int)videoId);
+        videoAllList=videoAllList[:8];
+        List<VideoDetailRespDto> videoList = new ArrayList<>();
+        for (Video video : videoAllList) {
             if(video == null){
                 continue;
             }
             User user = userMapper.selectById(video.getUserId());
-            videoWeekList.add(new VideoDetailRespDto(user,video));
+            videoList.add(new VideoDetailRespDto(user,video));
         }
 
-        List<VideoDetailRespDto> videoTotalList = new ArrayList<>();
-        Set totalRankVideoIds = rankUtil.getRank(RankConsts.TOTAL_RANK, Type ,0, 9);
-        for (Object videoId : totalRankVideoIds) {
+        return Result.success(videoList);
+    }
+
+    @Override
+    public Result getTypeDayTop(int type) {
+        return Result.success(getTopVideo(type,RankConsts.DAYLY_RANK,0,9));
+    }
+
+    @Override
+    public Result getTypeWeekTop(int type) {
+        return Result.success(getTopVideo(type,RankConsts.WEEKLY_RANK,0,9));
+    }
+
+    @Override
+    public Result getTypeMonthTop(int type) {
+        return Result.success(getTopVideo(type,RankConsts.MONTH_RANK,0,9));
+    }
+
+    private List<VideoDetailRespDto> getTopVideo(int type,String rank,int start,int end){
+        List<VideoDetailRespDto> videoList = new ArrayList<>();
+        Set rankVideoIds = rankUtil.getRank(rank,type , start, end);
+        for (Object videoId : rankVideoIds) {
             Video video = videoMapper.selectById((int)videoId);
             if(video == null){
                 continue;
             }
+            double hotPonit = rankUtil.getSingleScore(rank,type,(int)videoId);
+            video.setHotPoints((int) hotPonit);
             User user = userMapper.selectById(video.getUserId());
-            videoTotalList.add(new VideoDetailRespDto(user,video));
+            videoList.add(new VideoDetailRespDto(user,video));
         }
-
-        List<VideoDetailRespDto> videoDayList = new ArrayList<>();
-        Set dayRankVideoIds = rankUtil.getRank(RankConsts.DAYLY_RANK,Type , 0, 4);
-        for (Object videoId : dayRankVideoIds) {
-            Video video = videoMapper.selectById((int)videoId);
-            if(video == null){
-                continue;
-            }
-            User user = userMapper.selectById(video.getUserId());
-            videoDayList.add(new VideoDetailRespDto(user,video));
-        }
-
-        res.put("all",videoAllList);
-        res.put("total",videoTotalList);
-        res.put("week",videoWeekList);
-        res.put("day",videoDayList);
-        return Result.success(res);
+        return videoList;
     }
 
     public static <T> T selectRandomWeightedOption(List<WeightedItem<T>> items) {

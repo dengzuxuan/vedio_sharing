@@ -8,6 +8,7 @@ package com.vediosharing.backend.core.constant;
  * @Version 1.0
  */
 public class VideoTypeConsts {
+    public static final int ALL = 0;
     public static final int SPORT = 1;
     public static final int GAME = 2;
     public static final int FOOD = 3;

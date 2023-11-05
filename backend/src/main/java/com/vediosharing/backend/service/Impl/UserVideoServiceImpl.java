@@ -83,6 +83,7 @@ public class UserVideoServiceImpl implements UserVideoService {
                 baseHot,
                 baseHot,
                 baseHot,
+                baseHot,
                 0,
                 0,
                 0,
@@ -95,6 +96,7 @@ public class UserVideoServiceImpl implements UserVideoService {
 
         //初始redis中的热度
         rankUtil.initRank(RankConsts.TOTAL_RANK,vedio.getType(),baseHot,vedio.getId());
+        rankUtil.initRank(RankConsts.MONTH_RANK,vedio.getType(),baseHot,vedio.getId());
         rankUtil.initRank(RankConsts.WEEKLY_RANK,vedio.getType(),baseHot,vedio.getId());
         rankUtil.initRank(RankConsts.DAYLY_RANK,vedio.getType(),baseHot,vedio.getId());
 

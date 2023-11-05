@@ -29,9 +29,24 @@ public class VideoController {
     public Result getVideo(){
         return videoService.getVideo();
     }
-    @GetMapping("/gettypevideo")
+    @GetMapping("/gettypevideos")
     public Result getTypeVideo(@RequestParam Map<String,String> m1){
         int type = Integer.parseInt(m1.get("type"));
-        return videoService.getTypeVideo(type);
+        return videoService.getTypeVideos(type);
+    }
+    @GetMapping("/gettypedayrank")
+    public Result getTypeDayRank(@RequestParam Map<String,String> m1){
+        int type = Integer.parseInt(m1.get("type"));
+        return videoService.getTypeDayTop(type);
+    }
+    @GetMapping("/gettypeweekrank")
+    public Result getTypeWeekRank(@RequestParam Map<String,String> m1){
+        int type = Integer.parseInt(m1.get("type"));
+        return videoService.getTypeWeekTop(type);
+    }
+    @GetMapping("/gettypemonthrank")
+    public Result getTypeTotalRank(@RequestParam Map<String,String> m1){
+        int type = Integer.parseInt(m1.get("type"));
+        return videoService.getTypeMonthTop(type);
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName RankUtil
@@ -35,7 +36,9 @@ public class RankUtil {
     public boolean initRank(String key,int type, double score, Integer value){
         key=key+":"+type;
         try{
-            return redisTemplate.opsForZSet().add(key,value,score);
+            Boolean add = redisTemplate.opsForZSet().add(key, value, score);
+            redisTemplate.expire(key, 1, TimeUnit.DAYS);
+            return add;
         }catch (Exception e){
             e.printStackTrace();
             return false;
@@ -43,7 +46,7 @@ public class RankUtil {
     }
 
     public void addRank(int type,Integer value,double incr){
-        String[] keys = {RankConsts.DAYLY_RANK,RankConsts.WEEKLY_RANK,RankConsts.TOTAL_RANK};
+        String[] keys = {RankConsts.DAYLY_RANK,RankConsts.WEEKLY_RANK,RankConsts.TOTAL_RANK,RankConsts.MONTH_RANK};
         for (String key : keys) {
             key=key+":"+type;
             redisTemplate.opsForZSet().incrementScore(key, value, incr);
@@ -60,20 +63,25 @@ public class RankUtil {
         }
     }
 
-    public Double getSingleScore(String key, int value,int type){
+    public Double getSingleScore(String key, int type,int value){
+        key=key+":"+type;
         return redisTemplate.opsForZSet().score(key, value);
     }
 
-    public Boolean initAllRank(String key){
+    public Boolean  initAllRank(String key){
         boolean add = false;
-        for (int i = 1; i < 7; i++) {
-            QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("type",i);
-            List<Video> videoList = videoMapper.selectList(queryWrapper);
-            for (Video video:videoList){
-                add = initRank(key, i,video.getInitHotPoints(), video.getId());
-            }
+        List<Video> videoListAll = videoMapper.selectList(null);
+        for (Video video:videoListAll){
+            add = initRank(key, 0,video.getInitHotPoints(), video.getId());
         }
+//        for (int i = 1; i <= 7; i++) {
+//            QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
+//            queryWrapper.eq("type",i);
+//            List<Video> videoList = videoMapper.selectList(queryWrapper);
+//            for (Video video:videoList){
+//                add = initRank(key, i,video.getInitHotPoints(), video.getId());
+//            }
+//        }
 
         return add;
     }

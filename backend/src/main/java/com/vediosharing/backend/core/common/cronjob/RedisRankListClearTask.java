@@ -27,8 +27,10 @@ public class RedisRankListClearTask {
             System.out.println("本日热度排行榜清空失败");
         }
         //总热度表落表mysql
-        //本周 本月热度表落表mysql
-        rankUtil.saveRank();
+        //本周 本月 热度表落表mysql
+        rankUtil.saveRank(RankConsts.WEEKLY_RANK);
+        rankUtil.saveRank(RankConsts.MONTH_RANK);
+        rankUtil.saveRank(RankConsts.TOTAL_RANK);
     }
 
     @Scheduled(cron = "0 0 0 * * MON") // 每周第一天零点触发
@@ -40,6 +42,7 @@ public class RedisRankListClearTask {
         }else{
             System.out.println("本周热度排行榜清空失败");
         }
+        rankUtil.saveRank(RankConsts.WEEKLY_RANK);
     }
     @Scheduled(cron = "0 0 0 1 * ?") // 每月第一天零点触发
     public void clearMonthRedisData() {
@@ -50,5 +53,6 @@ public class RedisRankListClearTask {
         }else{
             System.out.println("本月热度排行榜清空失败");
         }
+        rankUtil.saveRank(RankConsts.MONTH_RANK);
     }
 }

@@ -118,7 +118,11 @@ public class VideoServiceImpl implements VideoService {
         queryWrapper.eq("type",Type);
         List<Video> videoAllList = videoMapper.selectList(queryWrapper);
         Collections.shuffle(videoAllList);
-        videoAllList=videoAllList[:8];
+
+        if(videoAllList.size()>8){
+            videoAllList=videoAllList.subList(0,8);
+        }
+
         List<VideoDetailRespDto> videoList = new ArrayList<>();
         for (Video video : videoAllList) {
             if(video == null){

@@ -33,6 +33,7 @@ public class Video {
     private transient int hotPoints; //热度
     private int initHotPoints;
     private int totalHotPoints;
+    private int monthHotPoints;
     private int weekHotPoints;
     private int viewsPoints;
     private int likePoints;

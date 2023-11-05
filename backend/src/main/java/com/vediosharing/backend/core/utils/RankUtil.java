@@ -74,40 +74,52 @@ public class RankUtil {
         for (Video video:videoListAll){
             add = initRank(key, 0,video.getInitHotPoints(), video.getId());
         }
-//        for (int i = 1; i <= 7; i++) {
-//            QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
-//            queryWrapper.eq("type",i);
-//            List<Video> videoList = videoMapper.selectList(queryWrapper);
-//            for (Video video:videoList){
-//                add = initRank(key, i,video.getInitHotPoints(), video.getId());
-//            }
-//        }
+        for (int i = 1; i <= 7; i++) {
+            QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("type",i);
+            List<Video> videoList = videoMapper.selectList(queryWrapper);
+            for (Video video:videoList){
+                add = initRank(key, i,video.getInitHotPoints(), video.getId());
+            }
+        }
 
         return add;
     }
 
-    public void saveRank(){
+    public void saveRank(String rankType){
+        Cursor<ZSetOperations.TypedTuple<Object>> scan = redisTemplate.opsForZSet().scan(rankType, ScanOptions.NONE);
+        switch (rankType){
+            case RankConsts.WEEKLY_RANK:
+                while (scan.hasNext()){
+                    ZSetOperations.TypedTuple item = scan.next();
+                    int videoId = (int) item.getValue();
+                    int hots = (int) Math.round(item.getScore());
+                    Video video = videoMapper.selectById(videoId);
+                    video.setWeekHotPoints(hots);
+                    videoMapper.updateById(video);
+                }
+                break;
+            case RankConsts.MONTH_RANK:
+                while (scan.hasNext()){
+                    ZSetOperations.TypedTuple item = scan.next();
+                    int videoId = (int) item.getValue();
+                    int hots = (int) Math.round(item.getScore());
+                    Video video = videoMapper.selectById(videoId);
+                    video.setMonthHotPoints(hots);
+                    videoMapper.updateById(video);
+                }
+                break;
+            case RankConsts.TOTAL_RANK:
+                while (scan.hasNext()){
+                    ZSetOperations.TypedTuple item = scan.next();
+                    int videoId = (int) item.getValue();
+                    int hots = (int) Math.round(item.getScore());
+                    Video video = videoMapper.selectById(videoId);
+                    video.setTotalHotPoints(hots);
+                    videoMapper.updateById(video);
+                }
+                break;
 
-//        Cursor<ZSetOperations.TypedTuple<Object>> scan = redisTemplate.opsForZSet().scan(RankConsts.TOTAL_RANK, ScanOptions.NONE);
-//        while (scan.hasNext()){
-//            ZSetOperations.TypedTuple item = scan.next();
-//            System.out.println(item.getValue() + ":" + item.getScore());
-//            int userId = (int) item.getValue();
-//            int hots = (int) Math.round(item.getScore());
-//            Video video = videoMapper.selectById(userId);
-//            video.setTotalHotPoints(hots);
-//            videoMapper.updateById(video);
-//        }
-//
-//        Cursor<ZSetOperations.TypedTuple<Object>> scan2 = redisTemplate.opsForZSet().scan(RankConsts.WEEKLY_RANK, ScanOptions.NONE);
-//        while (scan2.hasNext()){
-//            ZSetOperations.TypedTuple item = scan2.next();
-//            System.out.println(item.getValue() + ":" + item.getScore());
-//            int userId = (int) item.getValue();
-//            int hots = (int) Math.round(item.getScore());
-//            Video video = videoMapper.selectById(userId);
-//            video.setWeekHotPoints(hots);
-//            videoMapper.updateById(video);
-//        }
+        }
     }
 }

@@ -84,6 +84,7 @@ public class UserVideoServiceImpl implements UserVideoService {
                 baseHot,
                 baseHot,
                 baseHot,
+                baseHot,
                 0,
                 0,
                 0,

@@ -196,3 +196,14 @@ export const otheruservideo = async (user_id: number) => {
     }
   })
 }
+
+// 获取类型视频
+export const gettypevideo = async (type: number) => {
+  return await request({
+    url: '/api/v1/video/gettypevideo',
+    method: 'GET',
+    params: {
+      type
+    }
+  })
+}

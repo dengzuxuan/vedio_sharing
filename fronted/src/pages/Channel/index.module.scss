@@ -3,20 +3,20 @@
   height: 100vh;
 }
 
-.videos_box{
-  width: 100%;
+.videos_box {
+  width: 80%;
   padding: 20px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-row-gap: 20px;
 }
 
-.video_item{
+.video_item {
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
   overflow: hidden;
-  width: 320px;
-  height: 300px;
+  width: 270px;
+  height: 280px;
   background-color: beige;
 }
 
@@ -26,6 +26,7 @@
   cursor: pointer;
 
   :global {
+
     .vjs-has-started .vjs-control-bar,
     .vjs-audio-only-mode .vjs-control-bar {
       display: none;
@@ -33,7 +34,7 @@
   }
 }
 
-.title_description{
+.title_description {
   display: -webkit-box;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -51,7 +52,7 @@
   margin-right: 10px;
 }
 
-.description{
+.description {
   font-size: 12px;
 }
 
@@ -61,4 +62,85 @@
   font-size: 12px;
   color: gray;
   align-items: center;
+}
+
+.carousel_div {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.box {
+  width: 100%;
+  height: 240px;
+}
+
+.img_box {
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+}
+
+.carousel {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.main {
+  width: 100%;
+  display: flex;
+}
+
+.aside {
+  flex: 1;
+  padding: 10px 10px 10px 0;
+
+  .head {
+    font-size: 20px;
+    margin-bottom: 5px;
+  }
+}
+
+
+.rank_div {
+  color: #C9CCD0;
+
+  .rank_item {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    cursor: pointer;
+    margin-bottom: 12px;
+
+    .text {
+      color: #333;
+      cursor: pointer;
+    }
+
+    .text:hover {
+      color: #ff9214;
+    }
+
+    .number {
+      font-family: 'Avenir';
+      font-style: italic;
+      font-weight: 700;
+      margin-right: 10px;
+    }
+  }
+}
+
+.rank_div:first-child {
+  color: #ff473d;
+}
+
+.rank_div:nth-child(2) {
+  color: #ff6a29;
+}
+
+.rank_div:nth-child(3) {
+  color: #ff9214;
 }

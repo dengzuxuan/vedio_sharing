@@ -7,6 +7,7 @@ import personIcon from '../../assets/imgs/person.webp'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { context } from '../../hooks/store'
 import { userInfo } from '../../api/personal'
+import { type IGetInfo } from '../../libs/model'
 
 export default function Home() {
   const navigator = useNavigate()
@@ -15,6 +16,8 @@ export default function Home() {
 
   // 保存搜索框内容
   const [searchValue, setSearchValue] = useState('')
+  // 保存个人信息
+  const [info, setInfo] = useState<IGetInfo>()
 
   // 控制搜索框×
   const search = (value: string) => {
@@ -25,13 +28,17 @@ export default function Home() {
   const getSelfInfo = async () => {
     const res = await userInfo()
     if (res?.code === 200) {
-      console.log(res.data)
+      setInfo(res.data)
     }
   }
 
   useEffect(() => {
     navigator(`/home/${clickItemValue}`)
   }, [clickItemValue])
+
+  useEffect(() => {
+    getSelfInfo()
+  }, [])
 
   return (
     <div className={style.back}>
@@ -57,8 +64,9 @@ export default function Home() {
           <img src={searchIcon} className={style.searchIcon}></img>
         </div>
         <div className={style.right}>
+          <div className={style.nickname}>{info?.nickname}</div>
           <div className={style.personBox}>
-            <img src={personIcon} className={style.personImg} onClick={() => { setClickItemValue('my') }}></img>
+            <img src={info?.photo} className={style.personImg} onClick={() => { setClickItemValue('my') }}></img>
           </div>
         </div>
       </header>

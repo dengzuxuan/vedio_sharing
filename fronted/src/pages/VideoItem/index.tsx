@@ -4,7 +4,7 @@ import "video.js/dist/video-js.css"
 import { basicVideoInitOption, typeList } from '../../libs/data'
 import VideoComponent from '../../components/VideoComponent'
 import { Input, Tag, message } from 'antd'
-import { type IVideoInfo, type IGetVideo } from '../../libs/model'
+import { type IGetVideo, type IGetComments } from '../../libs/model'
 import likeIcon from '../../assets/imgs/likepoints.png'
 import likeIconClick from '../../assets/imgs/like_click.png'
 import collectIcon from '../../assets/imgs/collect.png'
@@ -17,11 +17,23 @@ import rightIcon from '../../assets/imgs/left.png'
 import Mask from '../../components/Mask'
 import { addCollect, addFrd, addLike, delCollect, delFrd, delLike, getsinglevideo } from '../../api/personal'
 import { useLocation } from 'react-router-dom'
+import Comment from './Comment'
+import { addcomment, getfirstcomments, getsecondcomments } from '../../api/comment'
 
 export default function VideoItem() {
   const video_id = useLocation().pathname.split('/')[2]
   const [videoInfo, setVideoInfo] = useState<IGetVideo>()
   const [hoverValue, setHoverValue] = useState('')
+  // 发布评论内容
+  const [messageInfo, setMessageInfo] = useState('')
+  // 保存对一级的评论
+  const [firstComment, setFirstComment] = useState('')
+  // 保存回复comment
+  const [returnComment, setReturnComment] = useState<IGetComments>()
+  // 更新flag
+  const [updateFlag, setUpdateFlag] = useState(false)
+  // 保存评论
+  const [comments, setComments] = useState<IGetComments[]>()
   // 控制左拉
   const [leftClick, setLeftClick] = useState(false)
   // 获得某一视频
@@ -100,6 +112,60 @@ export default function VideoItem() {
     }
   }
 
+  // 获取一级评论
+  const getMesages = async () => {
+    if (!(videoInfo?.video.id)) return
+    const res = await getfirstcomments(videoInfo?.video.id)
+    if (res?.code === 200) {
+      setComments(res.data)
+    }
+  }
+
+  // 发布评论(对视频)
+  const publishMessage = async () => {
+    const data = messageInfo.trim()
+    if (!data && !(videoInfo?.video.id)) return
+    const res = await addcomment(videoInfo?.video.id as number, 0, data, 1)
+    if (res?.code === 200) {
+      message.success('发布成功')
+      setMessageInfo('')
+      getMesages()
+    } else {
+      message.info(res?.message)
+    }
+  }
+
+  // 发布评论（对一级）
+  const publishFirstMessage = async () => {
+    const data = firstComment.trim()
+    if (!data) return
+    const res = await addcomment(videoInfo?.video.id as number, returnComment?.comment.id as number, data, 2)
+    if (res?.code === 200) {
+      message.success('发布成功')
+      setFirstComment('')
+      setUpdateFlag(true)
+    } else {
+      message.info(res?.message)
+    }
+  }
+
+  // 获得二级评论
+  const getFirstComment = async (id: number) => {
+    const res = await getsecondcomments(id)
+    if (res?.code === 200) {
+      return res.data
+    }
+  }
+
+  useEffect(() => {
+    if (!leftClick) {
+      setComments(undefined)
+      setFirstComment('')
+      setReturnComment(undefined)
+      setMessageInfo('')
+    }
+  }, [leftClick])
+
   useEffect(() => {
     getInitVideo()
   }, [])
@@ -149,7 +215,7 @@ export default function VideoItem() {
             </div>
           </div>
         </div>
-        <div className={style.right_click_btn} onClick={() => setLeftClick(!leftClick)}>
+        <div className={style.right_click_btn} onClick={() => { setLeftClick(!leftClick); getMesages() }}>
           <img src={rightIcon} className={!leftClick ? style.rightIcon : style.rightIcon_click}></img>
         </div>
       </div>
@@ -157,15 +223,29 @@ export default function VideoItem() {
         leftClick
           ? <div className={style.right_box}>
             <div className={style.video_right}>
-              <Input.TextArea className={style.input_style} showCount maxLength={1000} placeholder='发条评论吧'></Input.TextArea>
-              <div className={style.comment_div}>发布</div>
+              <Input.TextArea value={messageInfo} className={style.input_style} onChange={(e) => setMessageInfo(e.target.value)} showCount maxLength={1000} placeholder='发条评论吧'></Input.TextArea>
+              <div className={style.comment_div} onClick={() => publishMessage()}>发布</div>
             </div>
             <div className={style.commentDiv}>
-              {
-                videoInfo?.video.commentPoints
-                  ? <div></div>
-                  : <div className={style.no_comment}>还没有任何评论~</div>}
+              <div className={style.comment_auto}>
+                {
+                  comments?.length
+                    ? <>
+                      {
+                        comments.map(item => <Comment getMesages={getMesages} videoId={videoInfo?.video.id} updateFlag={updateFlag} setUpdateFlag={setUpdateFlag} getFirstComment={getFirstComment} setReturnComment={setReturnComment} key={item.comment.commentId} item={item} />)
+                      }
+                    </>
+                    : <div className={style.no_comment}>还没有任何评论~</div>}
+              </div>
             </div>
+            {
+              returnComment
+                ? <div className={style.input2_box}>
+                  <Input.TextArea value={firstComment} onChange={(e) => setFirstComment(e.target.value)} className={style.input_style} showCount maxLength={1000} placeholder={`回复${returnComment.user.nickname}`}></Input.TextArea>
+                  <div className={style.comment_div} onClick={() => publishFirstMessage()}>发布</div>
+                </div>
+                : ''
+            }
           </div>
           : ''
       }

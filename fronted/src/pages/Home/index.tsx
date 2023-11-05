@@ -1,26 +1,44 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import style from './index.module.scss'
 import { tabs_one, tabs_two } from '../../libs/data'
 import chaIcon from '../../assets/imgs/cha.png'
 import searchIcon from '../../assets/imgs/search.png'
 import personIcon from '../../assets/imgs/person.webp'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
+import { context } from '../../hooks/store'
+import { userInfo } from '../../api/personal'
+import { type IGetInfo } from '../../libs/model'
 
 export default function Home() {
   const navigator = useNavigate()
   // 控制左tabs高亮
-  const [clickItemValue, setClickItemValue] = useState('recommend')
+  const { clickItemValue, setClickItemValue } = useContext(context)
+
   // 保存搜索框内容
   const [searchValue, setSearchValue] = useState('')
+  // 保存个人信息
+  const [info, setInfo] = useState<IGetInfo>()
 
   // 控制搜索框×
   const search = (value: string) => {
     setSearchValue(value)
   }
 
+  // 获取本人信息
+  const getSelfInfo = async () => {
+    const res = await userInfo()
+    if (res?.code === 200) {
+      setInfo(res.data)
+    }
+  }
+
   useEffect(() => {
     navigator(`/home/${clickItemValue}`)
   }, [clickItemValue])
+
+  useEffect(() => {
+    getSelfInfo()
+  }, [])
 
   return (
     <div className={style.back}>
@@ -46,8 +64,9 @@ export default function Home() {
           <img src={searchIcon} className={style.searchIcon}></img>
         </div>
         <div className={style.right}>
+          <div className={style.nickname}>{info?.nickname}</div>
           <div className={style.personBox}>
-            <img src={personIcon} className={style.personImg} onClick={() => setClickItemValue('my')}></img>
+            <img src={info?.photo} className={style.personImg} onClick={() => { setClickItemValue('my') }}></img>
           </div>
         </div>
       </header>
@@ -71,7 +90,7 @@ export default function Home() {
               <div
                 key={index}
                 className={clickItemValue === item.value ? style.typeItemClick : style.typeItem}
-                onClick={() => setClickItemValue(item.value)}
+                onClick={() => setClickItemValue('channel/' + item.value)}
               >
                 <img src={item.src} className={style.item_icon}></img>
                 <div className={style.text}>{item.text}</div>

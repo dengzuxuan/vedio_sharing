@@ -2,7 +2,7 @@ import Dragger from 'antd/lib/upload/Dragger'
 import { InboxOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { Form, Input, message, type UploadProps, Upload, Select, Button, Image, Spin } from 'antd'
 import style from './index.module.scss'
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { type RcFile, type UploadChangeParam, type UploadFile } from 'antd/lib/upload'
 import { postPic, postVideo } from '../../api/common'
 import { typeList, basicVideoInitOption } from '../../libs/data'
@@ -11,12 +11,13 @@ import VideoComponent from '../../components/VideoComponent'
 import { addVideo } from '../../api/uploadVideo'
 import { useNavigate } from 'react-router-dom'
 import { type IUploadVideo } from '../../libs/model'
+import { context } from '../../hooks/store'
 
 export default function UploadView() {
+  const { clickItemValue, setClickItemValue } = useContext(context)
   const [uploadVideoReturn, setUploadVideoReturn] = useState<IUploadVideo>()
   const navigator = useNavigate()
   // 视频
-  // const [videoUrl, setVideoUrl] = useState<string>('')
   const [videoLoading, setVideoLoading] = useState(false)
   // 封面url
   const [coverUrl, setCoverUrl] = useState('')
@@ -77,8 +78,10 @@ export default function UploadView() {
     } else {
       const res = await addVideo(values.title, values.description, values.type, uploadVideoReturn.url, coverUrl)
       if (res?.code === 200) {
+        // message.success('上传成功', 1)
+        //   .then(() => navigator('/home/my'))
         message.success('上传成功', 1)
-          .then(() => navigator('/home/my'))
+          .then(() => setClickItemValue('my'))
       } else {
         message.info(res?.message)
       }

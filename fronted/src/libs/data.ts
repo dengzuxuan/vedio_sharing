@@ -104,7 +104,7 @@ export const typeList: IType[] = [
 export const basicVideoInitOption: IVideo = {
   language: 'zh-CN',
   controls: true,
-  autoplay: true, // 加载完成是否自动播放
+  // autoplay: true, // 加载完成是否自动播放
   loop: false, // 视频播放结束后，是否循环播放
   notSupportedMessage: '此视频暂无法播放，请稍后再试',
   poster: '', // 视频封面

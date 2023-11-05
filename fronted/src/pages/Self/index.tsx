@@ -1,20 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import style from './index.module.scss'
 import { Image, Modal, Spin, Upload, message, Form, Input, Radio, Button } from 'antd'
-import { updateInfo, userInfo } from '../../api/personal'
-import { type IGetInfo } from '../../libs/model'
+import { getFrdInfo, getSendFrd, getcollectvideos, getlikevideos, updateInfo, userInfo, userVideo } from '../../api/personal'
+import { type IVideoInfo, type IGetInfo, type IFrd } from '../../libs/model'
 import manIcon from '../../assets/imgs/man.png'
 import womanIcon from '../../assets/imgs/woman.png'
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { type UploadProps, type RcFile, type UploadChangeParam, type UploadFile } from 'antd/lib/upload'
 import { postPic } from '../../api/common'
 import { useForm } from 'antd/lib/form/Form'
+import VideoComponent from '../../components/VideoComponent'
+import { basicVideoInitOption } from '../../libs/data'
+
+import FrdItem from './FrdItem'
+interface IFrdInfo {
+  frds: IFrd[]
+  tabs: string
+}
 export default function Self() {
   const [form] = useForm()
   const [clickTabs, setClickTabs] = useState('work')
   const [selfInfo, setSelfInfo] = useState<IGetInfo>()
-  const [cover, setCover] = useState<RcFile>()
   const [coverLoading, setCoverLoading] = useState(false)
+  const [selfVideo, setSelfVideo] = useState<IVideoInfo[]>()
+  const [frd, setFrd] = useState<IFrdInfo>({ frds: [], tabs: '' })
+  const [isFrdModal, setIsFrdModal] = useState(false)
+
   // 控制modal
   const [isModal, setIsModal] = useState(false)
 
@@ -39,9 +49,6 @@ export default function Self() {
     if (!isLt5M) {
       message.error('图片要小于5MB!')
     }
-    if (isPNG && isLt5M) {
-      setCover(file)
-    }
     return isPNG && isLt5M
   }
 
@@ -56,7 +63,16 @@ export default function Self() {
     if (values.sexual === 1) {
       sex = 1
     }
-    const res = await updateInfo(values.nickname, selfInfo?.photo ?? '', values.email, sex)
+    let collect = 0
+    let like = 0
+    if (values.collect === 1) {
+      collect = 1
+    }
+    if (values.like === 1) {
+      like = 1
+    }
+    console.log(values)
+    const res = await updateInfo(values.nickname, selfInfo?.photo ?? '', values.email ?? '', sex, like, collect)
     if (res?.code === 200) {
       message.success('修改成功')
       getSelfInfo()
@@ -65,9 +81,69 @@ export default function Self() {
       message.info(res?.message)
     }
   }
+
+  // 获取个人作品
+  const getVideos = async (clickTabs: string) => {
+    let res
+    switch (clickTabs) {
+      case 'work':
+        res = await userVideo()
+        break
+      case 'good':
+        res = await getlikevideos()
+        break
+      case 'collect':
+        res = await getcollectvideos()
+        break
+      default:
+        console.log('')
+    }
+    if (res?.code === 200) {
+      setSelfVideo(res.data)
+    }
+  }
+
+  const getFriendInfo = async () => {
+    let res
+    if (frd?.tabs === 'sendFrd') {
+      res = await getSendFrd()
+    } else if (frd?.tabs === 'frd') {
+      res = await getFrdInfo()
+    }
+    if (res?.code) {
+      frd && setFrd({ ...frd, frds: res.data })
+    }
+  }
+
+  const clickFrdClick = (tabs: string) => {
+    setFrd({ ...frd, tabs })
+    setIsFrdModal(true)
+  }
+
+  // 跳转到新页面
+  const jump = (id: number) => {
+    const w = window.open('_black')
+    if (w) {
+      w.location.href = `/video/${id}`
+    }
+  }
+
+  useEffect(() => {
+    getFriendInfo()
+  }, [frd?.tabs])
+
+  useEffect(() => {
+    getVideos(clickTabs)
+  }, [clickTabs])
+
   useEffect(() => {
     getSelfInfo()
   }, [])
+
+  const option = {
+    ...basicVideoInitOption,
+    controls: true
+  }
   return (
     <div className={style.back}>
       <div className={style.self_info}>
@@ -81,12 +157,16 @@ export default function Self() {
           <div className={style.name_text}>{selfInfo?.nickname}</div>
           <div className={style.user_info}>
             <div className={style.item_info}>
-              <span className={style.text}>关注</span>
-              <span className={style.number}>{ }</span>
+              <span className={style.text} onClick={() => clickFrdClick('sendFrd')}>关注</span>
+              <span className={style.number}>{selfInfo?.sendFriends}</span>
+            </div>
+            <div className={style.item_info}>
+              <span className={style.text} onClick={() => clickFrdClick('frd')}>粉丝</span>
+              <span className={style.number}>{selfInfo?.friends}</span>
             </div>
             <div className={style.item_info}>
               <span className={style.text}>获赞</span>
-              <span className={style.number}>22</span>
+              <span className={style.number}>{selfInfo?.likes}</span>
             </div>
           </div>
           <div className={style.username_info}>
@@ -104,16 +184,36 @@ export default function Self() {
       <div className={style.tabs}>
         <div className={clickTabs === 'work' ? style.tabs_itemClick : style.tabs_item} onClick={() => setClickTabs('work')}>
           <span className={style.tabs_text}>作品</span>
-          <span className={style.number}>0</span>
+          <span className={style.number}>{selfInfo?.videos}</span>
         </div>
         <div className={clickTabs === 'good' ? style.tabs_itemClick : style.tabs_item} onClick={() => setClickTabs('good')}>
-          <span className={style.tabs_text}>获赞</span>
-          <span className={style.number}>0</span>
+          <span className={style.tabs_text}>喜爱</span>
+          <span className={style.number}>{selfInfo?.likes}</span>
         </div>
         <div className={clickTabs === 'collect' ? style.tabs_itemClick : style.tabs_item} onClick={() => setClickTabs('collect')}>
           <span className={style.tabs_text}>收藏</span>
-          <span className={style.number}>0</span>
+          <span className={style.number}>{selfInfo?.sendCollects}</span>
         </div>
+      </div>
+      <div className={style.video_box}>
+        {
+          selfVideo
+            ? selfVideo.map(item =>
+              <div key={item.id} className={style.video_item} onClick={() => jump(item.id)}>
+                <div className={style.video_div}>
+                  <VideoComponent propsOption={{ ...option, loop: true, poster: item.photoUrl }} hoverFunc={true} videoUrl={item.videoUrl}></VideoComponent>
+                </div>
+                <div className={style.title_description} title={item.description}>
+                  <span className={style.title}>{item.title}</span>
+                  <span className={style.description}>
+                    {
+                      item.description
+                    }
+                  </span>
+                </div>
+              </div>)
+            : ''
+        }
       </div>
       <Modal
         className={style.modal}
@@ -188,12 +288,42 @@ export default function Self() {
           >
             <Input defaultValue={selfInfo?.email}></Input>
           </Form.Item>
+          <Form.Item
+            label='喜爱设置'
+            name='like'
+          >
+            <Radio.Group defaultValue={selfInfo?.likeHidden}>
+              <Radio value={0}>公开</Radio>
+              <Radio value={1}>隐藏</Radio>
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item
+            label='收藏设置'
+            name='collect'
+          >
+            <Radio.Group defaultValue={selfInfo?.collectHidden}>
+              <Radio value={0}>公开</Radio>
+              <Radio value={1}>隐藏</Radio>
+            </Radio.Group>
+          </Form.Item>
           <Form.Item>
-              <div className={style.buttons}>
-                <Button className={style.button} type='primary' htmlType="submit">修改</Button>
-              </div>
-            </Form.Item>
+            <div className={style.buttons}>
+              <Button className={style.button} type='primary' htmlType="submit">修改</Button>
+            </div>
+          </Form.Item>
         </Form>
+      </Modal>
+      <Modal
+        title={frd?.tabs === 'sendFrd' ? '关注' : '粉丝'}
+        open={isFrdModal}
+        onCancel={() => { setIsFrdModal(false); setFrd({ ...frd, frds: [] }) }}
+        footer={null}
+        width={1100}
+      >
+        {
+          frd.frds.map(item =>
+            <FrdItem item={item} tabs={frd.tabs} getFriendInfo={getFriendInfo} key={item.id} />)
+        }
       </Modal>
     </div>
   )

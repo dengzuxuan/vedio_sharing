@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import style from './index.module.scss'
 import "video.js/dist/video-js.css"
 import { basicVideoInitOption, typeList } from '../../libs/data'
 import VideoComponent from '../../components/VideoComponent'
 import { Input, Tag, message } from 'antd'
-import { getVideo } from '../../api/recommend'
-import { type IGetComments, type IGetVideo } from '../../libs/model'
+import { type IGetVideo, type IGetComments } from '../../libs/model'
 import likeIcon from '../../assets/imgs/likepoints.png'
 import likeIconClick from '../../assets/imgs/like_click.png'
 import collectIcon from '../../assets/imgs/collect.png'
@@ -16,35 +15,32 @@ import topIcon from '../../assets/imgs/top.png'
 import bottomIcon from '../../assets/imgs/bottom.png'
 import rightIcon from '../../assets/imgs/left.png'
 import Mask from '../../components/Mask'
-import { addCollect, addFrd, addLike, delCollect, delFrd, delLike } from '../../api/personal'
-import { context } from '../../hooks/store'
-import { addcomment, getfirstcomments, getsecondcomments } from '../../api/comment'
+import { addCollect, addFrd, addLike, delCollect, delFrd, delLike, getsinglevideo } from '../../api/personal'
+import { useLocation } from 'react-router-dom'
 import Comment from './Comment'
+import { addcomment, getfirstcomments, getsecondcomments } from '../../api/comment'
 
-export default function recommend() {
-  const { setClickItemValue } = useContext(context)
+export default function VideoItem() {
+  const video_id = useLocation().pathname.split('/')[2]
   const [videoInfo, setVideoInfo] = useState<IGetVideo>()
   const [hoverValue, setHoverValue] = useState('')
-  const id = localStorage.getItem('id')
-  // 控制左拉
-  const [leftClick, setLeftClick] = useState(false)
   // 发布评论内容
   const [messageInfo, setMessageInfo] = useState('')
-  // 保存评论
-  const [comments, setComments] = useState<IGetComments[]>()
   // 保存对一级的评论
   const [firstComment, setFirstComment] = useState('')
   // 保存回复comment
   const [returnComment, setReturnComment] = useState<IGetComments>()
   // 更新flag
   const [updateFlag, setUpdateFlag] = useState(false)
-  // 获得初始视频
+  // 保存评论
+  const [comments, setComments] = useState<IGetComments[]>()
+  // 控制左拉
+  const [leftClick, setLeftClick] = useState(false)
+  // 获得某一视频
   const getInitVideo = async () => {
-    const res = await getVideo()
+    const res = await getsinglevideo(parseInt(video_id))
     if (res?.code === 200) {
       setVideoInfo(res.data)
-    } else {
-      message.info(res?.message)
     }
   }
 
@@ -115,16 +111,13 @@ export default function recommend() {
       }
     }
   }
-  // 跳转到用户页面
-  const jumpUserHome = () => {
-    const userid = videoInfo?.user.id
-    const id = localStorage.getItem('id')
-    if (!id) return
-    console.log(id, userid, parseInt(id) === userid)
-    if (parseInt(id) === userid) {
-      setClickItemValue('my')
-    } else {
-      setClickItemValue(`user/${userid}`)
+
+  // 获取一级评论
+  const getMesages = async () => {
+    if (!(videoInfo?.video.id)) return
+    const res = await getfirstcomments(videoInfo?.video.id)
+    if (res?.code === 200) {
+      setComments(res.data)
     }
   }
 
@@ -141,6 +134,7 @@ export default function recommend() {
       message.info(res?.message)
     }
   }
+
   // 发布评论（对一级）
   const publishFirstMessage = async () => {
     const data = firstComment.trim()
@@ -152,15 +146,6 @@ export default function recommend() {
       setUpdateFlag(true)
     } else {
       message.info(res?.message)
-    }
-  }
-
-  // 获取一级评论
-  const getMesages = async () => {
-    if (!(videoInfo?.video.id)) return
-    const res = await getfirstcomments(videoInfo?.video.id)
-    if (res?.code === 200) {
-      setComments(res.data)
     }
   }
 
@@ -184,6 +169,7 @@ export default function recommend() {
   useEffect(() => {
     getInitVideo()
   }, [])
+
   const propsOption = { ...basicVideoInitOption, loop: true, autoplay: true, poster: videoInfo?.video.photoUrl ? videoInfo?.video.photoUrl : '' }
   return (
     <div className={style.back}>
@@ -200,19 +186,15 @@ export default function recommend() {
         <div className={style.bottom_div}>
           <div className={style.right_div}>
             <div className={style.userInfo}>
-              <div className={style.img_box} onClick={() => jumpUserHome()}>
+              <div className={style.img_box}>
                 <img className={style.img} src={videoInfo?.user.photo}></img>
               </div>
-              <div className={style.user_info} onClick={() => jumpUserHome()}>
+              <div className={style.user_info}>
                 <div>{videoInfo?.user.nickname}</div>
                 <div>{videoInfo?.user.email.length ? videoInfo?.user.email : ''}</div>
                 <div>{videoInfo?.user.username}</div>
               </div>
-              {
-                videoInfo?.is_friend
-                  ? <div className={style.delFrd_box} onClick={() => changeFrd()}>已关注</div>
-                  : <div className={style.addFrd_box} onClick={() => changeFrd()}>点个关注</div>
-              }
+              <div className={style.addFrd_box} onClick={() => changeFrd()}>{videoInfo?.is_friend ? '取消关注' : '点个关注'}</div>
             </div>
             <div className={style.middle_div} title={videoInfo?.video.description}>
               {videoInfo?.video.description}
@@ -231,12 +213,6 @@ export default function recommend() {
               <img src={hoverValue === 'view' ? viewIconClick : viewIcon} className={style.icon}></img>
               <span className={style.number_text}>{videoInfo?.video.viewsPoints}</span>
             </div>
-          </div>
-        </div>
-        <div className={style.btns}>
-          <div className={style.btn_box}>
-            <img src={topIcon} className={style.changeIcon} />
-            <img src={bottomIcon} className={style.changeIcon} />
           </div>
         </div>
         <div className={style.right_click_btn} onClick={() => { setLeftClick(!leftClick); getMesages() }}>

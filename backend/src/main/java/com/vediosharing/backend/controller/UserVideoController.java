@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * @ClassName UserVideoController
- * @Description 上传 获取视频
+ * @Description 上传 删除 获取视频
  * @Author Colin
  * @Date 2023/10/30 2:42
  * @Version 1.0
@@ -38,5 +38,11 @@ public class UserVideoController {
     public Result getOtherUserVideo(@RequestParam Map<String,String>m1){
         int userId = Integer.parseInt(m1.get("user_id"));
         return userVideoService.getSingleUserVideos(userId);
+    }
+
+    @PostMapping("/delvideo")
+    public Result delUserVideo(@RequestParam Map<String,String>m1){
+        int videoId = Integer.parseInt(m1.get("video_id"));
+        return userVideoService.delUserVideo(videoId);
     }
 }

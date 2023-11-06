@@ -57,6 +57,7 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dto\re
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\SearchServiceImpl.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\MessageMapper.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\filter\JwtAuthenticationTokenFilter.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\config\QiniuStorageConfig.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dto\req\CommentReqDto.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\constant\MessageConsts.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\UserMapper.java

@@ -8,6 +8,7 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
+import com.vediosharing.backend.core.config.QiniuStorageConfig;
 import com.vediosharing.backend.core.constant.Result;
 import com.vediosharing.backend.core.utils.PathUtils;
 import com.vediosharing.backend.core.utils.VideoFrameGrabber;
@@ -43,6 +44,8 @@ import java.util.UUID;
  */
 @Service
 public class ResourceServiceImpl implements ResourceService {
+    @Autowired
+    QiniuStorageConfig config;
     @Autowired
     VideoMapper vedioMapper;
     @Override
@@ -109,9 +112,10 @@ public class ResourceServiceImpl implements ResourceService {
 
         UploadManager uploadManager = new UploadManager(cfg);
         //...生成上传凭证，然后准备上传
-        String accessKey = "97OSddKvoSFShgtTJ4MVpBkPROimA1l3xN4KNyFK";
-        String secretKey = "v7xyZ8rjRaCA9SIAhf-wAk2PnCeE2qpSxqcYh3cu";
-        String bucket = "vedio-sharing";
+
+        String accessKey = config.getQiniuAccessKey();
+        String secretKey = config.getQiniuSecretKey();
+        String bucket = config.getQiniuBucketName();
 
 
         Auth auth = Auth.create(accessKey, secretKey);
@@ -120,8 +124,7 @@ public class ResourceServiceImpl implements ResourceService {
         //解析上传成功的结果
         DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
 
-        Map<String,String> res = new HashMap<>();
-        return "http://s34n6l898.hn-bkt.clouddn.com/" + key;
+        return config.getQiniuDomain() + key;
     }
 }
 

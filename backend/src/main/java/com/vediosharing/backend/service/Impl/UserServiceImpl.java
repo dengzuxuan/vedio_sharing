@@ -7,19 +7,14 @@ import com.vediosharing.backend.core.constant.Result;
 import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
 import com.vediosharing.backend.core.utils.JwtUtil;
 import com.vediosharing.backend.core.utils.RegexUtil;
-import com.vediosharing.backend.dao.entity.Collects;
-import com.vediosharing.backend.dao.entity.Friend;
-import com.vediosharing.backend.dao.entity.User;
-import com.vediosharing.backend.dao.entity.Video;
-import com.vediosharing.backend.dao.mapper.CollectMapper;
-import com.vediosharing.backend.dao.mapper.FriendMapper;
-import com.vediosharing.backend.dao.mapper.UserMapper;
-import com.vediosharing.backend.dao.mapper.VideoMapper;
+import com.vediosharing.backend.dao.entity.*;
+import com.vediosharing.backend.dao.mapper.*;
 import com.vediosharing.backend.dto.req.UserInfoReqDto;
 import com.vediosharing.backend.dto.req.UserRegisterReqDto;
 import com.vediosharing.backend.service.Impl.utils.UserDetailsImpl;
 import com.vediosharing.backend.service.MessageService;
 import com.vediosharing.backend.service.UserService;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,6 +42,8 @@ public class UserServiceImpl implements UserService {
     VideoMapper videoMapper;
     @Autowired
     CollectMapper collectMapper;
+    @Autowired
+    LikeMapper likeMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -89,6 +86,7 @@ public class UserServiceImpl implements UserService {
                 "",
                 0,
                 defaultPhotoUrl,
+                0,
                 0,
                 0,
                 0,
@@ -173,8 +171,12 @@ public class UserServiceImpl implements UserService {
         QueryWrapper<Collects> queryWrapper1 = new QueryWrapper<>();
         queryWrapper1.eq("user_id",user.getId());
         List<Collects> collectsList = collectMapper.selectList(queryWrapper1);
-
         user.setSendCollects(collectsList.size());
+
+        QueryWrapper<Likes> queryWrapper2 = new QueryWrapper<>();
+        queryWrapper2.eq("user_id",user.getId());
+        List<Likes> likesList = likeMapper.selectList(queryWrapper2);
+        user.setSendLikes(likesList.size());
 
         return Result.success(user);
     }

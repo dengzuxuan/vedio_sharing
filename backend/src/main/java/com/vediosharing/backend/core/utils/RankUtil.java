@@ -37,7 +37,7 @@ public class RankUtil {
         key=key+":"+type;
         try{
             Boolean add = redisTemplate.opsForZSet().add(key, value, score);
-            redisTemplate.expire(key, 1, TimeUnit.DAYS);
+            redisTemplate.expire(key,  10 * 365, TimeUnit.DAYS );
             return add;
         }catch (Exception e){
             e.printStackTrace();
@@ -68,7 +68,16 @@ public class RankUtil {
         return redisTemplate.opsForZSet().score(key, value);
     }
 
-    public Boolean  initAllRank(String key){
+    public Boolean delVideoId(int type,int videoId){
+        String[] keys = {RankConsts.DAYLY_RANK,RankConsts.WEEKLY_RANK,RankConsts.TOTAL_RANK,RankConsts.MONTH_RANK};
+        for (String key : keys) {
+            key=key+":"+type;
+            redisTemplate.opsForZSet().remove(key, videoId);
+        }
+        return true;
+    }
+
+    public Boolean initAllRank(String key){
         boolean add = false;
         List<Video> videoListAll = videoMapper.selectList(null);
         for (Video video:videoListAll){

@@ -51,6 +51,7 @@ public class VideoServiceImpl implements VideoService {
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
         User loginuser = loginUser.getUser();
+
         Video video = new Video();
         History history = caffeineUtil.getHistory(loginuser.getId());
 

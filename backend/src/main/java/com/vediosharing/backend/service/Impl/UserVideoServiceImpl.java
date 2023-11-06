@@ -193,6 +193,18 @@ public class UserVideoServiceImpl implements UserVideoService {
         return Result.success(getSingleUserVideo(userId));
     }
 
+    @Override
+    public Result delUserVideo(int videoId) {
+        Video video = videoMapper.selectById(videoId);
+        //删除视频mysql
+        videoMapper.deleteById(videoId);
+        //删除redis
+        rankUtil.delVideoId(video.getType(),videoId);
+        //删除mongodb
+
+        return Result.success(null);
+    }
+
     private List<Video> getSingleUserVideo(int userId){
         QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id",userId);

@@ -9,22 +9,23 @@ import VideoComponent from '../../components/VideoComponent'
 import { basicVideoInitOption } from '../../libs/data'
 import { useLocation } from 'react-router-dom'
 import lockIcon from '../../assets/imgs/lock.png'
+import useJump from '../../hooks/useJump'
 interface IFrdInfo {
   frds: IFrd[]
   tabs: string
 }
 export default function User() {
+  const { jump } = useJump()
   const id = localStorage.getItem('id')
   const user_id = useLocation().pathname.split('/')[3]
   const [clickTabs, setClickTabs] = useState('work')
   const [Info, setInfo] = useState<IGetOtherInfo>()
-  const [selfVideo, setSelfVideo] = useState<IVideoInfo[]>()
+  const [selfVideo, setSelfVideo] = useState<IVideoInfo[]>([])
   const [frd, setFrd] = useState<IFrdInfo>({ frds: [], tabs: '' })
 
   const getOtherInfo = async () => {
     const res = await otheruserinfo(parseInt(user_id))
     if (res?.code === 200) {
-      console.log(res.data)
       setInfo(res.data)
     }
   }
@@ -62,21 +63,10 @@ export default function User() {
     }
   }
 
-  // 跳转到新页面
-  const jump = (id: number) => {
-    const w = window.open('_black')
-    if (w) {
-      w.location.href = `/video/${id}`
-    }
-  }
-
   // 是否出现关注按钮
   const showBtn = () => {
     if (!id) return null
     if (parseInt(id) === Info?.user.id) return null
-    // if (Info.)  {
-    //   return <div className={style.delFrd_box} onClick={() => changeFrd()}>已关注</div>
-    // }
   }
 
   useEffect(() => {
@@ -89,7 +79,8 @@ export default function User() {
 
   useEffect(() => {
     getOtherInfo()
-  }, [])
+    getFriendInfo()
+  }, [user_id])
 
   const option = {
     ...basicVideoInitOption,
@@ -164,7 +155,7 @@ export default function User() {
       </div>
       <div className={style.video_box}>
         {
-          selfVideo
+          selfVideo.length
             ? selfVideo.map(item =>
               <div key={item.id} className={style.video_item} onClick={() => jump(item.id)}>
                 <div className={style.video_div}>
@@ -182,6 +173,7 @@ export default function User() {
             : ''
         }
       </div>
+      {selfVideo.length === 0 ? <div className={style.nomore}>没有更多了~</div> : ''}
     </div>
   )
 }

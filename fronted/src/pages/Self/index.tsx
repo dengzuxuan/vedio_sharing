@@ -12,11 +12,13 @@ import VideoComponent from '../../components/VideoComponent'
 import { basicVideoInitOption } from '../../libs/data'
 
 import FrdItem from './FrdItem'
+import useJump from '../../hooks/useJump'
 interface IFrdInfo {
   frds: IFrd[]
   tabs: string
 }
 export default function Self() {
+  const { jump } = useJump()
   const [form] = useForm()
   const [clickTabs, setClickTabs] = useState('work')
   const [selfInfo, setSelfInfo] = useState<IGetInfo>()
@@ -71,7 +73,6 @@ export default function Self() {
     if (values.like === 1) {
       like = 1
     }
-    console.log(values)
     const res = await updateInfo(values.nickname, selfInfo?.photo ?? '', values.email ?? '', sex, like, collect)
     if (res?.code === 200) {
       message.success('修改成功')
@@ -118,14 +119,6 @@ export default function Self() {
   const clickFrdClick = (tabs: string) => {
     setFrd({ ...frd, tabs })
     setIsFrdModal(true)
-  }
-
-  // 跳转到新页面
-  const jump = (id: number) => {
-    const w = window.open('_black')
-    if (w) {
-      w.location.href = `/video/${id}`
-    }
   }
 
   useEffect(() => {
@@ -188,7 +181,7 @@ export default function Self() {
         </div>
         <div className={clickTabs === 'good' ? style.tabs_itemClick : style.tabs_item} onClick={() => setClickTabs('good')}>
           <span className={style.tabs_text}>喜爱</span>
-          <span className={style.number}>{selfInfo?.likes}</span>
+          <span className={style.number}>{selfInfo?.sendLikes}</span>
         </div>
         <div className={clickTabs === 'collect' ? style.tabs_itemClick : style.tabs_item} onClick={() => setClickTabs('collect')}>
           <span className={style.tabs_text}>收藏</span>

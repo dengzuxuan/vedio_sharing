@@ -33,15 +33,21 @@ export default function VideoComponent({ propsOption, videoUrl, hoverFunc }: Pro
         onReadyPlay(player)
       }
     }
-  }, [])
+    // return () => {
+    //   const player = playerRef.current
+    //   player.pause()
+    // }
+  }, [videoUrl])
   return (
     <div className={style.video_div}>
       <video style={{
         width: '100%',
         height: '100%'
-      }} ref={videoRef}
-        className="video-js vjs-big-play-centered">
-        <source src={videoUrl} type="video/mp4" />
+      }}
+        ref={videoRef}
+        className="video-js vjs-big-play-centered"
+        src={videoUrl}
+        >
       </video>
     </div>
   )

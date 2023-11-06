@@ -168,6 +168,7 @@ export default function VideoItem() {
 
   useEffect(() => {
     getInitVideo()
+    getMesages()
   }, [])
 
   const propsOption = { ...basicVideoInitOption, loop: true, autoplay: true, poster: videoInfo?.video.photoUrl ? videoInfo?.video.photoUrl : '' }

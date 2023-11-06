@@ -4,7 +4,7 @@ import "video.js/dist/video-js.css"
 import { basicVideoInitOption, typeList } from '../../libs/data'
 import VideoComponent from '../../components/VideoComponent'
 import { Input, Tag, message } from 'antd'
-import { getVideo } from '../../api/recommend'
+import { clearprevideo, getVideo, getprevideo } from '../../api/recommend'
 import { type IGetComments, type IGetVideo } from '../../libs/model'
 import likeIcon from '../../assets/imgs/likepoints.png'
 import likeIconClick from '../../assets/imgs/like_click.png'
@@ -23,7 +23,7 @@ import Comment from './Comment'
 
 export default function recommend() {
   const { setClickItemValue } = useContext(context)
-  const [videoInfo, setVideoInfo] = useState<IGetVideo>()
+  const [videoInfo, setVideoInfo] = useState<IGetVideo | null>()
   const [hoverValue, setHoverValue] = useState('')
   const id = localStorage.getItem('id')
   // 控制左拉
@@ -38,14 +38,31 @@ export default function recommend() {
   const [returnComment, setReturnComment] = useState<IGetComments>()
   // 更新flag
   const [updateFlag, setUpdateFlag] = useState(false)
-  // 获得初始视频
+
+  // 获得初始视频&&下一个
   const getInitVideo = async () => {
     const res = await getVideo()
+    if (res?.code === 200) {
+      if (res.data) {
+        setVideoInfo(res.data)
+      }
+    } else {
+      message.info(res?.message)
+    }
+  }
+
+  // 获取上一个视频
+  const getFormer = async () => {
+    const res = await getprevideo()
     if (res?.code === 200) {
       setVideoInfo(res.data)
     } else {
       message.info(res?.message)
     }
+  }
+  // 清空视频
+  const clear = async () => {
+    await clearprevideo()
   }
 
   const getType = (type: number) => {
@@ -120,7 +137,6 @@ export default function recommend() {
     const userid = videoInfo?.user.id
     const id = localStorage.getItem('id')
     if (!id) return
-    console.log(id, userid, parseInt(id) === userid)
     if (parseInt(id) === userid) {
       setClickItemValue('my')
     } else {
@@ -183,7 +199,11 @@ export default function recommend() {
 
   useEffect(() => {
     getInitVideo()
+    return () => {
+      clear()
+    }
   }, [])
+
   const propsOption = { ...basicVideoInitOption, loop: true, autoplay: true, poster: videoInfo?.video.photoUrl ? videoInfo?.video.photoUrl : '' }
   return (
     <div className={style.back}>
@@ -235,8 +255,8 @@ export default function recommend() {
         </div>
         <div className={style.btns}>
           <div className={style.btn_box}>
-            <img src={topIcon} className={style.changeIcon} />
-            <img src={bottomIcon} className={style.changeIcon} />
+            <img src={topIcon} onClick={() => getFormer()} className={style.changeIcon} />
+            <img src={bottomIcon} onClick={() => getInitVideo()} className={style.changeIcon} />
           </div>
         </div>
         <div className={style.right_click_btn} onClick={() => { setLeftClick(!leftClick); getMesages() }}>

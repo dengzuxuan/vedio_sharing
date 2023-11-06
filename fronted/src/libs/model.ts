@@ -59,6 +59,7 @@ export interface IGetVideo {
 }
 
 export interface IGetInfo {
+  sendLikes: number
   likeHidden: number
   collectHidden: number
   sendCollects: number
@@ -123,4 +124,36 @@ export interface IGetComments {
   comment: IComment
   like: boolean
   user: IGetInfo
+}
+
+export interface IGetTypeVideos {
+  user: IGetInfo
+  video: IVideoInfo
+}
+
+export interface IMSG {
+  content: string
+  createTime: string
+  id: number
+  pre: string
+  recvUserid: number
+  sendUserid: number
+  status: number
+  type: number
+  updateTime: string
+}
+
+export interface IGetMsg {
+  message: IMSG
+  user: IGetInfo
+}
+
+export interface IVideoDetail {
+  user: IGetInfo
+  video: IVideoInfo
+}
+
+export interface ISearch {
+  userList: IGetInfo[]
+  videoDetail: IVideoDetail[]
 }

@@ -22,7 +22,6 @@ export default function Login() {
   }
 
   const onFinish = async (values: any) => {
-    console.log(values.username, values.password)
     const res = await login(values.username, values.password)
     if (res?.code === 200) {
       localStorage.setItem('token', res.data.token)

@@ -7,6 +7,7 @@ import com.vediosharing.backend.dto.req.UserRegisterReqDto;
 import com.vediosharing.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import redis.clients.jedis.Jedis;
 
 import java.util.Map;
 
@@ -61,6 +62,11 @@ public class UserController {
     @GetMapping("/getfriend")
     public Result getfriend(){
         return userService.getfriend();
+    }
+
+    @GetMapping("/getsendfriend")
+    public Result getSendFriend(){
+        return userService.getSendFriend();
     }
 
 }

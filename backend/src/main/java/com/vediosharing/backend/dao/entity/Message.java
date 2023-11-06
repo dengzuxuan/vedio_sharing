@@ -25,6 +25,7 @@ import java.util.Date;
 public class Message {
     @TableId(type = IdType.AUTO)
     private Integer id;
+    private String pre;
     private String content;
     private int recvUserid;
     private int sendUserid;

@@ -25,4 +25,5 @@ public class ApiRouterConsts {
      * 用户操作视频相关请求路径前缀
      */
     public static final String OPTVIDEO_URL_PREFIX = API_URL_PREFIX + "/optvideo";
+    public static final String SEARCH_URL_PREFIX = API_URL_PREFIX + "/search";
 }

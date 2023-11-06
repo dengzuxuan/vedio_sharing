@@ -1,6 +1,7 @@
 package com.vediosharing.backend.service;
 
 import com.vediosharing.backend.core.constant.Result;
+import com.vediosharing.backend.dto.req.CommentReqDto;
 
 /**
  * @ClassName OptVideoService
@@ -15,8 +16,15 @@ public interface OptVideoService {
     Result addcollect(int videoId);
     Result delcollect(int videoId);
 
-    Result addcomment(int videoId,int commentId);
+    Result getcollectVideo();
+    Result getlikeVideo();
+    Result getOthercollectVideo(int userId);
+    Result getOtherlikeVideo(int userId);
+    Result addcomment(CommentReqDto dto);
     Result delcomment(int commentId);
     Result addLikeComment(int commentId);
     Result delLikeComment(int commentId);
+    Result getFirstComments(int videoId);
+    Result getSecondComments(int commentId);
+
 }

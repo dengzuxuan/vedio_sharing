@@ -34,10 +34,17 @@ public class User implements Serializable {
     private String email;
     private int sexual; //0默认 1男 2女
     private String photo; //使用七牛云cdn存储
-    private Integer likes; //被点赞数
-    private Integer collects; //被收藏数
+    private Integer likeHidden; //是否隐藏喜欢视频 0不隐藏 1隐藏
+    private Integer collectHidden; //是否隐藏收藏视频
+    private transient Integer likes; //被点赞数
+    private transient Integer collects; //被收藏数
+    private transient Integer sendCollects; //收藏数
+    private transient Integer sendLikes; //收藏数
+    private transient boolean bothfriend; //是否为共同好友
     private Integer friends; //被关注数
-    private Integer views; //视频被播放数
+    private Integer sendFriends; //我关注的数量
+    private transient Integer videos; //我发布视频的数量
+    private transient Integer views; //我发布的视频的播放量
 
 
     @JsonInclude(value = JsonInclude.Include.NON_NULL)

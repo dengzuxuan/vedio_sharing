@@ -30,7 +30,11 @@ public class Video {
     private int type;
     private String videoUrl;
     private String photoUrl;
-    private int hotPoints;
+    private transient int hotPoints; //热度
+    private int initHotPoints;
+    private int totalHotPoints;
+    private int monthHotPoints;
+    private int weekHotPoints;
     private int viewsPoints;
     private int likePoints;
     private int collectPoints;

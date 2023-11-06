@@ -6,7 +6,7 @@ import com.vediosharing.backend.dto.req.UserRegisterReqDto;
 
 /**
  * @ClassName UserService
- * @Description 用户模块
+ * @Description 用户相关模块
  * @Author Colin
  * @Date 2023/10/26 12:06
  * @Version 1.0
@@ -22,6 +22,8 @@ public interface UserService {
     Result addfriend(Integer userId);
     //删除朋友
     Result delfriend(Integer userId);
-    //获取朋友
+    //获取关注我的
     Result getfriend();
+    //获取我关注的
+    Result getSendFriend();
 }

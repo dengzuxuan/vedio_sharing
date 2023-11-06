@@ -124,3 +124,25 @@ export interface IGetComments {
   like: boolean
   user: IGetInfo
 }
+
+export interface IGetTypeVideos {
+  user: IGetInfo
+  video: IVideoInfo
+}
+
+export interface IMSG {
+  content: string
+  createTime: string
+  id: number
+  pre: string
+  recvUserid: number
+  sendUserid: number
+  status: number
+  type: number
+  updateTime: string
+}
+
+export interface IGetMsg {
+  message: IMSG
+  user: IGetInfo
+}

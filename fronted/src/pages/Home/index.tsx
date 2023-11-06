@@ -3,11 +3,14 @@ import style from './index.module.scss'
 import { tabs_one, tabs_two } from '../../libs/data'
 import chaIcon from '../../assets/imgs/cha.png'
 import searchIcon from '../../assets/imgs/search.png'
-import personIcon from '../../assets/imgs/person.webp'
+import CallIcon from '../../assets/imgs/call.png'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { context } from '../../hooks/store'
-import { userInfo } from '../../api/personal'
-import { type IGetInfo } from '../../libs/model'
+import { getmessage, getnotread, userInfo } from '../../api/personal'
+import { type IGetMsg, type IGetInfo } from '../../libs/model'
+import personIcon from '../../assets/imgs/person.webp'
+import { Badge, Popover, Select } from 'antd'
+import dayjs from 'dayjs'
 
 export default function Home() {
   const navigator = useNavigate()
@@ -18,6 +21,12 @@ export default function Home() {
   const [searchValue, setSearchValue] = useState('')
   // 保存个人信息
   const [info, setInfo] = useState<IGetInfo>()
+  // 保存未读数量
+  const [noNum, setNoNum] = useState<number>()
+  // 保存搜索type
+  const [type, setType] = useState(0)
+  // 保存通知信息
+  const [msgs, setMsgs] = useState<IGetMsg[]>()
 
   // 控制搜索框×
   const search = (value: string) => {
@@ -32,12 +41,94 @@ export default function Home() {
     }
   }
 
+  // 获取未读数目
+  const getNumber = async () => {
+    const res = await getnotread()
+    setNoNum(res?.data)
+  }
+
+  // 获得通知消息
+  const getMsg = async () => {
+    const res = await getmessage(type)
+    if (res?.code === 200) {
+      setMsgs(res.data)
+    }
+  }
+
+  useEffect(() => {
+    getMsg()
+  }, [type])
+
+  const renderType = (item: IGetMsg) => {
+    const type = item.message.type
+    switch (type) {
+      case 1:
+        return '已关注你'
+      case 2:
+        return item.message.content
+      case 3:
+        return '点赞了你'
+      case 4:
+        return '收藏了你的视频'
+    }
+  }
+
+  const content = (
+    <div className={style.content}>
+      <div>
+        <Select
+          style={{ width: '100px' }}
+          defaultValue={type}
+          onChange={(value) => setType(value)}
+          optionFilterProp="children"
+          options={[
+            {
+              value: 0,
+              label: '全部消息'
+            },
+            {
+              value: 1,
+              label: '关注'
+            },
+            {
+              value: 2,
+              label: '评论'
+            },
+            {
+              value: 3,
+              label: '喜爱'
+            },
+            {
+              value: 4,
+              label: '收藏'
+            }
+          ]}
+        ></Select>
+      </div>
+      <div className={style.hoverMain}>
+        {
+          msgs?.map(item => <div key={item.message.id} className={style.item}>
+            <div className={style.img_box}>
+              <img className={style.img} src={item.user.photo}></img>
+            </div>
+            <div className={style.info}>
+              <div>{item.user.nickname}</div>
+              <div className={style.contentMsg}>{renderType(item)}</div>
+              <div>{'已回复你的评论' + item.message.pre + '  ' + dayjs(item.message.createTime).format('MM-DD')}</div>
+            </div>
+          </div>)
+        }
+      </div>
+    </div>
+  )
+
   useEffect(() => {
     navigator(`/home/${clickItemValue}`)
   }, [clickItemValue])
 
   useEffect(() => {
     getSelfInfo()
+    getNumber()
   }, [])
 
   return (
@@ -64,6 +155,15 @@ export default function Home() {
           <img src={searchIcon} className={style.searchIcon}></img>
         </div>
         <div className={style.right}>
+          <Popover content={content} title="互动消息">
+            <div className={style.callDiv}>
+              {
+                noNum ? <div className={style.callRed}>12</div> : ''
+              }
+              <img src={CallIcon} className={style.call}></img>
+              <span>通知</span>
+            </div>
+          </Popover>
           <div className={style.nickname}>{info?.nickname}</div>
           <div className={style.personBox}>
             <img src={info?.photo} className={style.personImg} onClick={() => { setClickItemValue('my') }}></img>

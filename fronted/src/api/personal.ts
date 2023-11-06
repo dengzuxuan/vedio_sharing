@@ -1,4 +1,12 @@
-import { type IGetInfo, type IFrd, type IVideoInfo, type IGetVideo, type IGetOtherInfo } from "../libs/model"
+import {
+  type IGetInfo,
+  type IFrd,
+  type IVideoInfo,
+  type IGetVideo,
+  type IGetOtherInfo,
+  type IGetTypeVideos,
+  type IGetMsg
+} from "../libs/model"
 import request from "../utils/request"
 
 // 收藏
@@ -201,6 +209,69 @@ export const otheruservideo = async (user_id: number) => {
 export const gettypevideo = async (type: number) => {
   return await request({
     url: '/api/v1/video/gettypevideo',
+    method: 'GET',
+    params: {
+      type
+    }
+  })
+}
+
+// 获取类型下全部视频
+export const gettypevideos = async (type: number) => {
+  return await request<IGetTypeVideos[]>({
+    url: '/api/v1/video/gettypevideos',
+    method: 'GET',
+    params: {
+      type
+    }
+  })
+}
+
+// 获取日榜
+export const gettypedayrank = async (type: number) => {
+  return await request<IGetTypeVideos[]>({
+    url: '/api/v1/video/gettypedayrank',
+    method: 'GET',
+    params: {
+      type
+    }
+  })
+}
+
+// 获取周榜
+export const gettypeweekrank = async (type: number) => {
+  return await request<IGetTypeVideos[]>({
+    url: '/api/v1/video/gettypeweekrank',
+    method: 'GET',
+    params: {
+      type
+    }
+  })
+}
+
+// 获取月榜
+export const gettypemonthrank = async (type: number) => {
+  return await request<IGetTypeVideos[]>({
+    url: '/api/v1/video/gettypemonthrank',
+    method: 'GET',
+    params: {
+      type
+    }
+  })
+}
+
+// 获取未读消息数目
+export const getnotread = async () => {
+  return await request<number>({
+    url: '/api/v1/optvideo/getnotread',
+    method: 'GET'
+  })
+}
+
+// 获得未读消息
+export const getmessage = async (type: number) => {
+  return await request<IGetMsg[]>({
+    url: '/api/v1/optvideo/getmessage',
     method: 'GET',
     params: {
       type

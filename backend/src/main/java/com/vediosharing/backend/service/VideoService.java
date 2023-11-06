@@ -11,6 +11,8 @@ import com.vediosharing.backend.core.constant.Result;
  */
 public interface VideoService {
     Result getVideo();
+    Result getPreVideo();
+    Result clearPreVideo();
     Result getTypeVideos(int type);
     Result getTypeDayTop(int type);
     Result getTypeWeekTop(int type);

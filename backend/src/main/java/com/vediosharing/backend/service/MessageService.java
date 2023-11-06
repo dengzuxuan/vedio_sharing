@@ -10,9 +10,9 @@ import com.vediosharing.backend.core.constant.Result;
  * @Version 1.0
  */
 public interface MessageService {
-    Result getNotReadMessageCount(int userId);
+    Result getNotReadMessageCount();
 
     void addMessage(int type,String pre,String message,int recvUserId,int sendUserId);
 
-    Result getTypeMessage(int type,int recvUserId);
+    Result getTypeMessage(int type);
 }

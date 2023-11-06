@@ -97,14 +97,12 @@ public class UserOptController {
     }
 
     @GetMapping(value = "/getnotread")
-    public Result getnotread(@RequestParam Map<String,String> m1){
-        int userId = Integer.parseInt(m1.get("user_id"));
-        return messageService.getNotReadMessageCount(userId);
+    public Result getnotread(){
+        return messageService.getNotReadMessageCount();
     }
     @GetMapping(value = "/getmessage")
     public Result getmessage(@RequestParam Map<String,String> m1){
-        int userId = Integer.parseInt(m1.get("user_id"));
         int type = Integer.parseInt(m1.get("type"));
-        return messageService.getTypeMessage(type,userId);
+        return messageService.getTypeMessage(type);
     }
 }

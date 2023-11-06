@@ -29,6 +29,14 @@ public class VideoController {
     public Result getVideo(){
         return videoService.getVideo();
     }
+    @GetMapping("/getprevideo")
+    public Result getPreVideo(){
+        return videoService.getPreVideo();
+    }
+    @GetMapping("/clearprevideo")
+    public Result clearPreVideo(){
+        return videoService.clearPreVideo();
+    }
     @GetMapping("/gettypevideos")
     public Result getTypeVideo(@RequestParam Map<String,String> m1){
         int type = Integer.parseInt(m1.get("type"));

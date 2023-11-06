@@ -2,9 +2,11 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dto\re
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\utils\JwtUtil.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dto\resp\CommentDetailRespDto.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\Video.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\config\CaffeineConfig.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\controller\UserOptController.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\controller\UserController.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\LikeMapper.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\controller\SearchController.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\UserVideoService.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\VideoService.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\constant\RankConsts.java
@@ -14,6 +16,7 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\c
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\Friend.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\VideoMapper.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\utils\VideoPool.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\utils\CaffeineUtil.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\CommentLikes.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\CommentLikesMapper.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\UserVideoServiceImpl.java
@@ -27,6 +30,7 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\c
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\UserService.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\OptVideoServiceImpl.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\FriendMapper.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dto\resp\SearchDeatilRespDto.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\utils\SearchUtil.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\common\constant\result\ResultCodeEnum.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\utils\RegexUtil.java
@@ -50,6 +54,7 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\c
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\User.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\UsertLikely.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dto\req\UserRegisterReqDto.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\SearchServiceImpl.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\MessageMapper.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\filter\JwtAuthenticationTokenFilter.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dto\req\CommentReqDto.java
@@ -58,9 +63,11 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\ma
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\constant\ApiRouterConsts.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\common\cronjob\RedisRankListClearTask.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\Comment.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\SearchService.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\controller\ResourceController.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\utils\UserDetailsImpl.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\MessageServiceImpl.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\utils\OrderDateComparator.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\History.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\utils\PathUtils.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\ResourceServiceImpl.java

@@ -48,6 +48,10 @@ public class RankUtil {
     public void addRank(int type,Integer value,double incr){
         String[] keys = {RankConsts.DAYLY_RANK,RankConsts.WEEKLY_RANK,RankConsts.TOTAL_RANK,RankConsts.MONTH_RANK};
         for (String key : keys) {
+            //总榜热度
+            key=key+":"+0;
+            redisTemplate.opsForZSet().incrementScore(key, value, incr);
+            //细分子榜热度
             key=key+":"+type;
             redisTemplate.opsForZSet().incrementScore(key, value, incr);
         }

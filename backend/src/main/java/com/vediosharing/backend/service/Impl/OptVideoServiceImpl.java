@@ -2,6 +2,7 @@ package com.vediosharing.backend.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
+import com.vediosharing.backend.core.constant.LikeConsts;
 import com.vediosharing.backend.core.constant.MessageConsts;
 import com.vediosharing.backend.core.constant.RankConsts;
 import com.vediosharing.backend.core.constant.Result;
@@ -14,6 +15,7 @@ import com.vediosharing.backend.dto.resp.CommentDetailRespDto;
 import com.vediosharing.backend.dto.resp.VideoDetailRespDto;
 import com.vediosharing.backend.service.Impl.utils.UserDetailsImpl;
 import com.vediosharing.backend.service.OptVideoService;
+import com.vediosharing.backend.service.UserVideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,6 +50,8 @@ public class OptVideoServiceImpl implements OptVideoService {
     MessageServiceImpl messageService;
     @Autowired
     CommentLikesMapper commentLikesMapper;
+    @Autowired
+    UserVideoService userVideoService;
     @Autowired
     RankUtil rankUtil;
     @Override
@@ -85,6 +89,8 @@ public class OptVideoServiceImpl implements OptVideoService {
 
         rankUtil.addRank(findVideo.getType(), videoId, RankConsts.LIKE_INCR);
 
+        userVideoService.changeVideoLike(findVideo.getType(), LikeConsts.LIKE_INCR);
+
         String pre = findVideo.getTitle();
         if(pre.length()>10){
             pre = pre.substring(0, 10)+"...";
@@ -113,6 +119,7 @@ public class OptVideoServiceImpl implements OptVideoService {
         }
         likeMapper.delete(queryWrapper);
 
+        userVideoService.changeVideoLike(findVideo.getType(), LikeConsts.LIKE_DESC);
 
         //在video表中减去
         findVideo.setLikePoints(findVideo.getLikePoints()-1);
@@ -153,6 +160,8 @@ public class OptVideoServiceImpl implements OptVideoService {
         findVideo.setCollectPoints(findVideo.getCollectPoints()+1);
         videoMapper.updateById(findVideo);
 
+        userVideoService.changeVideoLike(findVideo.getType(), LikeConsts.COLLECT_INCR);
+
         rankUtil.addRank(findVideo.getType(),videoId, RankConsts.COLLECT_INCR);
 
         String pre = findVideo.getTitle();
@@ -183,6 +192,8 @@ public class OptVideoServiceImpl implements OptVideoService {
             return Result.build(null,ResultCodeEnum.COLLECT_NOT_EXIST);
         }
         collectMapper.delete(queryWrapper);
+
+        userVideoService.changeVideoLike(findVideo.getType(), LikeConsts.COLLECT_DESC);
 
         //在video表中减去
         findVideo.setCollectPoints(findVideo.getCollectPoints()-1);

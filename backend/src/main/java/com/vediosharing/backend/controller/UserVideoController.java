@@ -2,6 +2,7 @@ package com.vediosharing.backend.controller;
 
 import com.vediosharing.backend.core.constant.ApiRouterConsts;
 import com.vediosharing.backend.core.constant.Result;
+import com.vediosharing.backend.dto.req.VideoJudgeReqDto;
 import com.vediosharing.backend.dto.req.VideoReqDto;
 import com.vediosharing.backend.service.UserVideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,10 @@ public class UserVideoController {
     @PostMapping(value = "/addvideo",consumes="application/json")
     public Result addVideo(@RequestBody VideoReqDto dto){
         return userVideoService.addVideo(dto);
+    }
+    @PostMapping(value = "/judge",consumes="application/json")
+    public Result judgeVideo(@RequestBody VideoJudgeReqDto dto){
+        return userVideoService.judge(dto);
     }
     @GetMapping("/uservideo")
     public Result getUserVideo(){

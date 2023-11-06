@@ -1,15 +1,21 @@
 package com.vediosharing.backend.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
+import com.vediosharing.backend.core.constant.LikeConsts;
 import com.vediosharing.backend.core.constant.RankConsts;
 import com.vediosharing.backend.core.constant.Result;
+import com.vediosharing.backend.core.constant.VideoTypeConsts;
 import com.vediosharing.backend.core.utils.RankUtil;
 import com.vediosharing.backend.dao.entity.*;
 import com.vediosharing.backend.dao.mapper.*;
+import com.vediosharing.backend.dto.req.VideoJudgeReqDto;
 import com.vediosharing.backend.dto.req.VideoReqDto;
 import com.vediosharing.backend.service.Impl.utils.UserDetailsImpl;
 import com.vediosharing.backend.service.UserVideoService;
+import org.checkerframework.checker.units.qual.A;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,19 +41,67 @@ public class UserVideoServiceImpl implements UserVideoService {
     @Autowired
     CollectMapper collectMapper;
     @Autowired
+    CommentMapper commentMapper;
+    @Autowired
+    CommentLikesMapper commentLikesMapper;
+    @Autowired
     LikeMapper likeMapper;
     @Autowired
     FriendMapper friendMapper;
     @Autowired
     RankUtil rankUtil;
     @Override
-    public Result incrVideoLike(int videoId, int delta) {
-        return null;
+    public Result judge(VideoJudgeReqDto dto) {
+        Video video = videoMapper.selectById(dto.getVideoId());
+        if(video == null){
+            return Result.build(null,ResultCodeEnum.VIDEO_NOT_EXIST);
+        }
+        if(dto.isDoneOne()){
+            changeVideoLike(video.getType(), LikeConsts.VIEW_INCR_1);
+        }
+        if(dto.isDoneTwo()){
+            changeVideoLike(video.getType(), LikeConsts.VIEW_INCR_2);
+        }
+        if(dto.isDoneAll()){
+            changeVideoLike(video.getType(), LikeConsts.VIEW_INCR_4);
+        }
+        return Result.success(null);
     }
 
     @Override
-    public Result decrVideoLike(int videoId, int delta) {
-        return null;
+    public void changeVideoLike(int type,int delta) {
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User user = loginUser.getUser();
+        QueryWrapper<UsertLikely> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",user.getId());
+        UsertLikely usertLikely = userLikelyMapper.selectOne(queryWrapper);
+        UpdateWrapper<UsertLikely> updateWrapper = new UpdateWrapper<>();
+        switch (type){
+            case VideoTypeConsts.SPORT:
+                updateWrapper.eq("user_id",user.getId()).set("sport",usertLikely.getSport()+delta);
+                break;
+            case VideoTypeConsts.GAME:
+                updateWrapper.eq("user_id",user.getId()).set("game",usertLikely.getGame()+delta);
+                break;
+            case VideoTypeConsts.FOOD:
+                updateWrapper.eq("user_id",user.getId()).set("food",usertLikely.getFood()+delta);
+                break;
+            case VideoTypeConsts.MUSIC:
+                updateWrapper.eq("user_id",user.getId()).set("music",usertLikely.getMusic()+delta);
+                break;
+            case VideoTypeConsts.FUN:
+                updateWrapper.eq("user_id",user.getId()).set("fun",usertLikely.getFun()+delta);
+                break;
+            case VideoTypeConsts.KNOWLEDGE:
+                updateWrapper.eq("user_id",user.getId()).set("knowledge",usertLikely.getKnowledge()+delta);
+                break;
+            case VideoTypeConsts.ANIMAL:
+                updateWrapper.eq("user_id",user.getId()).set("animal",usertLikely.getAnimal()+delta);
+                break;
+        }
+        userLikelyMapper.update(null,updateWrapper);
     }
 
     @Override
@@ -195,9 +249,38 @@ public class UserVideoServiceImpl implements UserVideoService {
 
     @Override
     public Result delUserVideo(int videoId) {
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
+        User loginuser = loginUser.getUser();
+
         Video video = videoMapper.selectById(videoId);
+        if(video == null){
+            return Result.build(null,ResultCodeEnum.VIDEO_NOT_EXIST);
+        }
+
+        if(video.getUserId()!=loginuser.getId()){
+            return Result.build(null,ResultCodeEnum.VIDEO_CANT_DELTE);
+        }
+
         //删除视频mysql
         videoMapper.deleteById(videoId);
+        //删除被收藏
+        QueryWrapper<Collects> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("video_id",videoId);
+        collectMapper.delete(queryWrapper);
+        //删除被点赞
+        QueryWrapper<Likes> queryWrapper1 = new QueryWrapper<>();
+        queryWrapper1.eq("video_id",videoId);
+        likeMapper.delete(queryWrapper1);
+        //删除被评论
+        QueryWrapper<Comment> queryWrapper2 = new QueryWrapper<>();
+        queryWrapper2.eq("video_id",videoId);
+        commentMapper.delete(queryWrapper2);
+        //删除评论区点赞
+        QueryWrapper<CommentLikes> queryWrapper3 = new QueryWrapper<>();
+        queryWrapper3.eq("video_id",videoId);
+        commentLikesMapper.delete(queryWrapper3);
         //删除redis
         rankUtil.delVideoId(video.getType(),videoId);
         //删除mongodb

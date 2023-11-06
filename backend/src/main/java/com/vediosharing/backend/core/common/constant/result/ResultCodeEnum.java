@@ -35,7 +35,9 @@ public enum ResultCodeEnum {
 
     VIDEO_PARAMS_WRONG(3001,"视频上传格式有误"),
     VIDEO_INPUT_WRONG(3002,"上传失败"),
-    PHOTO_PARAMS_WRONG(3002,"图片上传格式有误"),
+    PHOTO_PARAMS_WRONG(3003,"图片上传格式有误"),
+    VIDEO_CANT_DELTE(3004,"无法删除该视频"),
+    TYPE_PARAMS_WRONG(3005,"类型格式有误"),
     FRIEND_ADD_WRONG(4001,"你已经关注过了"),
 
     VIDEO_NOT_EXIST(5001,"该视频不存在"),

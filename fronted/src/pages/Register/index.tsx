@@ -25,7 +25,6 @@ export default function Register() {
     if (values.password !== values.passwordConfirm) {
       message.info('两次密码不一致')
     } else {
-      console.log(values.username, values.password)
       const res = await register(values.username, values.password)
       if (res?.code === 200) {
         message

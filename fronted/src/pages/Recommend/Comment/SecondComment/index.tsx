@@ -34,7 +34,6 @@ export default function SecondComment({ item2, clickSecond, setClickSecond, last
   // 发布评论（对二级）
   const publishFirstMessage = async () => {
     const data = lastComment?.trim()
-    console.log(videoId)
     if (!data || !videoId) return
     const res = await addcomment(videoId, clickSecond as number, data, 3)
     if (res?.code === 200) {

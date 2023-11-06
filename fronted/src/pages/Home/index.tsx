@@ -6,13 +6,14 @@ import searchIcon from '../../assets/imgs/search.png'
 import CallIcon from '../../assets/imgs/call.png'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { context } from '../../hooks/store'
-import { getmessage, getnotread, userInfo } from '../../api/personal'
-import { type IGetMsg, type IGetInfo } from '../../libs/model'
-import personIcon from '../../assets/imgs/person.webp'
-import { Badge, Popover, Select } from 'antd'
+import { getmessage, getnotread, searchApi, userInfo } from '../../api/personal'
+import { type IGetMsg, type IGetInfo, type ISearch } from '../../libs/model'
+import { Popover, Select } from 'antd'
 import dayjs from 'dayjs'
+import useJump from '../../hooks/useJump'
 
 export default function Home() {
+  const { jump } = useJump()
   const navigator = useNavigate()
   // 控制左tabs高亮
   const { clickItemValue, setClickItemValue } = useContext(context)
@@ -27,6 +28,8 @@ export default function Home() {
   const [type, setType] = useState(0)
   // 保存通知信息
   const [msgs, setMsgs] = useState<IGetMsg[]>()
+  // 保存搜索内容
+  const [searchItem, setSearchItem] = useState<ISearch>()
 
   // 控制搜索框×
   const search = (value: string) => {
@@ -122,6 +125,51 @@ export default function Home() {
     </div>
   )
 
+  const clickSearch = async () => {
+    if (!searchValue) return
+    const res = await searchApi(searchValue)
+    if (res?.code === 200) {
+      setSearchItem(res.data)
+    }
+  }
+
+  const searchContent = (
+    <div className={style.searchContent}>
+      {
+        searchItem?.videoDetail.length ? <div>视频</div> : ''
+      }
+      <div className={style.video_box}>
+        {
+          searchItem?.videoDetail.map(item => <div onClick={() => jump(item.video.id)} key={item.video.id} className={style.item}>
+            <div className={style.img}>
+              <img className={style.img_} src={item.video.photoUrl}></img>
+            </div>
+            <div className={style.content}>
+              <div className={style.title} title={item.video.title}>{item.video.title}</div>
+              <div className={style.userInfo}>
+                <span className={style.time}>{dayjs(item.video.createTime).format('YY-DD')}</span>
+                <span>{item.user.nickname}</span>
+              </div>
+            </div>
+          </div>)
+        }
+      </div>
+      {
+        searchItem?.userList.length ? <div>用户</div> : ''
+      }
+      <div className={style.user_box}>
+        {
+          searchItem?.userList.map(item => <div onClick={() => navigator(`user/${item.id}`)} key={item.id} className={style.item}>
+            <div className={style.img}>
+              <img className={style.img_} src={item.photo}></img>
+            </div>
+            <div className={style.nickname} title={item.nickname}>{item.nickname}</div>
+          </div>)
+        }
+      </div>
+    </div>
+  )
+
   useEffect(() => {
     navigator(`/home/${clickItemValue}`)
   }, [clickItemValue])
@@ -149,10 +197,14 @@ export default function Home() {
           <div className={style.left_box}>
             <input value={searchValue} className={style.input} onChange={(e) => search(e.target.value)}></input>
             {
-              searchValue.length ? <img onClick={() => setSearchValue('')} src={chaIcon} className={style.chaIcon}></img> : ''
+              searchValue.length
+                ? <img onClick={() => setSearchValue('')} src={chaIcon} className={style.chaIcon}></img>
+                : ''
             }
           </div>
-          <img src={searchIcon} className={style.searchIcon}></img>
+          <Popover placement="bottomRight" trigger="click" content={searchContent}>
+            <img src={searchIcon} onClick={() => clickSearch()} className={style.searchIcon}></img>
+          </Popover>
         </div>
         <div className={style.right}>
           <Popover content={content} title="互动消息">
@@ -161,10 +213,8 @@ export default function Home() {
                 noNum ? <div className={style.callRed}>12</div> : ''
               }
               <img src={CallIcon} className={style.call}></img>
-              <span>通知</span>
             </div>
           </Popover>
-          <div className={style.nickname}>{info?.nickname}</div>
           <div className={style.personBox}>
             <img src={info?.photo} className={style.personImg} onClick={() => { setClickItemValue('my') }}></img>
           </div>

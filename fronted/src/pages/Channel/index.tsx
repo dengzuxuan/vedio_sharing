@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import style from './index.module.scss'
 import { basicVideoInitOption } from '../../libs/data'
 import { Carousel } from 'antd'
-import casual2 from '../../assets/imgs/casual2.webp'
-import casual3 from '../../assets/imgs/casual3.webp'
-import casual4 from '../../assets/imgs/casual4.webp'
-import casual5 from '../../assets/imgs/casual5.webp'
 import likeIcon from '../../assets/imgs/likepoints.png'
 import { gettypedayrank, gettypemonthrank, gettypevideos, gettypeweekrank } from '../../api/personal'
 import { type IGetTypeVideos } from '../../libs/model'
 import VideoComponent from '../../components/VideoComponent'
 import dayjs from 'dayjs'
+import useJump from '../../hooks/useJump'
 
 export default function Channel() {
+  const { jump } = useJump()
+  const navigator = useNavigate()
   const type = useLocation().pathname.split('/')[3]
   // 保存视频
   const [videosInfo, setVideoInfos] = useState<IGetTypeVideos[]>()
@@ -50,7 +49,6 @@ export default function Channel() {
           arr = []
         }
       }
-      console.log(temp)
       setCasualInfo(temp)
     }
   }
@@ -66,14 +64,6 @@ export default function Channel() {
     }
     if (res?.code === 200) {
       setRankInfo(res.data)
-    }
-  }
-
-  // 跳转到新页面
-  const jump = (id: number) => {
-    const w = window.open('_black')
-    if (w) {
-      w.location.href = `/video/${id}`
     }
   }
 

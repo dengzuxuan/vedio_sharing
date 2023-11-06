@@ -5,7 +5,8 @@ import {
   type IGetVideo,
   type IGetOtherInfo,
   type IGetTypeVideos,
-  type IGetMsg
+  type IGetMsg,
+  type ISearch
 } from "../libs/model"
 import request from "../utils/request"
 
@@ -275,6 +276,17 @@ export const getmessage = async (type: number) => {
     method: 'GET',
     params: {
       type
+    }
+  })
+}
+
+// 模拟搜索
+export const searchApi = async (content: string) => {
+  return await request<ISearch>({
+    url: '/api/v1/search/content',
+    method: 'GET',
+    params: {
+      content
     }
   })
 }

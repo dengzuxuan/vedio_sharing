@@ -7,6 +7,7 @@ import com.vediosharing.backend.core.constant.Result;
 import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
 import com.vediosharing.backend.core.utils.JwtUtil;
 import com.vediosharing.backend.core.utils.RegexUtil;
+import com.vediosharing.backend.core.utils.SearchUtil;
 import com.vediosharing.backend.dao.entity.*;
 import com.vediosharing.backend.dao.mapper.*;
 import com.vediosharing.backend.dto.req.UserInfoReqDto;
@@ -53,6 +54,8 @@ public class UserServiceImpl implements UserService {
     private MessageService messageService;
     @Autowired
     private UserVideoServiceImpl userVideoServicel;
+    @Autowired
+    SearchUtil searchUtil;
 
     @Override
     public Result register(UserRegisterReqDto dto) {
@@ -102,7 +105,10 @@ public class UserServiceImpl implements UserService {
                 now
         );
         userMapper.insert(newUser);
+
         userVideoServicel.initVideoLike(newUser.getId());
+
+        searchUtil.addUserInfo(newUser.getId(),newUser.getNickname());
         return Result.success(null);
     }
 
@@ -272,6 +278,7 @@ public class UserServiceImpl implements UserService {
 
         userMapper.updateById(user);
 
+        searchUtil.addUserInfo(user.getId(),dto.getNickname());
         return Result.success(null);
     }
 

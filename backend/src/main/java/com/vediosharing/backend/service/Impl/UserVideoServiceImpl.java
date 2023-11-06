@@ -8,6 +8,7 @@ import com.vediosharing.backend.core.constant.RankConsts;
 import com.vediosharing.backend.core.constant.Result;
 import com.vediosharing.backend.core.constant.VideoTypeConsts;
 import com.vediosharing.backend.core.utils.RankUtil;
+import com.vediosharing.backend.core.utils.SearchUtil;
 import com.vediosharing.backend.dao.entity.*;
 import com.vediosharing.backend.dao.mapper.*;
 import com.vediosharing.backend.dto.req.VideoJudgeReqDto;
@@ -50,6 +51,8 @@ public class UserVideoServiceImpl implements UserVideoService {
     FriendMapper friendMapper;
     @Autowired
     RankUtil rankUtil;
+    @Autowired
+    SearchUtil searchUtil;
     @Override
     public Result judge(VideoJudgeReqDto dto) {
         Video video = videoMapper.selectById(dto.getVideoId());
@@ -154,6 +157,8 @@ public class UserVideoServiceImpl implements UserVideoService {
         rankUtil.initRank(RankConsts.MONTH_RANK,vedio.getType(),baseHot,vedio.getId());
         rankUtil.initRank(RankConsts.WEEKLY_RANK,vedio.getType(),baseHot,vedio.getId());
         rankUtil.initRank(RankConsts.DAYLY_RANK,vedio.getType(),baseHot,vedio.getId());
+        //初始化mongodb
+        searchUtil.addVideoInfo(vedio.getId(),vedio.getTitle(),vedio.getDescription());
 
         return Result.success(null);
     }
@@ -284,6 +289,7 @@ public class UserVideoServiceImpl implements UserVideoService {
         //删除redis
         rankUtil.delVideoId(video.getType(),videoId);
         //删除mongodb
+        searchUtil.delVideoInfo(videoId);
 
         return Result.success(null);
     }

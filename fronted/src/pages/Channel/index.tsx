@@ -84,6 +84,7 @@ export default function Channel() {
               {
                 item.map(item2 => <div key={item2.video.id} className={style.img3}>
                   <img onClick={() => jump(item2.video.id)} src={item2.video.photoUrl} className={style.carousel}></img>
+                  <div className={style.title}>{item2.video.title}</div>
                 </div>)
               }
             </div>)

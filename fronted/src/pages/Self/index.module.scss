@@ -207,6 +207,7 @@
 .left {
   width: 160px;
   overflow: hidden;
+  display: -webkit-box;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;

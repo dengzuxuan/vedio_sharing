@@ -5,6 +5,7 @@ import likeIcon from '../../../../assets/imgs/commentLike.png'
 import like_clickIcon from '../../../../assets/imgs/commentLike_click.png'
 import { addcomment, addcommentlikes, delcomment, delcommentlikes, getsecondcomments } from '../../../../api/comment'
 import { Input, message } from 'antd'
+import useJump from '../../../../hooks/useJump'
 interface Props {
   item2: IGetComments
   clickSecond: number | undefined
@@ -16,6 +17,7 @@ interface Props {
 }
 export default function SecondComment({ item2, clickSecond, setClickSecond, lastComment, setLastComment, videoId, func }: Props) {
   const id = localStorage.getItem('id')
+  const { otherJump } = useJump()
   const [itemCopy, setItemCopy] = useState(item2)
   const clickLike = async () => {
     if (!itemCopy.like) {
@@ -58,7 +60,7 @@ export default function SecondComment({ item2, clickSecond, setClickSecond, last
     <div className={style.back}>
       <div className={style.img_name}>
         <div className={style.img_box}>
-          <img className={style.img} src={item2.user.photo}></img>
+          <img onClick={() => otherJump(item2.user.id)} className={style.img} src={item2.user.photo}></img>
         </div>
         <div className={style.text}>{item2.user.nickname}</div>
         <div className={style.comment}>{item2.comment.content}</div>

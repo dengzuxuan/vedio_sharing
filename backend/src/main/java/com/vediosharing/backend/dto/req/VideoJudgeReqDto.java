@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class VideoJudgeReqDto {
     private int videoId;
-    private boolean doneOne;
-    private boolean doneTwo;
-    private boolean doneAll;
+    private boolean is1;
+    private boolean is2;
+    private boolean is4;
 }

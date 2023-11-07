@@ -253,7 +253,7 @@ export default function Home() {
             tabs_two.map((item, index) =>
               <div
                 key={index}
-                className={clickItemValue === item.value ? style.typeItemClick : style.typeItem}
+                className={clickItemValue === 'channel/' + item.value ? style.typeItemClick : style.typeItem}
                 onClick={() => setClickItemValue('channel/' + item.value)}
               >
                 <img src={item.src} className={style.item_icon}></img>

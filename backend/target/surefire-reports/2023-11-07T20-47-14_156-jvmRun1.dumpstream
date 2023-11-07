@@ -1,0 +1,93 @@
+# Created at 2023-11-07T20:47:16.047
+TestSet has not finished before stream error has appeared >> initializing exit by non-null configuration: null
+java.io.EOFException
+	at java.io.DataInputStream.readInt(DataInputStream.java:392)
+	at org.apache.maven.surefire.booter.MasterProcessCommand.decode(MasterProcessCommand.java:115)
+	at org.apache.maven.surefire.booter.CommandReader$CommandRunnable.run(CommandReader.java:391)
+	at java.lang.Thread.run(Thread.java:750)
+
+
+# Created at 2023-11-07T20:47:16.551
+Unexpected IOException with stream: 20:47:16.551 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Neither @ContextConfiguration nor @ContextHierarchy found for test class [com.vediosharing.backend.JedisTest], using SpringBootContextLoader
+
+
+# Created at 2023-11-07T20:47:16.553
+Unexpected IOException with stream: 20:47:16.553 [main] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [com.vediosharing.backend.JedisTest]: class path resource [com/vediosharing/backend/JedisTest-context.xml] does not exist
+
+
+# Created at 2023-11-07T20:47:16.554
+Unexpected IOException with stream: 20:47:16.554 [main] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [com.vediosharing.backend.JedisTest]: class path resource [com/vediosharing/backend/JedisTestContext.groovy] does not exist
+
+
+# Created at 2023-11-07T20:47:16.555
+Unexpected IOException with stream: 20:47:16.555 [main] INFO org.springframework.test.context.support.AbstractContextLoader - Could not detect default resource locations for test class [com.vediosharing.backend.JedisTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+
+
+# Created at 2023-11-07T20:47:16.555
+Unexpected IOException with stream: 20:47:16.555 [main] DEBUG org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Ignoring class [com.vediosharing.backend.JedisTest$User]; it must be static, non-private, non-final, and annotated with @Configuration to be considered a default configuration class.
+
+
+# Created at 2023-11-07T20:47:16.557
+Unexpected IOException with stream: 20:47:16.555 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.vediosharing.backend.JedisTest]: JedisTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+
+
+# Created at 2023-11-07T20:47:16.569
+Unexpected IOException with stream: 20:47:16.568 [main] DEBUG org.springframework.test.context.support.ActiveProfilesUtils - Could not find an 'annotation declaring class' for annotation type [org.springframework.test.context.ActiveProfiles] and class [com.vediosharing.backend.JedisTest]
+
+
+# Created at 2023-11-07T20:47:16.623
+Unexpected IOException: 7,1,com.vediosharing.backend.JedisTest,com.vediosharing.backend.JedisTest,null,Unable to find a @SpringBootConfiguration\002C you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test,null,Unable to find a @SpringBootConfiguration\002C you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test,JedisTest \00BB IllegalState Unable to find a @SpringBootConfiguration\002C you need t...,java.lang.IllegalStateException: Unable to find a @SpringBootConfiguration\002C you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test\000A
+
+
+# Created at 2023-11-07T20:47:16.624
+Unexpected IOException: 2,1,org.apache.maven.surefire.junitplatform.JUnitPlatformProvider,com.vediosharing.backend.JedisTest,null,null,null
+
+
+# Created at 2023-11-07T20:47:16.629
+Unexpected IOException: 1,1,org.apache.maven.surefire.junitplatform.JUnitPlatformProvider,com.vediosharing.backend.log4jTest,null,null,null
+
+
+# Created at 2023-11-07T20:47:16.630
+Unexpected IOException with stream: 20:47:16.629 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating CacheAwareContextLoaderDelegate from class [org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate]
+
+
+# Created at 2023-11-07T20:47:16.630
+Unexpected IOException with stream: 20:47:16.630 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating BootstrapContext using constructor [public org.springframework.test.context.support.DefaultBootstrapContext(java.lang.Class,org.springframework.test.context.CacheAwareContextLoaderDelegate)]
+
+
+# Created at 2023-11-07T20:47:16.632
+Unexpected IOException with stream: 20:47:16.631 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating TestContextBootstrapper for test class [com.vediosharing.backend.log4jTest] from class [org.springframework.boot.test.context.SpringBootTestContextBootstrapper]
+
+
+# Created at 2023-11-07T20:47:16.633
+Unexpected IOException with stream: 20:47:16.633 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Neither @ContextConfiguration nor @ContextHierarchy found for test class [com.vediosharing.backend.log4jTest], using SpringBootContextLoader
+
+
+# Created at 2023-11-07T20:47:16.635
+Unexpected IOException with stream: 20:47:16.634 [main] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [com.vediosharing.backend.log4jTest]: class path resource [com/vediosharing/backend/log4jTest-context.xml] does not exist
+
+
+# Created at 2023-11-07T20:47:16.636
+Unexpected IOException with stream: 20:47:16.635 [main] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [com.vediosharing.backend.log4jTest]: class path resource [com/vediosharing/backend/log4jTestContext.groovy] does not exist
+
+
+# Created at 2023-11-07T20:47:16.636
+Unexpected IOException with stream: 20:47:16.636 [main] INFO org.springframework.test.context.support.AbstractContextLoader - Could not detect default resource locations for test class [com.vediosharing.backend.log4jTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+
+
+# Created at 2023-11-07T20:47:16.637
+Unexpected IOException with stream: 20:47:16.636 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.vediosharing.backend.log4jTest]: log4jTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+
+
+# Created at 2023-11-07T20:47:16.639
+Unexpected IOException with stream: 20:47:16.639 [main] DEBUG org.springframework.test.context.support.ActiveProfilesUtils - Could not find an 'annotation declaring class' for annotation type [org.springframework.test.context.ActiveProfiles] and class [com.vediosharing.backend.log4jTest]
+
+
+# Created at 2023-11-07T20:47:16.693
+Unexpected IOException: 7,1,com.vediosharing.backend.log4jTest,com.vediosharing.backend.log4jTest,null,Unable to find a @SpringBootConfiguration\002C you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test,null,Unable to find a @SpringBootConfiguration\002C you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test,log4jTest \00BB IllegalState Unable to find a @SpringBootConfiguration\002C you need t...,java.lang.IllegalStateException: Unable to find a @SpringBootConfiguration\002C you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test\000A
+
+
+# Created at 2023-11-07T20:47:16.694
+Unexpected IOException: 2,1,org.apache.maven.surefire.junitplatform.JUnitPlatformProvider,com.vediosharing.backend.log4jTest,null,null,null
+
+

@@ -1,6 +1,7 @@
 .back {
   padding: 5px;
-  max-width: 400px;
+  max-width: 100%;
+  border-bottom: 1px solid rgb(227, 229, 231);
 }
 
 .img_name {
@@ -26,6 +27,8 @@
 }
 
 .comment {
+  margin-top: 7px;
+  margin-bottom: 7px;
   width: 100%;
   color: #333;
   // 单词换行需要父盒子为块级元素

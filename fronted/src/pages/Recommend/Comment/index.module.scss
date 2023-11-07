@@ -1,6 +1,7 @@
 .back {
   padding: 5px;
-  max-width: 400px;
+  max-width: 100%;
+  border-bottom: 1px solid rgb(227, 229, 231);
 }
 
 .img_name {
@@ -29,6 +30,8 @@
 .comment {
   width: 100%;
   color: #333;
+  margin-top: 5px;
+  margin-bottom: 5px;
   // 单词换行需要父盒子为块级元素
   word-break: break-all; // 按字符截断换行；支持IE和chrome，FF不支持
   word-wrap: break-word; // 按英文单词整体截断换行；以上三个浏览器均支持

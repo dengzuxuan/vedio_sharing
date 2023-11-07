@@ -38,10 +38,14 @@ service.interceptors.response.use(res => {
   return handleErrorCode(status, stat, message)
 })
 // 处理错误代码
-function handleErrorCode (status: number, stat: string, msg: string) {
+function handleErrorCode(status: number, stat: string, msg: string) {
   switch (status) {
     case 400:
-    case 401:
+    case 401: {
+      message.error(msg)
+      localStorage.clear()
+      return Promise.reject(status)
+    }
     case 403:
     case 404:
     case 405:
@@ -56,7 +60,7 @@ function handleErrorCode (status: number, stat: string, msg: string) {
   }
 }
 // 请求函数
-async function request<T> (option: AxiosRequestConfig) {
+async function request<T>(option: AxiosRequestConfig) {
   try {
     const res = await service.request<Response<T>>({
       ...option

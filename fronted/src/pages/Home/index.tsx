@@ -11,6 +11,7 @@ import { type IGetMsg, type IGetInfo, type ISearch } from '../../libs/model'
 import { Popover, Select } from 'antd'
 import dayjs from 'dayjs'
 import useJump from '../../hooks/useJump'
+import exitIcon from '../../assets/imgs/exit.png'
 
 export default function Home() {
   const { jump } = useJump()
@@ -61,6 +62,13 @@ export default function Home() {
   useEffect(() => {
     getMsg()
   }, [type])
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      navigator('/login')
+    }
+  }, [clickItemValue])
 
   const renderType = (item: IGetMsg) => {
     const type = item.message.type
@@ -170,6 +178,11 @@ export default function Home() {
     </div>
   )
 
+  const exitClick = () => {
+    localStorage.clear()
+    navigator('/login')
+  }
+
   useEffect(() => {
     navigator(`/home/${clickItemValue}`)
   }, [clickItemValue])
@@ -218,6 +231,7 @@ export default function Home() {
           <div className={style.personBox}>
             <img src={info?.photo} className={style.personImg} onClick={() => { setClickItemValue('my') }}></img>
           </div>
+          <img src={exitIcon} className={style.exit}></img>
         </div>
       </header>
       <main className={style.main}>
@@ -243,7 +257,7 @@ export default function Home() {
                 onClick={() => setClickItemValue('channel/' + item.value)}
               >
                 <img src={item.src} className={style.item_icon}></img>
-                <div className={style.text}>{item.text}</div>
+                <div className={style.text} onClick={() => exitClick()}>{item.text}</div>
               </div>
             )
           }

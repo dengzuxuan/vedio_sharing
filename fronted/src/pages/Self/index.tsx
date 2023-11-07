@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import style from './index.module.scss'
 import { Image, Modal, Spin, Upload, message, Form, Input, Radio, Button } from 'antd'
-import { getFrdInfo, getSendFrd, getcollectvideos, getlikevideos, updateInfo, userInfo, userVideo } from '../../api/personal'
+import { delVideo, getFrdInfo, getSendFrd, getcollectvideos, getlikevideos, updateInfo, userInfo, userVideo } from '../../api/personal'
 import { type IVideoInfo, type IGetInfo, type IFrd } from '../../libs/model'
 import manIcon from '../../assets/imgs/man.png'
 import womanIcon from '../../assets/imgs/woman.png'
@@ -10,14 +10,15 @@ import { postPic } from '../../api/common'
 import { useForm } from 'antd/lib/form/Form'
 import VideoComponent from '../../components/VideoComponent'
 import { basicVideoInitOption } from '../../libs/data'
-
 import FrdItem from './FrdItem'
 import useJump from '../../hooks/useJump'
+import { ExclamationCircleOutlined } from '@ant-design/icons'
 interface IFrdInfo {
   frds: IFrd[]
   tabs: string
 }
 export default function Self() {
+  const { confirm } = Modal
   const { jump } = useJump()
   const [form] = useForm()
   const [clickTabs, setClickTabs] = useState('work')
@@ -26,6 +27,8 @@ export default function Self() {
   const [selfVideo, setSelfVideo] = useState<IVideoInfo[]>()
   const [frd, setFrd] = useState<IFrdInfo>({ frds: [], tabs: '' })
   const [isFrdModal, setIsFrdModal] = useState(false)
+  // 保存删除视频id
+  const [delId, setDelId] = useState<number>()
 
   // 控制modal
   const [isModal, setIsModal] = useState(false)
@@ -121,6 +124,33 @@ export default function Self() {
     setIsFrdModal(true)
   }
 
+  const delVideoClick = async (video_id: number) => {
+    const res = await delVideo(video_id)
+    if (res?.code === 200) {
+      message.success('删除成功')
+      getSelfInfo()
+      getVideos(clickTabs)
+    } else {
+      message.info(res?.message)
+    }
+  }
+
+  const showDeleteConfirm = () => {
+    confirm(
+      {
+        title: '你确定删除该视频吗？',
+        icon: <ExclamationCircleOutlined />,
+        okText: '确定',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk() {
+          if (delId) {
+            delVideoClick(delId)
+          }
+        }
+      })
+  }
+
   useEffect(() => {
     getFriendInfo()
   }, [frd?.tabs])
@@ -192,17 +222,16 @@ export default function Self() {
         {
           selfVideo
             ? selfVideo.map(item =>
-              <div key={item.id} className={style.video_item} onClick={() => jump(item.id)}>
-                <div className={style.video_div}>
-                  <VideoComponent propsOption={{ ...option, loop: true, poster: item.photoUrl }} hoverFunc={true} videoUrl={item.videoUrl}></VideoComponent>
+              <div key={item.id} className={style.video_item}>
+                <div className={style.video_div} onClick={() => jump(item.id)}>
+                  <VideoComponent videoId={item.id} propsOption={{ ...option, loop: true, poster: item.photoUrl }} hoverFunc={true} videoUrl={item.videoUrl}></VideoComponent>
                 </div>
-                <div className={style.title_description} title={item.description}>
-                  <span className={style.title}>{item.title}</span>
-                  <span className={style.description}>
-                    {
-                      item.description
-                    }
-                  </span>
+                <div className={style.title_description}>
+                  <div className={style.left} onClick={() => jump(item.id)}>
+                    <b>{item.title}</b>
+                    {' ' + item.description}
+                  </div>
+                  <span className={style.del} onClick={() => { showDeleteConfirm(); setDelId(item.id) }}>删除</span>
                 </div>
               </div>)
             : ''

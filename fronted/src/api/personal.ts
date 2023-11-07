@@ -290,3 +290,33 @@ export const searchApi = async (content: string) => {
     }
   })
 }
+
+// 删除视频
+export const delVideo = async (video_id: number) => {
+  return await request({
+    url: '/api/v1/video/delvideo',
+    method: 'POST',
+    params: {
+      video_id
+    }
+  })
+}
+
+// 视频进度
+export const judge = async (
+  videoId: number,
+  is1: boolean,
+  is2: boolean,
+  is4: boolean
+) => {
+  return await request({
+    url: '/api/v1/video/judge',
+    method: 'POST',
+    data: {
+      videoId,
+      is1,
+      is2,
+      is4
+    }
+  })
+}

@@ -16,7 +16,6 @@ import { context } from '../../hooks/store'
 export default function UploadView() {
   const { clickItemValue, setClickItemValue } = useContext(context)
   const [uploadVideoReturn, setUploadVideoReturn] = useState<IUploadVideo>()
-  const navigator = useNavigate()
   // 视频
   const [videoLoading, setVideoLoading] = useState(false)
   // 封面url
@@ -28,12 +27,12 @@ export default function UploadView() {
   // 检查上传文件
   const beforeUpload = (file: RcFile) => {
     const isTypeTrue = file.type === 'video/mp4'
-    const isLt5M = file.size / 1024 / 1024 < 5
+    const isLt5M = file.size / 1024 / 1024 < 20
     if (!isTypeTrue) {
-      message.error(`${file.name} 文件只能为mp4格式`)
+      message.error(`${file.name}视频只能为mp4格式`)
     }
     if (!isLt5M) {
-      message.error('图片要小于5MB!')
+      message.error('视频要小于20MB!')
     }
     return isTypeTrue && isLt5M
   }
@@ -78,8 +77,6 @@ export default function UploadView() {
     } else {
       const res = await addVideo(values.title, values.description, values.type, uploadVideoReturn.url, coverUrl)
       if (res?.code === 200) {
-        // message.success('上传成功', 1)
-        //   .then(() => navigator('/home/my'))
         message.success('上传成功', 1)
           .then(() => setClickItemValue('my'))
       } else {

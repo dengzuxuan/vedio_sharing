@@ -1,12 +1,12 @@
 .back {
   width: 100%;
-  height: 100vh;
+  height: 100%;
 }
 
 .video_boxs {
   width: 80%;
   padding: 10px;
-  height: 500px;
+  height: 440px;
 }
 
 .videos_box {
@@ -16,6 +16,7 @@
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);
   grid-column-gap: 10px;
+  grid-row-gap: 10px;
 }
 
 .video_item {
@@ -86,13 +87,12 @@
 
 .box {
   width: 100%;
-  height: 200px;
+  height: 180px;
 }
 
 .img_box {
   width: 100%;
-  height: 200px;
-  // // overflow: hidden;
+  height: 180px;
   display: flex !important;
   justify-content: space-around;
 
@@ -150,6 +150,7 @@
 
 .rank_div {
   color: #C9CCD0;
+  padding-left: 10px;
 
   .rank_item {
     display: -webkit-box;

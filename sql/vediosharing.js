@@ -1,0 +1,616 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : docker
+ Source Server Type    : MongoDB
+ Source Server Version : 30623 (3.6.23)
+ Source Host           : 8.140.38.47:27018
+ Source Schema         : vediosharing
+
+ Target Server Type    : MongoDB
+ Target Server Version : 30623 (3.6.23)
+ File Encoding         : 65001
+
+ Date: 07/11/2023 22:57:54
+*/
+
+
+// ----------------------------
+// Collection structure for user
+// ----------------------------
+db.getCollection("user").drop();
+db.createCollection("user");
+
+// ----------------------------
+// Documents of user
+// ----------------------------
+db.getCollection("user").insert([ {
+    _id: NumberInt("28"),
+    nickName: "黄瓜奶油",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$User"
+} ]);
+db.getCollection("user").insert([ {
+    _id: NumberInt("26"),
+    nickName: "啊吧啊吧",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$User"
+} ]);
+db.getCollection("user").insert([ {
+    _id: NumberInt("27"),
+    nickName: "牛牛",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$User"
+} ]);
+db.getCollection("user").insert([ {
+    _id: NumberInt("29"),
+    nickName: "花生奶酪",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$User"
+} ]);
+db.getCollection("user").insert([ {
+    _id: NumberInt("30"),
+    nickName: "吃我一掌",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$User"
+} ]);
+db.getCollection("user").insert([ {
+    _id: NumberInt("31"),
+    nickName: "玛卡巴卡",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$User"
+} ]);
+db.getCollection("user").insert([ {
+    _id: NumberInt("32"),
+    nickName: "葡萄三明治",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$User"
+} ]);
+db.getCollection("user").insert([ {
+    _id: NumberInt("33"),
+    nickName: "薄荷馒头",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$User"
+} ]);
+
+// ----------------------------
+// Collection structure for video
+// ----------------------------
+db.getCollection("video").drop();
+db.createCollection("video");
+
+// ----------------------------
+// Documents of video
+// ----------------------------
+db.getCollection("video").insert([ {
+    _id: NumberInt("72"),
+    title: "《爱永在》24届艺考生！记录小课日常，期待蜕变",
+    description: "24届（应届）艺考生练习《爱永在》\n一直在调整咬字问题，有很多字依然没有咬好，也以至于最后高音没有唱好，视频为记录，欢迎交流！",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("73"),
+    title: "苏打绿 小情歌 8bit版",
+    description: "苏打绿 小情歌 8bit版",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("74"),
+    title: "【犬少年|EP】INUTOPIA-不听过错亿的作业BGM",
+    description: "是直播间的bgm，很多同学觉得非常适合写作业的时候听。",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("75"),
+    title: "【原创】做了一段非常Funky的高潮「Can You Hea",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("76"),
+    title: "活人单妹和AI单妹合唱（？）我是我的狗！",
+    description: "活人单妹完败）",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("77"),
+    title: "“当你踏过沼泽去拯救小猫时，自己也会深陷其中",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("78"),
+    title: "【SLPA】当我用琵琶弹爵士...| 原创《Dummy Li",
+    description: "原创《Dummy Lips》\n演奏: THE EITHER - Jiaju",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("79"),
+    title: "楼下的车一直在响警报，借此机会，给邻居们弹首周杰伦吧。",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("80"),
+    title: "一段很有力量的话",
+    description: "我从未见过，一个早起、勤奋、谨慎、诚实的人，抱怨命运不好的",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("82"),
+    title: "最近运气如何？",
+    description: "最近运气如何？",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("83"),
+    title: "给他一个苹果，立刻还一个橘子的人！真的不能深交吗？【强边界感",
+    description: "给他一个苹果，立刻还一个橘子的人！真的不能深交吗？",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("84"),
+    title: "16 岁 的他孤身犯险潜入敌营一个人干掉一个鬼子",
+    description: "台儿庄战役 16 岁 的他孤身犯险潜入敌营一个人干掉一个鬼子特工营，被誉为广西最年轻的狼兵战士，先后参加了淞沪会战、徐州会战、台儿庄战役、武汉会战，最终在武汉会战时为保护战友，自己被飞机轰炸牺牲！",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("85"),
+    title: "全国金太阳高二11月联考试卷答案考前 get!",
+    description: "全国金太阳高二11月联考试卷答案考前 get!",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("86"),
+    title: "这就是50天极限考研的后果......",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("87"),
+    title: "面试必考题：你目前还在面试哪些公司？",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("88"),
+    title: "军宅必备的战术用语合集1",
+    description: "：b",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("89"),
+    title: "高端显卡动画工程—18个分镜头",
+    description: "领取工程文件加：xiaomac4d，截图备注c4d即可",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("90"),
+    title: "逆反 别做正常人",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("91"),
+    title: "四招解决版面空",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("92"),
+    title: "【简易字体设计教程】素颜",
+    description: "今年最后一期字体设计系统课报名中，更多课程详情可单独咨询",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("93"),
+    title: "桌子上的连锁反应",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("94"),
+    title: "模拟节点 - 粒子平流 - blender",
+    description: "教程 ：https://www.youtube.com/watch?v=MhREfLSHLQM&t=12s",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("95"),
+    title: "帅啊，这个味太对了！",
+    description: "https://www.youtube.com/watch?v=m1ijQhuJkCY\nAzuki Elementals ✦",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("96"),
+    title: "【Adobe全家桶2023】",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("97"),
+    title: "这才叫PR转场！",
+    description: "1",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("98"),
+    title: "【一句话系列23】这样说不仅高情商，关键还“有趣”",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("99"),
+    title: "审美提升 摄影分享 一叶舟",
+    description: "审美提升 摄影分享 一叶舟\n",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("100"),
+    title: "完全不理解，谁说她没有刘海就变普女的！！",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("101"),
+    title: "宁艺卓 | “是斯莱特林的Vivian小姐”",
+    description: "封面这张照片尊嘟很蛇院 特别是眼睛\n我立马开剪一个\n但是莫名剪到最后的Vivian~有点搞笑哈哈哈哈骚瑞\n还有一个喜欢的bgm 抉择不出来 好想放P2 啊啊啊但是不知道怎么放P2",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("102"),
+    title: "戒断失败！她俩转圈圈，我还能再看一百遍！！｜绝世舞姬",
+    description: "素材全部来源于网络，权侵删。\n封面来源于/五月流影/视频截图。\n感谢封面字素·大雾天气-\n",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("103"),
+    title: "【aespa】假如Spicy的拍摄现场去掉BGM时…",
+    description: "助力aespa回归 请多多期待吧",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("104"),
+    title: "谁懂！剪的时候腿快溢出屏幕啦！！（张元英一键换装） 48.6",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("105"),
+    title: "14岁就被妈妈逼着整容的Bella Hadid从2013到2",
+    description: "Tiktok",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("106"),
+    title: "小蓝鸟博主推荐那f",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("107"),
+    title: "康师傅冰红茶涨价最新后续，引起轩然大波，紧急撤回涨价通知。",
+    description: "康师傅冰红茶涨价最新后续，引起轩然大波，紧急撤回涨价通知。",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("108"),
+    title: "陈泽再次教育宇大将军 将军求饶请求出狱",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("109"),
+    title: "冬泳怪鸽真男人！下跪救父！他第一次在直播里哭了",
+    description: "冬泳怪鸽 独自一人照顾着年迈的父亲和智力残缺的弟弟，他走投无路，看着父亲的医院缴费单，他用颤抖的手打开了直播间的打赏功能，跪在地上泪洒直播间说，我已经用了大家的钱治病，但我不能再用大家的钱发财，他真的是网红圈的一股清流！",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("110"),
+    title: "王一博出发金鸡奖红毯！加油加油！",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("111"),
+    title: "【宋亚轩】小宋老师，你看你是这意思不",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("112"),
+    title: "Jam Republic Ling和Emma Tiktok更",
+    description: "x",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("113"),
+    title: "告诉我这是谁出的主意，这么超前的营业我第一次见！",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("114"),
+    title: "【TREASURE｜yoshi金本芳典】精雕细琢的美人相",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("115"),
+    title: "【黄铉辰】VERSACE23假日系列宣传片",
+    description: "Hyunjin for Versace Holiday | Campaign Film | Versace",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("116"),
+    title: "“开门红转黑-勇士雷霆”",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("117"),
+    title: "“开门红转黑-勇士雷霆”",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("118"),
+    title: "#南韩第一亚比#孙彩瑛",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("119"),
+    title: "“你手机通讯录最出名的人是谁？”英超快问快答",
+    description: "快问快答之英超球星版",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("120"),
+    title: "【卡卡】一 见 卡 卡 误 终 身",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("121"),
+    title: "【帕雷德斯 迪巴拉】队花队草一起做运动",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("122"),
+    title: "3种假传过人",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("123"),
+    title: "别再三步上篮了，教你“慢三步”轻松上篮！",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("124"),
+    title: "喊你不会上篮的兄弟来看看吧。",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("125"),
+    title: "滑雪教练在中级道被不会滑雪的鱼雷创飞第一视角拍摄",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("126"),
+    title: "今天没得黑！周琦找回状态证明自己 6投6中拿12分5板",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("127"),
+    title: "暮年的乔丹科比，不也被球迷喊话？",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("128"),
+    title: "新手必学4个过人动作，熟练使用后已无人能防！",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("129"),
+    title: "休闲鞋也能有跑鞋技术？？",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("130"),
+    title: "羽毛球原来这么简单…mp4",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("131"),
+    title: "这招太帅了，兄弟们",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("132"),
+    title: "当初反对你养狗的父母，是不是都变成这样了…",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("133"),
+    title: "“爷爷：老伙计，我带你回家…”",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("134"),
+    title: "【十一喵3】更新啦，赶紧来围观吧！",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("135"),
+    title: "穿上袜子的鱼仔：你说公主请吃饭",
+    description: "--",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("136"),
+    title: "猫房子来客人了",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("137"),
+    title: "听说昨天大家都在偶遇七崽",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("138"),
+    title: "小狗怎么那么喜欢揣手手啊",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("139"),
+    title: "这这这…为什么它会这样，为什么睡一觉起来就变烧狗了",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("140"),
+    title: "抓住限时降温，赶紧烤起来啊",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("141"),
+    title: "【猎杀对决】《钳 形 战 术》",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("142"),
+    title: "【原神】你也想把派蒙抱在怀里吗？",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("143"),
+    title: "【原神】你也想把派蒙抱在怀里吗？",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("144"),
+    title: "11.0资料片泄露了？",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("145"),
+    title: "梵天百兽，加诸此身",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("146"),
+    title: "挺近加贪欲 伤害99000",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("147"),
+    title: "王者里有哪些皮肤相当于换了个英雄！",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("148"),
+    title: "湖北菜为什么没特点？武汉是一个美食“洼地”？",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("149"),
+    title: "「重阳节」品尝古法重阳节花糕，松软糯口香甜，传统习俗中的永恒魅力！",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("150"),
+    title: "韩国街头的综合性摊位，各种小吃可抵上一个集市，均价实惠还美味",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("151"),
+    title: "杰克逊的灵魂宵夜！~【名人爱吃啥！？】",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("152"),
+    title: "年大将军这是不想活了呀，竟然在皇上面前以下犯上",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("153"),
+    title: "吐司上放块巧克力，压出来个圈，就是巧克力夹心派！",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("154"),
+    title: "小学生早餐不重样，家里有剩米饭的神仙吃法",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("155"),
+    title: "小学生早餐不重样，家里有剩米饭的神仙吃法",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("156"),
+    title: "一人食-低脂高蛋白的西兰花口蘑炒鸡胸肉",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("157"),
+    title: "【营养师教你减肥怎么吃小北减脂食谱】",
+    description: "第2天午饭，饭菜肉一锅煮好，低脂低热量，简单又好吃",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("158"),
+    title: "米其林名师配方\"一生中最好的焦糖布丁“",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("159"),
+    title: "辛苦了一天回来，来上一根麻辣香肠，顿时感觉很满足。",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("160"),
+    title: "胜负我不好评定 我只能做好自己",
+    description: "胜负我不好评定 我只能做好自己",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("161"),
+    title: "越看越红？盘点原神里那些优秀品质！",
+    description: "一句话让宅男们集体破防，都别吵了",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);
+db.getCollection("video").insert([ {
+    _id: NumberInt("162"),
+    title: "感谢宵宫的热情，宵宫的可爱，宵宫的活泼，感谢宵宫这一路上陪我",
+    description: "-",
+    _class: "com.vediosharing.backend.core.utils.SearchUtil$Video"
+} ]);

@@ -104,7 +104,7 @@ export default function Channel() {
                   <div className={style.title_description} title={item.video.description}>
                     <span className={style.description}>
                       {
-                        item.video.description
+                        item.video.title
                       }
                     </span>
                   </div>
@@ -118,10 +118,6 @@ export default function Channel() {
                   </div>
                 </div>)
             }
-            <div className={style.video_item}></div>
-            <div className={style.video_item}></div>
-            <div className={style.video_item}></div>
-            <div className={style.video_item}></div>
           </div>
         </div>
         <div className={style.aside}>
@@ -134,7 +130,7 @@ export default function Channel() {
             rankInfo?.map((item, index) => <div key={item.video.id} className={style.rank_div}>
               <div className={style.rank_item}>
                 <span className={style.number}>{index + 1}</span>
-                <span onClick={() => jump(item.video.id)} className={style.text} title={item.video.description}>{item.video.description}</span>
+                <span onClick={() => jump(item.video.id)} className={style.text} title={item.video.title}>{item.video.title}</span>
               </div>
             </div>)
           }

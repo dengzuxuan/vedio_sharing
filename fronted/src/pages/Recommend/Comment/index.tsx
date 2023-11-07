@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import style from './index.module.scss'
 import likeIcon from '../../../assets/imgs/commentLike.png'
 import like_clickIcon from '../../../assets/imgs/commentLike_click.png'
@@ -6,6 +6,8 @@ import { type IComment, type IGetComments } from '../../../libs/model'
 import { addcommentlikes, delcomment, delcommentlikes, getsecondcomments } from '../../../api/comment'
 import SecondComment from './SecondComment'
 import { message } from 'antd'
+import { context } from '../../../hooks/store'
+import useJump from '../../../hooks/useJump'
 interface Props {
   item: IGetComments
   setReturnComment: (data: IGetComments | undefined) => void
@@ -18,6 +20,7 @@ interface Props {
 export default function Comment({ item, setReturnComment, getFirstComment, updateFlag, setUpdateFlag, videoId, getMesages }: Props) {
   const id = localStorage.getItem('id')
   const [itemCopy, setItemCopy] = useState(item)
+  const { otherJump } = useJump()
   // 保存二级评论
   const [secondComment, setSecondComment] = useState<IGetComments[]>()
   // 记录点击回复二级评论
@@ -67,7 +70,7 @@ export default function Comment({ item, setReturnComment, getFirstComment, updat
     <div className={style.back}>
       <div className={style.img_name}>
         <div className={style.img_box}>
-          <img className={style.img} src={item.user.photo}></img>
+          <img onClick={() => otherJump(item.user.id)} className={style.img} src={item.user.photo}></img>
         </div>
         <div className={style.text}>{item.user.nickname}</div>
         {

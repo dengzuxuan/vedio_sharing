@@ -20,11 +20,13 @@ import { addCollect, addFrd, addLike, delCollect, delFrd, delLike } from '../../
 import { context } from '../../hooks/store'
 import { addcomment, getfirstcomments, getsecondcomments } from '../../api/comment'
 import Comment from './Comment'
+import useJump from '../../hooks/useJump'
 
 export default function recommend() {
   const { setClickItemValue } = useContext(context)
   const [videoInfo, setVideoInfo] = useState<IGetVideo | null>()
   const [hoverValue, setHoverValue] = useState('')
+  const { otherJump } = useJump()
   // 控制左拉
   const [leftClick, setLeftClick] = useState(false)
   // 发布评论内容
@@ -158,17 +160,6 @@ export default function recommend() {
       }
     }
   }
-  // 跳转到用户页面
-  const jumpUserHome = () => {
-    const userid = videoInfo?.user.id
-    const id = localStorage.getItem('id')
-    if (!id) return
-    if (parseInt(id) === userid) {
-      setClickItemValue('my')
-    } else {
-      setClickItemValue(`user/${userid}`)
-    }
-  }
 
   // 发布评论(对视频)
   const publishMessage = async () => {
@@ -255,10 +246,10 @@ export default function recommend() {
         <div className={style.bottom_div}>
           <div className={style.right_div}>
             <div className={style.userInfo}>
-              <div className={style.img_box} onClick={() => jumpUserHome()}>
+              <div className={style.img_box} onClick={() => otherJump(videoInfo?.user.id)}>
                 <img className={style.img} src={videoInfo?.user.photo}></img>
               </div>
-              <div className={style.user_info} onClick={() => jumpUserHome()}>
+              <div className={style.user_info} onClick={() => otherJump(videoInfo?.user.id)}>
                 <div>{videoInfo?.user.nickname}</div>
                 <div>{videoInfo?.user.email.length ? videoInfo?.user.email : ''}</div>
                 <div>{videoInfo?.user.username}</div>

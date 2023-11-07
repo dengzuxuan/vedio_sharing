@@ -12,7 +12,6 @@ import useJump from '../../hooks/useJump'
 
 export default function Channel() {
   const { jump } = useJump()
-  const navigator = useNavigate()
   const type = useLocation().pathname.split('/')[3]
   // 保存视频
   const [videosInfo, setVideoInfos] = useState<IGetTypeVideos[]>()
@@ -134,7 +133,7 @@ export default function Channel() {
             rankInfo?.map((item, index) => <div key={item.video.id} className={style.rank_div}>
               <div className={style.rank_item}>
                 <span className={style.number}>{index + 1}</span>
-                <span className={style.text} title={item.video.description}>{item.video.description}</span>
+                <span onClick={() => jump(item.video.id)} className={style.text} title={item.video.description}>{item.video.description}</span>
               </div>
             </div>)
           }

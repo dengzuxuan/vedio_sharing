@@ -227,7 +227,7 @@ export default function Self() {
                   <VideoComponent videoId={item.id} propsOption={{ ...option, loop: true, poster: item.photoUrl }} hoverFunc={true} videoUrl={item.videoUrl}></VideoComponent>
                 </div>
                 <div className={style.title_description}>
-                  <div className={style.left} onClick={() => jump(item.id)}>
+                  <div className={style.left} title={item.description} onClick={() => jump(item.id)}>
                     <b>{item.title}</b>
                     {' ' + item.description}
                   </div>

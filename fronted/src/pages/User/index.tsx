@@ -159,7 +159,7 @@ export default function User() {
             ? selfVideo.map(item =>
               <div key={item.id} className={style.video_item} onClick={() => jump(item.id)}>
                 <div className={style.video_div}>
-                  <VideoComponent propsOption={{ ...option, loop: true, poster: item.photoUrl }} hoverFunc={true} videoUrl={item.videoUrl}></VideoComponent>
+                  <VideoComponent videoId={item.id} propsOption={{ ...option, loop: true, poster: item.photoUrl }} hoverFunc={true} videoUrl={item.videoUrl}></VideoComponent>
                 </div>
                 <div className={style.title_description} title={item.description}>
                   <span className={style.title}>{item.title}</span>

@@ -214,7 +214,7 @@ export default function recommend() {
         </div>
         <div className={style.video_box}>
           {
-            videoInfo ? <VideoComponent propsOption={propsOption} videoUrl={videoInfo?.video.videoUrl}></VideoComponent> : <Mask />
+            videoInfo ? <VideoComponent videoId={videoInfo.video.id} propsOption={propsOption} videoUrl={videoInfo?.video.videoUrl}></VideoComponent> : <Mask />
           }
         </div>
         <div className={style.bottom_div}>

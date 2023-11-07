@@ -99,7 +99,7 @@ export default function Channel() {
               videosInfo?.map(item =>
                 <div key={item.video.id} className={style.video_item} onClick={() => jump(item.video.id)}>
                   <div className={style.video_div}>
-                    <VideoComponent propsOption={{ ...option, loop: true, poster: item.video.photoUrl ?? '' }} hoverFunc={true} videoUrl={item.video.videoUrl ?? ''}></VideoComponent>
+                    <VideoComponent videoId={item.video.id} propsOption={{ ...option, loop: true, poster: item.video.photoUrl ?? '' }} hoverFunc={true} videoUrl={item.video.videoUrl ?? ''}></VideoComponent>
                   </div>
                   <div className={style.title_description} title={item.video.description}>
                     <span className={style.description}>

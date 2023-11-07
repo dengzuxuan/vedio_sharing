@@ -204,26 +204,30 @@
   }
 }
 
-.title_description{
-  display: -webkit-box;
+.left {
+  width: 160px;
   overflow: hidden;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  color: #808080;
   cursor: pointer;
+  color: dimgray;
+}
+
+.title_description {
+  display: flex;
 }
 
 .title {
   color: dimgray;
   font-size: 14px;
-  overflow: hidden;
   font-weight: 700;
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
-.description{
-  font-size: 12px;
+.description {
+  font-size: 14px;
+  color: #808080;
 }
 
 .username_info {
@@ -234,3 +238,12 @@
   align-items: center;
 }
 
+.del {
+  margin-left: auto;
+  width: 28px;
+}
+
+.del:hover {
+  color: #f87e45;
+  cursor: pointer;
+}

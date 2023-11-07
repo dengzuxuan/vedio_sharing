@@ -184,13 +184,6 @@ public class UserVideoServiceImpl implements UserVideoService {
         UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
         User loginuser = loginUser.getUser();
 
-
-        rankUtil.initAllRank(RankConsts.TOTAL_RANK);
-        rankUtil.initAllRank(RankConsts.MONTH_RANK);
-        rankUtil.initAllRank(RankConsts.DAYLY_RANK);
-        rankUtil.initAllRank(RankConsts.WEEKLY_RANK);
-
-
         Map<String,Object> res = new HashMap<>();
         Video video = videoMapper.selectById(videoId);
 

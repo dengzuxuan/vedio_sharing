@@ -34,10 +34,16 @@ public class RankUtil {
     private RedisTemplate redisTemplate;
 
     public boolean initRank(String key,int type, double score, Integer value){
-        key=key+":"+type;
+        //总榜热度
+//        String keytotal=key+":"+0;
+//        Boolean add = redisTemplate.opsForZSet().add(keytotal, value, score);
+//        redisTemplate.expire(keytotal,  10 * 365, TimeUnit.DAYS );
+
+        //子榜热度
+        String keyType=key+":"+type;
         try{
-            Boolean add = redisTemplate.opsForZSet().add(key, value, score);
-            redisTemplate.expire(key,  10 * 365, TimeUnit.DAYS );
+            Boolean add = redisTemplate.opsForZSet().add(keyType, value, score);
+            redisTemplate.expire(keyType,  10 * 365, TimeUnit.DAYS );
             return add;
         }catch (Exception e){
             e.printStackTrace();
@@ -49,11 +55,11 @@ public class RankUtil {
         String[] keys = {RankConsts.DAYLY_RANK,RankConsts.WEEKLY_RANK,RankConsts.TOTAL_RANK,RankConsts.MONTH_RANK};
         for (String key : keys) {
             //总榜热度
-            key=key+":"+0;
-            redisTemplate.opsForZSet().incrementScore(key, value, incr);
+            String keytotal=key+":"+0;
+            redisTemplate.opsForZSet().incrementScore(keytotal, value, incr);
             //细分子榜热度
-            key=key+":"+type;
-            redisTemplate.opsForZSet().incrementScore(key, value, incr);
+            String keyType=key+":"+type;
+            redisTemplate.opsForZSet().incrementScore(keyType, value, incr);
         }
     }
 

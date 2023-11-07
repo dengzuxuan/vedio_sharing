@@ -15,6 +15,7 @@ import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -129,9 +130,15 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public Result getTypeVideos(int Type) {
-        QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("type",Type);
-        List<Video> videoAllList = videoMapper.selectList(queryWrapper);
+        List<Video> videoAllList = new ArrayList<>();
+        if(Type == 0){
+            videoAllList = videoMapper.selectList(null);
+        }else{
+            QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("type",Type);
+            videoAllList = videoMapper.selectList(queryWrapper);
+        }
+
         Collections.shuffle(videoAllList);
 
         if(videoAllList.size()>8){

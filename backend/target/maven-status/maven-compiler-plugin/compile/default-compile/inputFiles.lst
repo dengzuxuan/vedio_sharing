@@ -42,6 +42,7 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dto\re
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\CommentMapper.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dto\req\UserInfoReqDto.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\Impl\UserDetailServiceImpl.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\constant\LikeConsts.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\ResourceService.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\Likes.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\OptVideoService.java
@@ -59,6 +60,7 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\ma
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\filter\JwtAuthenticationTokenFilter.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\config\QiniuStorageConfig.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dto\req\CommentReqDto.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dto\req\VideoJudgeReqDto.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\constant\MessageConsts.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\mapper\UserMapper.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\constant\ApiRouterConsts.java

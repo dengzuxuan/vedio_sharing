@@ -59,13 +59,13 @@ public class UserVideoServiceImpl implements UserVideoService {
         if(video == null){
             return Result.build(null,ResultCodeEnum.VIDEO_NOT_EXIST);
         }
-        if(dto.isDoneOne()){
+        if(dto.is1()){
             changeVideoLike(video.getType(), LikeConsts.VIEW_INCR_1);
         }
-        if(dto.isDoneTwo()){
+        if(dto.is2()){
             changeVideoLike(video.getType(), LikeConsts.VIEW_INCR_2);
         }
-        if(dto.isDoneAll()){
+        if(dto.is4()){
             changeVideoLike(video.getType(), LikeConsts.VIEW_INCR_4);
         }
         return Result.success(null);
@@ -183,6 +183,13 @@ public class UserVideoServiceImpl implements UserVideoService {
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
         User loginuser = loginUser.getUser();
+
+
+        rankUtil.initAllRank(RankConsts.TOTAL_RANK);
+        rankUtil.initAllRank(RankConsts.MONTH_RANK);
+        rankUtil.initAllRank(RankConsts.DAYLY_RANK);
+        rankUtil.initAllRank(RankConsts.WEEKLY_RANK);
+
 
         Map<String,Object> res = new HashMap<>();
         Video video = videoMapper.selectById(videoId);

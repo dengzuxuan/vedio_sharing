@@ -8,7 +8,7 @@
 
 地址 http://8.140.38.47:3000/
 
-demo 
+demo http://s34n6l898.hn-bkt.clouddn.com/demo.mp4
 
 ### 1. 项目架构
 

@@ -84,7 +84,7 @@ export default function Channel() {
             casualInfo?.map((item, index) => <div key={index} style={{ display: 'flex' }} className={style.img_box}>
               {
                 item.map(item2 => <div key={item2.video.id} className={style.img3}>
-                  <img src={item2.video.photoUrl} className={style.carousel}></img>
+                  <img onClick={() => jump(item2.video.id)} src={item2.video.photoUrl} className={style.carousel}></img>
                 </div>)
               }
             </div>)

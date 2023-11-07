@@ -14,6 +14,7 @@ import Channel from './pages/Channel'
 
 function App() {
   // 控制左tabs高亮
+  document.title = '短视频平台'
   const [clickItemValue, setClickItemValue] = useState('recommend')
   return (
     <div className="App">

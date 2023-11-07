@@ -231,7 +231,7 @@ export default function Home() {
           <div className={style.personBox}>
             <img src={info?.photo} className={style.personImg} onClick={() => { setClickItemValue('my') }}></img>
           </div>
-          <img src={exitIcon} className={style.exit}></img>
+          <img src={exitIcon} className={style.exit} onClick={() => exitClick()}></img>
         </div>
       </header>
       <main className={style.main}>
@@ -257,7 +257,7 @@ export default function Home() {
                 onClick={() => setClickItemValue('channel/' + item.value)}
               >
                 <img src={item.src} className={style.item_icon}></img>
-                <div className={style.text} onClick={() => exitClick()}>{item.text}</div>
+                <div className={style.text}>{item.text}</div>
               </div>
             )
           }

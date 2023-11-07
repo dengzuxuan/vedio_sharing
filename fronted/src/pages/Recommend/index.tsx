@@ -25,7 +25,6 @@ export default function recommend() {
   const { setClickItemValue } = useContext(context)
   const [videoInfo, setVideoInfo] = useState<IGetVideo | null>()
   const [hoverValue, setHoverValue] = useState('')
-  const id = localStorage.getItem('id')
   // 控制左拉
   const [leftClick, setLeftClick] = useState(false)
   // 发布评论内容
@@ -45,6 +44,10 @@ export default function recommend() {
     if (res?.code === 200) {
       if (res.data) {
         setVideoInfo(res.data)
+        const res2 = await getfirstcomments(res.data.video.id)
+        if (res2?.code === 200) {
+          setComments(res2.data)
+        }
       }
     } else {
       message.info(res?.message)
@@ -56,6 +59,10 @@ export default function recommend() {
     const res = await getprevideo()
     if (res?.code === 200) {
       setVideoInfo(res.data)
+      const res2 = await getfirstcomments(res.data.video.id)
+      if (res2?.code === 200) {
+        setComments(res2.data)
+      }
     } else {
       message.info(res?.message)
     }
@@ -63,6 +70,25 @@ export default function recommend() {
   // 清空视频
   const clear = async () => {
     await clearprevideo()
+  }
+
+  // 键盘事件函数
+  const PopupKeyUp = (e: KeyboardEvent) => {
+    console.log(e.code)
+    if (e.code === 'ArrowUp') {
+      getFormer()
+    } else if (e.code === 'ArrowDown') {
+      getInitVideo()
+    }
+    if (e.code === 'ArrowLeft' && !leftClick) {
+      setLeftClick(true)
+      getMesages()
+    }
+    console.log(e.code, leftClick)
+    if (e.code === 'ArrowRight' && leftClick) {
+      setLeftClick(false)
+      getMesages()
+    }
   }
 
   const getType = (type: number) => {
@@ -187,6 +213,15 @@ export default function recommend() {
       return res.data
     }
   }
+
+  useEffect(() => {
+    // 监听键盘事件
+    document.addEventListener("keyup", PopupKeyUp, false)
+    return () => {
+      // 销毁键盘事件
+      document.removeEventListener("keyup", PopupKeyUp, false)
+    }
+  }, [leftClick])
 
   useEffect(() => {
     if (!leftClick) {

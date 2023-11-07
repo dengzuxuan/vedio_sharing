@@ -1,3 +1,4 @@
 com\vediosharing\backend\JedisTest.class
 com\vediosharing\backend\log4jTest.class
+com\vediosharing\backend\JedisTest$User.class
 com\vediosharing\backend\BackendApplicationTests.class

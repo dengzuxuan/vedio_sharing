@@ -46,6 +46,7 @@ D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\c
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\ResourceService.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\dao\entity\Likes.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\service\OptVideoService.java
+D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\controller\ReloadRedisDataController.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\controller\UserVideoController.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\controller\VideoController.java
 D:\code\java\vedio_sharing\backend\src\main\java\com\vediosharing\backend\core\utils\RankUtil.java

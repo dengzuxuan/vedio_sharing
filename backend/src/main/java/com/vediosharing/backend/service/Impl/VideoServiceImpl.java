@@ -1,6 +1,7 @@
 package com.vediosharing.backend.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.vediosharing.backend.core.common.constant.result.ResultCodeEnum;
 import com.vediosharing.backend.core.constant.RankConsts;
 import com.vediosharing.backend.core.constant.Result;
 import com.vediosharing.backend.core.constant.VideoTypeConsts;
@@ -76,6 +77,10 @@ public class VideoServiceImpl implements VideoService {
             QueryWrapper<Video> queryWrapper1 = new QueryWrapper<>();
             queryWrapper1.eq("type",selectedOption);
             List<Video> videos = videoMapper.selectList(queryWrapper1);
+
+            if(videos.size()==0){
+                return Result.build(null, ResultCodeEnum.VIDEO_NOT_ENOUGHT);
+            }
 
             //在选中类型里随机挑选视频
             int videoIndex = (int) (Math.random()* videos.size());

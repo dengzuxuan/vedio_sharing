@@ -1,14 +1,11 @@
 #--------------------------通用配置-------------------------
 spring:
   application:
-    # 应用名
     name: vediosharing
   servlet:
     multipart:
-      # 上传文件最大大小
       max-file-size: 20MB
 server:
-  # 端口号
   port: 3003
 
 --- #---------------------数据库配置---------------------------
@@ -18,16 +15,11 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
-  # ShardingSphere-JDBC 配置
-  # 配置是 ShardingSphere-JDBC 中唯一与应用开发者交互的模块，
-  # 通过它可以快速清晰的理解 ShardingSphere-JDBC 所提供的功能。v
-
 --- #---------------------中间件配置---------------------------
 spring:
   redis:
     host: 8.140.38.47
     port: 6379
-    password: 123456
     lettuce:
       pool:
         max-active: 8
@@ -39,13 +31,12 @@ spring:
   # MongoDB数据库
   data:
     mongodb:
-      uri: mongodb://8.140.38.47:27018/test
+      uri: mongodb://8.140.38.47:27018/videosharing
       host: 8.140.38.47
       port: 27018
-      database: vediosharing
+      database: videosharing
 
 --- #---------------------OSS配置---------------------------
-# 七牛云存储
 oss:
   qiniu:
     domain: http://s34n6l898.hn-bkt.clouddn.com/ # 访问域名(默认使用七牛云测试域名)

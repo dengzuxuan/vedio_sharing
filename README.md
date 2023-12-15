@@ -1,3 +1,4 @@
+# vedio_sharing
 # 短视频平台
 
 前端 陈典 @cdcdcd
@@ -13,6 +14,8 @@ demo http://s34n6l898.hn-bkt.clouddn.com/demo.mp4
 ### 1. 项目架构
 
 ​		前端以React+ts为架构进行设计，样式上采取了antd以及更加稳定成熟的样式sass。后端使用Java三件套spring springmvc以及Mybatisplus，并使用springboot进行快速开发。在需要快速查询并且需要线程安全的历史记录核心模块上采用了Java本地高速缓存Caffeine。数据库方面，采用了稳定易用的MySQL作为关系型数据库存储内容。中间件采用Redis，为需要大量快速高IO访问的热度排行榜模块提供有效的支持。此外还使用了MongoDB为项目中的搜索模块提供支持，缓解频繁搜索对MySQL数据库的压力。
+![Uploading image.png…]()
+
 
 ![image-20231107210518680](C:\Users\Colin\AppData\Roaming\Typora\typora-user-images\image-20231107210518680.png)
 
@@ -21,6 +24,7 @@ demo http://s34n6l898.hn-bkt.clouddn.com/demo.mp4
 ### 2. 架构说明
 
 
+![Uploading image.png…]()
 
 ![image-20231107195146330](C:\Users\Colin\AppData\Roaming\Typora\typora-user-images\image-20231107195146330.png)
 

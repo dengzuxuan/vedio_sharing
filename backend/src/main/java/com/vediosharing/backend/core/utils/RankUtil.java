@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -43,7 +44,7 @@ public class RankUtil {
         String keyType=key+":"+type;
         try{
             Boolean add = redisTemplate.opsForZSet().add(keyType, value, score);
-            redisTemplate.expire(keyType,  10 * 365, TimeUnit.DAYS );
+            redisTemplate.expire(keyType, Duration.ofDays(100));
             return add;
         }catch (Exception e){
             e.printStackTrace();

@@ -40,6 +40,7 @@ public enum ResultCodeEnum {
     TYPE_PARAMS_WRONG(3005,"类型格式有误"),
     FRIEND_ADD_WRONG(4001,"你已经关注过了"),
 
+    VIDEO_NOT_ENOUGHT(5000,"视频数量不足"),
     VIDEO_NOT_EXIST(5001,"该视频不存在"),
     LIKE_NOT_EXIST(5002,"您尚未点赞"),
     LIKE_ALREADY_EXIST(5003,"您已经点过赞了"),

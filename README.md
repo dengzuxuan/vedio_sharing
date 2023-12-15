@@ -17,12 +17,16 @@ demo http://s34n6l898.hn-bkt.clouddn.com/demo.mp4
 ![Uploading image.png…]()
 
 
+![image-20231107210518680](C:\Users\Colin\AppData\Roaming\Typora\typora-user-images\image-20231107210518680.png)
+
 
 
 ### 2. 架构说明
 
 
 ![Uploading image.png…]()
+
+![image-20231107195146330](C:\Users\Colin\AppData\Roaming\Typora\typora-user-images\image-20231107195146330.png)
 
 ​        项目的后端链路如上图所示，以下简单阐述下核心的几个功能。
 

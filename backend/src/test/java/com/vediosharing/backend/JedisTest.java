@@ -1,36 +1,15 @@
 package com.vediosharing.backend;
-import com.mysql.cj.xdevapi.UpdateResult;
-import com.vediosharing.backend.core.utils.SearchUtil;
+import com.videocomment.backend.core.utils.SearchUtil;
 import lombok.Data;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import com.vediosharing.backend.core.utils.CaffeineUtil;
-import com.vediosharing.backend.dao.entity.History;
-import com.vediosharing.backend.dao.entity.User;
-import com.vediosharing.backend.dao.entity.Video;
+import com.videocomment.backend.core.utils.CaffeineUtil;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.data.redis.core.Cursor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ScanOptions;
-import org.springframework.data.redis.core.ZSetOperations;
-import org.springframework.stereotype.Indexed;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @ClassName JedisTest

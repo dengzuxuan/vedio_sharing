@@ -3,7 +3,7 @@ package com.videocomment.backend.controller;
 import com.videocomment.backend.core.constant.ApiRouterConsts;
 import com.videocomment.backend.core.constant.RankConsts;
 import com.videocomment.backend.core.constant.Result;
-import com.videocomment.backend.core.utils.RankUtil;
+import com.videocomment.backend.core.utils.redis.RankUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

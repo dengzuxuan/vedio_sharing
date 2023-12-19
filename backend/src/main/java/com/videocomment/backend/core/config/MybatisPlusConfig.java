@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  * @Version 1.0
  */
 @Configuration
-@MapperScan("com.vediosharing.backend.dao.mapper")
+@MapperScan("com.videocomment.backend.dao.mapper")
 public class MybatisPlusConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {

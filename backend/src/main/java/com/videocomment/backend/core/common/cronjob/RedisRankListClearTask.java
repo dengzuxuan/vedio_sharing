@@ -1,6 +1,6 @@
 package com.videocomment.backend.core.common.cronjob;
 
-import com.videocomment.backend.core.utils.RankUtil;
+import com.videocomment.backend.core.utils.redis.RankUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

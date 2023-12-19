@@ -7,7 +7,7 @@ import com.videocomment.backend.core.constant.MessageConsts;
 import com.videocomment.backend.core.constant.RankConsts;
 import com.videocomment.backend.core.constant.Result;
 import com.videocomment.backend.core.utils.OrderDateComparator;
-import com.videocomment.backend.core.utils.RankUtil;
+import com.videocomment.backend.core.utils.redis.RankUtil;
 import com.videocomment.backend.dao.entity.*;
 import com.videocomment.backend.dao.mapper.*;
 import com.videocomment.backend.dto.req.CommentReqDto;

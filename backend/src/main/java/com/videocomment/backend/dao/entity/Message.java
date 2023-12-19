@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * @ClassName Message
+ * @ClassName MessageDto
  * @Description TODO
  * @Author Colin
  * @Date 2023/10/28 2:13

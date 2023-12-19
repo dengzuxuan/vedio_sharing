@@ -1,6 +1,7 @@
 package com.videocomment.backend.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -30,11 +31,18 @@ public class Video {
     private int type;
     private String videoUrl;
     private String photoUrl;
-    private transient int hotPoints; //热度
+
+    @TableField(exist = false)
+    private int hotPoints; //热度
+    @TableField(exist = false)
     private int initHotPoints;
+    @TableField(exist = false)
     private int totalHotPoints;
+    @TableField(exist = false)
     private int monthHotPoints;
+    @TableField(exist = false)
     private int weekHotPoints;
+
     private int viewsPoints;
     private int likePoints;
     private int collectPoints;

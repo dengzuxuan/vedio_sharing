@@ -7,7 +7,7 @@ import com.videocomment.backend.core.constant.LikeConsts;
 import com.videocomment.backend.core.constant.RankConsts;
 import com.videocomment.backend.core.constant.Result;
 import com.videocomment.backend.core.constant.VideoTypeConsts;
-import com.videocomment.backend.core.utils.RankUtil;
+import com.videocomment.backend.core.utils.redis.RankUtil;
 import com.videocomment.backend.core.utils.SearchUtil;
 import com.videocomment.backend.dao.entity.*;
 import com.videocomment.backend.dao.mapper.*;

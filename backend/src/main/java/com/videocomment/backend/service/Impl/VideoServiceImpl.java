@@ -6,7 +6,8 @@ import com.videocomment.backend.core.constant.RankConsts;
 import com.videocomment.backend.core.constant.Result;
 import com.videocomment.backend.core.constant.VideoTypeConsts;
 import com.videocomment.backend.core.utils.CaffeineUtil;
-import com.videocomment.backend.core.utils.RankUtil;
+import com.videocomment.backend.core.utils.redis.CacheClient;
+import com.videocomment.backend.core.utils.redis.RankUtil;
 import com.videocomment.backend.dao.entity.*;
 import com.videocomment.backend.dao.mapper.*;
 import com.videocomment.backend.dto.resp.VideoDetailRespDto;
@@ -18,6 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+import static com.videocomment.backend.core.constant.RedisKeyConsts.VIDEO_INFO_KEY;
+import static com.videocomment.backend.core.constant.RedisKeyConsts.VIDEO_INFO_TTL;
 
 /**
  * @ClassName VideoServiceImpl
@@ -44,6 +49,8 @@ public class VideoServiceImpl implements VideoService {
     RankUtil rankUtil;
     @Autowired
     CaffeineUtil caffeineUtil;
+    @Autowired
+    CacheClient cacheClient;
 
     @Override
     public Result getVideo() {
@@ -56,6 +63,7 @@ public class VideoServiceImpl implements VideoService {
         History history = caffeineUtil.getHistory(loginuser.getId());
 
         //当前视频与最新视频index一致，获取新视频
+        int videoIndex = 0;
         if(history.getCurrentIndex() == history.getHistory().size()){
             QueryWrapper<UsertLikely> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("user_id",loginuser.getId());
@@ -76,27 +84,24 @@ public class VideoServiceImpl implements VideoService {
             queryWrapper1.eq("type",selectedOption);
             List<Video> videos = videoMapper.selectList(queryWrapper1);
 
-            if(videos.size()==0){
+            if(videos.isEmpty()){
                 return Result.build(null, ResultCodeEnum.VIDEO_NOT_ENOUGHT);
             }
 
             //在选中类型里随机挑选视频
-            int videoIndex = (int) (Math.random()* videos.size());
-            video = videos.get(videoIndex);
+            videoIndex = (int) (Math.random()* videos.size());
             caffeineUtil.addNextHistory(history,video.getId());
             history = caffeineUtil.getHistory(loginuser.getId());
-            System.out.println("new:"+history);
         }else{
             //当前视频与最新视频index不一致，获取历史视频
             Map<Integer, Integer> prehistory = history.getHistory();
-            video = videoMapper.selectById(prehistory.get(history.getCurrentIndex()+1));
+            videoIndex = prehistory.get(history.getCurrentIndex()+1);
             //更新currentindex
             caffeineUtil.addCurrentIndex(history);
             history = caffeineUtil.getHistory(loginuser.getId());
-            System.out.println("new pre:"+history);
         }
 
-        return Result.success(getVideoDetail(video,loginuser.getId()));
+        return Result.success(getVideoDetail(videoIndex,loginuser.getId()));
     }
     @Override
     public Result getPreVideo() {
@@ -104,20 +109,17 @@ public class VideoServiceImpl implements VideoService {
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl loginUser = (UserDetailsImpl) authentication.getPrincipal();
         User loginuser = loginUser.getUser();
-        Video video = new Video();
         History history = caffeineUtil.getHistory(loginuser.getId());
         if(history.getCurrentIndex() <= 1){
             //无法向上滑动
             return Result.success(null);
         }else{
             Map<Integer, Integer> prehistory = history.getHistory();
-            video = videoMapper.selectById(prehistory.get(history.getCurrentIndex()-1));
+            Integer videoId = prehistory.get(history.getCurrentIndex()-1);
             //更新currentindex
             caffeineUtil.deCurrentIndex(history);
+            return Result.success(getVideoDetail(videoId,loginuser.getId()));
         }
-        history = caffeineUtil.getHistory(loginuser.getId());
-        System.out.println("pre:"+history);
-        return Result.success(getVideoDetail(video,loginuser.getId()));
     }
 
     @Override
@@ -175,12 +177,22 @@ public class VideoServiceImpl implements VideoService {
         return Result.success(getTopVideo(type,RankConsts.MONTH_RANK,0,9));
     }
 
-    private Map<String,Object> getVideoDetail(Video video,Integer userId){
+    private Map<String,Object> getVideoDetail(Integer videoId,Integer userId){
         Map<String,Object> res = new HashMap<>();
+        Video video = cacheClient.queryWithPassThroght(
+                VIDEO_INFO_KEY,
+                videoId, Video.class,
+                iddb -> videoMapper.selectById(iddb),
+                VIDEO_INFO_TTL, TimeUnit.MINUTES);
+        if (video == null) {
+            video= videoMapper.selectById(videoId);
+            cacheClient.set(VIDEO_INFO_KEY+videoId,video,VIDEO_INFO_TTL, TimeUnit.MINUTES);
+        }
 
         video.setViewsPoints(video.getViewsPoints()+1);
         videoMapper.updateById(video);
 
+        //获取是否收藏
         QueryWrapper<Collects> queryWrapper2 = new QueryWrapper<>();
         queryWrapper2.eq("user_id",userId).eq("video_id",video.getId());
         Collects findCollect= collectMapper.selectOne(queryWrapper2);
@@ -190,6 +202,7 @@ public class VideoServiceImpl implements VideoService {
             res.put("is_collect",false);
         }
 
+        //获取是否点赞
         QueryWrapper<Likes> queryWrapper3 = new QueryWrapper<>();
         queryWrapper3.eq("user_id",userId).eq("video_id",video.getId());
         Likes findLike= likeMapper.selectOne(queryWrapper3);
@@ -199,6 +212,7 @@ public class VideoServiceImpl implements VideoService {
             res.put("is_like",false);
         }
 
+        //获取是否关注
         QueryWrapper<Friend> queryWrapper4 = new QueryWrapper<>();
         queryWrapper4.eq("recv_userid",video.getUserId()).eq("send_userid",userId);
         Friend findFriend= friendMapper.selectOne(queryWrapper4);
@@ -207,6 +221,8 @@ public class VideoServiceImpl implements VideoService {
         }else{
             res.put("is_friend",false);
         }
+
+        //获取点赞 收藏 播放量 评论数 信息
 
         User author = userMapper.selectById(video.getUserId());
         author.setPassword(null);

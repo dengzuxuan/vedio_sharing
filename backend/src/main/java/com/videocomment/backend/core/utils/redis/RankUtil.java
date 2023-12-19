@@ -1,4 +1,4 @@
-package com.videocomment.backend.core.utils;
+package com.videocomment.backend.core.utils.redis;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.videocomment.backend.core.constant.RankConsts;

@@ -27,4 +27,9 @@ public class ApiRouterConsts {
     public static final String OPTVIDEO_URL_PREFIX = API_URL_PREFIX + "/optvideo";
     public static final String SEARCH_URL_PREFIX = API_URL_PREFIX + "/search";
     public static final String RELOAD_URL_PREFIX = API_URL_PREFIX + "/reload";
+    /**
+     * 聊天部分相关请求路径前缀
+     */
+
+    public static final String CHAT_URL_PREFIX = API_URL_PREFIX + "/chat";
 }

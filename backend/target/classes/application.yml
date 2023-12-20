@@ -31,10 +31,10 @@ spring:
   # MongoDB数据库
   data:
     mongodb:
-      uri: mongodb://8.140.38.47:27018/videosharing
+      uri: mongodb://8.140.38.47:27017/
       host: 8.140.38.47
       port: 27018
-      database: videosharing
+      database: test
 
 --- #---------------------OSS配置---------------------------
 oss:
